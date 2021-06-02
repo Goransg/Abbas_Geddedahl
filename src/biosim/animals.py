@@ -23,6 +23,7 @@ class animal(object):
     def birth(self):
         # rd.random normal distribution W_birth, and standard deviation
 
+        birth_proba =
 
 
 
