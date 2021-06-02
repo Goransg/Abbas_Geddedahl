@@ -23,19 +23,25 @@ class animal(object):
     def birth(self):
         # rd.random normal distribution W_birth, and standard deviation
 
-    def migration(self):
-
     def death(self):
         # Calculating the probability of death, also simulating if the death will occur.
 
         if weight <= 0:
             return True
         else:
-            proba = self.omega(1-self.fitness)
-            if rd.uniform(0,1) <= proba:
+            death_proba = self.omega(1-self.fitness)
+            if rd.uniform(0,1) <= death_proba:
                 return True
             else:
                 return False
+
+    def migration(self):
+        # Calculating probability of migration, and deciding whether
+
+        migration_proba = self.mu * self.fitness
+
+
+
 
 
 
