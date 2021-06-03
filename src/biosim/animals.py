@@ -22,8 +22,26 @@ class animal(object):
             self.fitness = (1/(1+m.e**(self.phi_age*(self.age-self.a_half)))) * \
                            (1/(1+m.e**(-self.phi_weight*(self.weight-self.w_half))))
 
-    #@classmethod
-    #def updateparams(cls, species):
+#   @classmethod
+#   def update_params(cls, paramchange):
+#      if paramchange[0].lower() == 'carnivore':
+#
+#        individual = carnivore(age=2, weight=30, seed=12345)
+#
+#        elif paramchange[0].lower() == 'herbivore':
+#            individual = herbivore(age=2, weight=30, seed=12345)
+#
+#       else:
+#            raise ValueError(" Unknown Species entered ")
+
+#        for param in paramchange[1].keys():
+#
+#            try:
+#                paramname = exec("individual.%s" % (param))
+#                paramname = paramdict[param]
+
+#            except:
+#                warnings.warn(param + ' ' + 'is not a valid class parameter, and will not be updated.')
 
     def birth(self, n_animals):
         # Calculating the possibility and probability of birth, returning True if birth and false if not birth.
@@ -87,7 +105,6 @@ class herbivore(animal):
         self.omega = 0.4
         self.F = 10
         self.fitness()
-
 
 '''
     def feeding(self, F_actual):
