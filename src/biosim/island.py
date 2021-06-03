@@ -40,6 +40,11 @@ class island:
 
         self.coord_map = coord_map
 
+    def speciescount(self):
+        # Counts the number of animal per species on the entire Island
+
+        for
+
 
 
 

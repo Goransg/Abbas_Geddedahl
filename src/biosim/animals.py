@@ -10,8 +10,9 @@ class animal(object):
         self.age = age
         self.seed = seed
         rd.seed(a=self.seed)
+        self.fitnessupdate()
 
-    def fitness(self):
+    def fitnessupdate(self):
         # Calculating the fitness of the animal; if the weight is negative or zero, the fitness will be zero.
         # Variables in use: a and w. The rest is defined for the respective species.
 
@@ -88,11 +89,15 @@ class animal(object):
 
         self.weight += (self.beta * F_actual)
 
+        self.fitnessupdate()
+
     def aging(self):
         # Increases the age of an animal and subtracts yearly weight loss
 
         self.age += 1
         self.weight -= (self.eta * self.weight)
+
+        self.fitnessupdate()
 
 
 class herbivore(animal):
@@ -113,12 +118,7 @@ class herbivore(animal):
     F = 10
 
     def __init__(self, age, weight, seed = rd.randint(0,9999999)):
-        self.seed = seed
-        self.weight = weight
-        self.age = age
-
-        self.fitness()
-
+        super().__init__(weight, age, seed = rd.randint(0,9999999))
 
 class carnivore(animal):
 
@@ -139,11 +139,7 @@ class carnivore(animal):
     DeltaPhiMax = 10
 
     def __init__(self, age, weight, seed=rd.randint(0, 9999999)):
-        self.seed = seed
-        self.weight = weight
-        self.age = age
-
-        self.fitness()
+        super().__init__(weight, age, seed = rd.randint(0,9999999))
 
 
 '''
