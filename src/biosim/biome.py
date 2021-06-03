@@ -21,25 +21,25 @@ class lowland(biome):
 
     def __init__(self, loc):
         self.f_max = 800
-        super.__init__(loc)
+        super().__init__(loc)
 
 
 class highland(biome):
 
     def __init__(self, loc):
         self.f_max = 300
-        super.__init__(loc)
+        super().__init__(loc)
 
 
 class desert(biome):
 
     def __init__(self, loc):
         self.f_max = 0
-        super.__init__(loc)
+        super().__init__(loc)
 
 
 class water(biome):
 
     def __init__(self, loc):
         self.f_max = 0
-        super.__init__(loc)
+        super().__init__(loc)
