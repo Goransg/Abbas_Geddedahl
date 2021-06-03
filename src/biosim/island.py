@@ -43,7 +43,19 @@ class island:
     def speciescount(self):
         # Counts the number of animal per species on the entire Island
 
-        for
+        num_herbivore = 0
+        num_carnivore = 0
+        for lst in self.coord_map:
+
+            for x in lst:
+
+                num_herbivore += len(x.herb)
+                num_carnivore += len(x.carn)
+
+        return num_herbivore, num_carnivore
+
+
+
 
 
 

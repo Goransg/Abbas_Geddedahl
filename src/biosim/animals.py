@@ -10,18 +10,20 @@ class animal(object):
         self.age = age
         self.seed = seed
         rd.seed(a=self.seed)
-        self.fitnessupdate()
+        self.fitness = self.fitnessupdate()
 
     def fitnessupdate(self):
         # Calculating the fitness of the animal; if the weight is negative or zero, the fitness will be zero.
         # Variables in use: a and w. The rest is defined for the respective species.
 
         if self.weight <= 0:
-            self.fitness = 0
+            fitness = 0
 
         else:
-            self.fitness = (1/(1+m.e**(self.phi_age*(self.age-self.a_half)))) * \
+            fitness = (1/(1+m.e**(self.phi_age*(self.age-self.a_half)))) * \
                            (1/(1+m.e**(-self.phi_weight*(self.weight-self.w_half))))
+        return fitness
+
 
 #   @classmethod
 #   def update_params(cls, paramchange):
@@ -89,7 +91,7 @@ class animal(object):
 
         self.weight += (self.beta * F_actual)
 
-        self.fitnessupdate()
+        self.fitness = self.fitnessupdate()
 
     def aging(self):
         # Increases the age of an animal and subtracts yearly weight loss
@@ -97,7 +99,7 @@ class animal(object):
         self.age += 1
         self.weight -= (self.eta * self.weight)
 
-        self.fitnessupdate()
+        self.fitness = self.fitnessupdate()
 
 
 class herbivore(animal):
