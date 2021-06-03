@@ -62,8 +62,15 @@ def test_migration_good_fitness():
     assert individual.migration() is True
 
 
-#def test_parameterupdate():
+#def test_parameterupdate_oneinstance():
     # Test if parameter updating affects the unintended subclass.
+ #   weight = 50
+ #   age = 2
+ #   individual2 = animals.carnivore(age=age, weight=weight, seed=245362)
+ #   individual2.update_params(('carnivore', {'beta': 0.5}))
+ #   assert individual2.beta == 0.5
+
+
 
 
 
