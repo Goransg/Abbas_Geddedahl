@@ -11,6 +11,10 @@ class island:
         y = 0
 
         for line in map_list:
+
+            # Making a coordinate system with nested lists through a nested for-loop.
+            # The Biome class is decided by the type of cell in the map string.
+
             line_list = []
             y += 1
 
