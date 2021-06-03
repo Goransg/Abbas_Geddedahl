@@ -86,24 +86,26 @@ class animal(object):
 
 class herbivore(animal):
 
+    w_birth = 8
+    sigma_birth = 1.5
+    beta = 0.9
+    eta = 0.05
+    a_half = 40
+    phi_age = 0.6
+    w_half = 10
+    phi_weight = 0.1
+    mu = 0.25
+    gamma = 0.2
+    zeta = 3.5
+    xi = 1.2
+    omega = 0.4
+    F = 10
+
     def __init__(self, age, weight, seed = rd.randint(0,9999999)):
         self.seed = seed
         self.weight = weight
         self.age = age
-        self.w_birth = 8
-        self.sigma_birth = 1.5
-        self.beta = 0.9
-        self.eta = 0.05
-        self.a_half = 40
-        self.phi_age = 0.6
-        self.w_half = 10
-        self.phi_weight = 0.1
-        self.mu = 0.25
-        self.gamma = 0.2
-        self.zeta = 3.5
-        self.xi = 1.2
-        self.omega = 0.4
-        self.F = 10
+
         self.fitness()
 
 '''
