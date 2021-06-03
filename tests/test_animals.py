@@ -61,6 +61,23 @@ def test_migration_good_fitness():
     individual = animals.carnivore(age=age, weight=weight, seed=245362)
     assert individual.migration() is True
 
+def test_aging():
+    weight = 50
+    age = 2
+    yearly_weightloss = 50 * 0.05
+    individual = animals.herbivore(age=age, weight=weight, seed=245362)
+    individual.aging()
+    assert individual.age == 3
+    assert individual.weight == (50 - yearly_weightloss)
+
+def test_feeding():
+    weight = 50
+    age = 2
+    yearly_weightgain = 20 * 0.9
+    individual = animals.herbivore(age=age, weight=weight, seed=245362)
+    individual.feeding(20)
+    assert individual.weight == (50 + yearly_weightgain)
+
 
 #def test_parameterupdate_oneinstance():
     # Test if parameter updating affects the unintended subclass.

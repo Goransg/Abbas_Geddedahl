@@ -83,6 +83,17 @@ class animal(object):
         else:
             return False
 
+    def feeding(self, F_actual):
+        # Annual eating and weight loss calculated into annual weight change for the animal
+
+        self.weight += (self.beta * F_actual)
+
+    def aging(self):
+        # Increases the age of an animal and subtracts yearly weight loss
+
+        self.age += 1
+        self.weight -= (self.eta * self.weight)
+
 
 class herbivore(animal):
 
@@ -108,35 +119,30 @@ class herbivore(animal):
 
         self.fitness()
 
-'''
-    def feeding(self, F_actual):
-        # Annual eating and weight loss calculated into annual weight change for the animal
-
-        self.weight += (self.beta * F_actual) - (self.eta * self.weight)
-'''
-
 
 class carnivore(animal):
 
-    def __init__(self, age, weight, seed = rd.randint(0,9999999)):
+    w_birth = 6
+    sigma_birth = 1
+    beta = 0.75
+    eta = 0.125
+    a_half = 40
+    phi_age = 0.3
+    w_half = 4
+    phi_weight = 0.4
+    mu = 0.4
+    gamma = 0.8
+    zeta = 3.5
+    xi = 1.1
+    omega = 0.8
+    F = 50
+    DeltaPhiMax = 10
+
+    def __init__(self, age, weight, seed=rd.randint(0, 9999999)):
         self.seed = seed
         self.weight = weight
         self.age = age
-        self.w_birth = 6
-        self.sigma_birth = 1
-        self.beta = 0.75
-        self.eta = 0.125
-        self.a_half = 40
-        self.phi_age = 0.3
-        self.w_half = 4
-        self.phi_weight = 0.4
-        self.mu = 0.4
-        self.gamma = 0.8
-        self.zeta = 3.5
-        self.xi = 1.1
-        self.omega = 0.8
-        self.F = 50
-        self.DeltaPhiMax = 10
+
         self.fitness()
 
 
