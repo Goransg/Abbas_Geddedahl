@@ -25,6 +25,8 @@ def test_creation_carn():
     assert individual_carn.fitness == fitness
 
 def test_death_bad_fitness():
+    # Testing if an animal will die if the fitness is poor
+
     weight = 0
     age = 100
     individual = animals.carnivore(weight=weight, age=age, seed=245362)
@@ -32,36 +34,48 @@ def test_death_bad_fitness():
 
 
 def test_death_good_fitness():
+    # Testing if an animal will not die if the fitness is good
+
     weight = 50
     age = 2
     individual = animals.carnivore(weight=weight, age=age, seed=245362)
     assert individual.death() is False
 
 def test_birth_bad_recreation():
+    # Testing if an animal will recreate if the fitness is poor
+
     weight = 0
     age = 100
     individual = animals.carnivore(weight=weight, age=age, seed=45362)
     assert individual.birth(n_animals=0) is False
 
 def test_birth_good_recreation():
+    # Testing if an animal will recreate if the fitness is good
+
     weight = 100
     age = 5
     individual = animals.carnivore(weight=weight, age=age, seed=86245)
     assert individual.birth(n_animals=500) is True
 
 def test_migration_bad_fitness():
+    # Testing if an animal will migrate if the fitness is poor
+
     weight = 0
     age = 100
     individual = animals.carnivore(weight=weight, age=age, seed=245362)
     assert individual.migration() is False
 
 def test_migration_good_fitness():
+    # Testing if an animal will migrate if the fitness is good
+
     weight = 50
     age = 2
     individual = animals.carnivore(weight=weight, age=age, seed=7)
     assert individual.migration() is True
 
 def test_aging():
+    # Testing the aging and yearly weight decrease function
+
     weight = 50
     age = 2
     yearly_weightloss = 50 * 0.05
@@ -71,6 +85,8 @@ def test_aging():
     assert individual.weight == (50 - yearly_weightloss)
 
 def test_feeding_herbivore():
+    # Testing the feeding function for herbivores
+
     weight = 50
     age = 2
     yearly_weightgain = 10 * 0.9
@@ -81,11 +97,14 @@ def test_feeding_herbivore():
 
 
 def test_feeding_carnivore():
-    weight = 100
+    # Testing the feeding function for carnivores
+
+    weight = 50
     age = 2
-    yearly_weightgain = 1 * 0.75
+    yearly_weightgain = 10 * 0.75
     individual = animals.carnivore(weight=weight, age=age, seed=8)
-    left = individual.feeding([animals.herbivore(weight=1, age=300), animals.herbivore(weight=60, age=1)])
+    individual.DeltaPhiMax = 1
+    left = individual.feeding([animals.herbivore(weight=10, age=300), animals.herbivore(weight=60, age=1)])
     assert len(left) == 1
     assert individual.weight == (50 + yearly_weightgain)
 
