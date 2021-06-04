@@ -186,12 +186,15 @@ class carnivore(animal):
                 p_eat = 1
 
             else:
-                p_eat = ()/self.DeltaPhiMax
+                p_eat = (self.fitness - prey.fitness)/self.DeltaPhiMax
 
             if rd.uniform(0, 1) <= p_eat and appetite > 0:
                 living_herbivores.remove(prey)
-                self.weight += prey.weight * beta
+                self.weight += prey.weight * self.beta
 
+        self.fitness = self.fitness_update()
+
+        return living_herbivores
 
 
 

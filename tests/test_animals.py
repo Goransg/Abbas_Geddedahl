@@ -70,7 +70,7 @@ def test_aging():
     assert individual.age == 3
     assert individual.weight == (50 - yearly_weightloss)
 
-def test_feeding():
+def test_feeding_herbivore():
     weight = 50
     age = 2
     yearly_weightgain = 10 * 0.9
@@ -78,6 +78,17 @@ def test_feeding():
     left = individual.feeding(2000)
     assert individual.weight == (50 + yearly_weightgain)
     assert left == 1990
+
+
+def test_feeding_carnivore():
+    weight = 100
+    age = 2
+    yearly_weightgain = 1 * 0.75
+    individual = animals.carnivore(weight=weight, age=age, seed=8)
+    left = individual.feeding([animals.herbivore(weight=1, age=300), animals.herbivore(weight=60, age=1)])
+    assert len(left) == 1
+    assert individual.weight == (50 + yearly_weightgain)
+
 
 
 def test_parameterupdate_oneinstance():
