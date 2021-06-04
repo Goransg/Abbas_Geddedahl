@@ -24,16 +24,22 @@ class biome:
         self.herb[:] = [specie for specie in self.herb if not specie.death()]
         self.carn[:] = [specie for specie in self.carn if not specie.death()]
 
-    def grazing(self):
-        pass
-
     def breeding(self):
+
         pass
 
+    def aging(self):
+        for specie in self.herb:
+            specie.aging()
+        for specie in self.carn:
+            specie.aging()
 
-
-
-
+    def grazing(self):
+        for specie in self.herb:
+            if self.fodder>0:
+                specie.feeding(self.fodder)
+        for specie in self.carn:
+            pass
 
 
 
@@ -64,16 +70,17 @@ class water(biome):
         self.f_max = 0
         super().__init__(loc)
 
-A = lowland((1,1))
+
+A = lowland((1, 1))
 A.add_population([{'species': 'Herbivore',
-                           'age': 5,
-                           'weight': 20}])
+                   'age': 5,
+                   'weight': 20}])
 A.add_population([{'species': 'Herbivore',
-                           'age': 5,
-                           'weight': 20}])
+                   'age': 5,
+                   'weight': 20}])
 A.add_population([{'species': 'Herbivore',
-                           'age': 5,
-                           'weight': 20}])
+                   'age': 5,
+                   'weight': 20}])
 print(A.herb)
 A.remove_population()
 print(A.herb)
