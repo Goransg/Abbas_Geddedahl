@@ -11,6 +11,7 @@ class BioSim:
         self.ini_pop = ini_pop
         self.seed = seed
         self.vis_years = vis_years
+        self.island = island(island_map)
 
 
     """
@@ -67,16 +68,22 @@ class BioSim:
     @property
     def year(self):
     """Last year simulated."""
+
     @property
     def num_animals(self):
-    """Total number of animals on island."""
+        # Calls animal_count function from  class, returning the number of animals on the island
+
+        animals_on_island = self.island.animal_count()
+
+        return animals_on_island
     @property
     def num_animals_per_species(self):
-        carnivorecount, herbivorecount = island.speciescount()
+        # Calls species_count function from island class, returning a dictionary showing the population of the two
+        # species of the island
 
-        return carnivorecount, herbivorecount
+        animals_per_species = self.island.species_count()
 
+        return animals_per_species
 
-    """Number of animals per species in island, as dictionary."""
     def make_movie(self):
     """Create MPEG4 movie from visualization images saved."""
