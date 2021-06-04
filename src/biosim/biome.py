@@ -18,7 +18,7 @@ class biome:
             if specie['species'] == 'Herbivore':
                 self.herb.append(herbivore(specie['age'], specie['weight']))
             elif specie['species'] == 'Carnivore':
-                self.carn.append(herbivore(specie['age'], specie['weight']))
+                self.carn.append(carnivore(specie['age'], specie['weight']))
 
     def remove_population(self):
         self.herb[:] = [specie for specie in self.herb if not specie.death()]
