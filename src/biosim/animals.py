@@ -4,45 +4,26 @@ import random as rd
 
 class animal(object):
 
-    def __init__(self, species, weight, age, seed = rd.randint(0,9999999)):
-        self.species = species
+    def __init__(self, weight, age, seed=rd.randint(0,9999999)):
+        # self.species = species
         self.weight = weight
         self.age = age
         self.seed = seed
         rd.seed(a=self.seed)
-        self.fitnessupdate()
+        self.fitness = self.fitness_update()
 
-    def fitnessupdate(self):
+    def fitness_update(self):
         # Calculating the fitness of the animal; if the weight is negative or zero, the fitness will be zero.
         # Variables in use: a and w. The rest is defined for the respective species.
 
         if self.weight <= 0:
-            self.fitness = 0
+            fitness = 0
 
         else:
-            self.fitness = (1/(1+m.e**(self.phi_age*(self.age-self.a_half)))) * \
+            fitness = (1/(1+m.e**(self.phi_age*(self.age-self.a_half)))) * \
                            (1/(1+m.e**(-self.phi_weight*(self.weight-self.w_half))))
+        return fitness
 
-#   @classmethod
-#   def update_params(cls, paramchange):
-#      if paramchange[0].lower() == 'carnivore':
-#
-#        individual = carnivore(age=2, weight=30, seed=12345)
-#
-#        elif paramchange[0].lower() == 'herbivore':
-#            individual = herbivore(age=2, weight=30, seed=12345)
-#
-#       else:
-#            raise ValueError(" Unknown Species entered ")
-
-#        for param in paramchange[1].keys():
-#
-#            try:
-#                paramname = exec("individual.%s" % (param))
-#                paramname = paramdict[param]
-
-#            except:
-#                warnings.warn(param + ' ' + 'is not a valid class parameter, and will not be updated.')
 
     def birth(self, n_animals):
         # Calculating the possibility and probability of birth, returning True if birth and false if not birth.
@@ -78,8 +59,8 @@ class animal(object):
         # Calculating probability of migration, and deciding whether the animal will migrate or not.
 
         migration_proba = self.mu * self.fitness
-
-        if rd.uniform(0,1) <= migration_proba:
+        print(self.mu)
+        if rd.uniform(0, 1) <= migration_proba:
             return True
         else:
             return False
@@ -89,7 +70,7 @@ class animal(object):
 
         self.weight += (self.beta * F_actual)
 
-        self.fitnessupdate()
+        self.fitness = self.fitness_update()
 
     def aging(self):
         # Increases the age of an animal and subtracts yearly weight loss
@@ -97,7 +78,22 @@ class animal(object):
         self.age += 1
         self.weight -= (self.eta * self.weight)
 
-        self.fitnessupdate()
+        self.fitness = self.fitness_update()
+
+    @classmethod
+    def update_params(cls, paramchange):
+        for param in paramchange[1].keys():
+            classname = cls.__name__
+            if param in dir(cls):
+                try:
+                    paramname = classname + '.' + param
+                    exec("%s = %f" % (paramname, paramchange[1][param]))
+                    print(paramchange[1][param])
+
+                except:
+                        warnings.warn(param + ' ' + 'is not a valid class parameter, and will not be updated.')
+            else:
+                raise ValueError('Unknown parameter inserted')
 
 
 class herbivore(animal):
@@ -117,8 +113,8 @@ class herbivore(animal):
     omega = 0.4
     F = 10
 
-    def __init__(self, age, weight, seed = rd.randint(0,9999999)):
-        super().__init__(weight, age, seed = rd.randint(0,9999999))
+    def __init__(self, weight, age, seed = rd.randint(0,9999999)):
+        super().__init__(weight, age, seed)
 
 class carnivore(animal):
 
@@ -138,15 +134,7 @@ class carnivore(animal):
     F = 50
     DeltaPhiMax = 10
 
-    def __init__(self, age, weight, seed=rd.randint(0, 9999999)):
-        super().__init__(weight, age, seed = rd.randint(0,9999999))
+    def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
+        super().__init__(weight, age, seed)
 
 
-'''
-
-    def feeding(self, w_herb_tot_year):
-        # Annual eating and weight loss calculated into annual weight change for the animal
-        
-        self.weight += self.beta * w_herb_tot_year - (self.eta * self.weight)
-
-'''
