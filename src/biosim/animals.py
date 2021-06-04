@@ -1,5 +1,6 @@
 import math as m
 import random as rd
+import operator
 
 
 class animal(object):
@@ -128,6 +129,26 @@ class herbivore(animal):
     def __init__(self, weight, age, seed = rd.randint(0,9999999)):
         super().__init__(weight, age, seed)
 
+    def feeding(self, f_available):
+        # Takes amt of available fodder, adds the fodder eaten by animal to its weight.
+        # If less than desired fodder (F) is present, it will eat all available.
+        # Returns the remaining fodder in the cell after the animal has eaten.
+
+        cur_fodder = f_available
+
+        if f_available >= self.F:
+            self.weight += (self.beta * self.F)
+            cur_fodder -= self.F
+
+        else:
+            self.weight += (self.beta * f_available)
+            cur_fodder -= f_available
+
+        self.fitness = self.fitness_update()
+
+        return cur_fodder
+
+
 class carnivore(animal):
 
     w_birth = 6
@@ -148,5 +169,31 @@ class carnivore(animal):
 
     def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
         super().__init__(weight, age, seed)
+
+    def feeding(self, available_herbivores):
+
+        # available_herbivores.sort(key=operator.attrgetter('fitness'))
+
+        appetite = self.F
+        living_herbivores = available_herbivores
+
+        for prey in available_herbivores:
+            
+            if prey.fitness > self.fitness: 
+                p_eat = 0
+
+            elif (self.fitness - prey.fitness) > self.DeltaPhiMax:
+                p_eat = 1
+
+            else:
+                p_eat = ()/self.DeltaPhiMax
+
+            if rd.uniform(0, 1) <= p_eat and appetite > 0:
+                living_herbivores.remove(prey)
+                self.weight += prey.weight * beta
+
+
+
+
 
 
