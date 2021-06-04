@@ -82,11 +82,11 @@ class animal(object):
 
     @classmethod
     def update_params(cls, paramchange):
-
+        print(cls)
         for param in paramchange[1].keys():
             if param in dir(cls):
                 try:
-                    paramname = exec("carnivore.%s" % (param))
+                    paramname = exec("cls.%s" % (param))
                     paramname = paramchange[1][param]
                     print(paramname, paramchange[1][param])
 
