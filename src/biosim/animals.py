@@ -82,16 +82,16 @@ class animal(object):
 
     @classmethod
     def update_params(cls, paramchange):
-        print(cls)
         for param in paramchange[1].keys():
+            classname = cls.__name__
             if param in dir(cls):
                 try:
-                    paramname = exec("cls.%s" % (param))
-                    paramname = paramchange[1][param]
-                    print(paramname, paramchange[1][param])
+                    paramname = classname + '.' + param
+                    exec("%s = %f" % (paramname, paramchange[1][param]))
+                    print(paramchange[1][param])
 
                 except:
-                    warnings.warn(param + ' ' + 'is not a valid class parameter, and will not be updated.')
+                        warnings.warn(param + ' ' + 'is not a valid class parameter, and will not be updated.')
             else:
                 raise ValueError('Unknown parameter inserted')
 
