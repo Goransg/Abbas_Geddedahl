@@ -75,10 +75,11 @@ def test_aging():
 def test_feeding():
     weight = 50
     age = 2
-    yearly_weightgain = 20 * 0.9
+    yearly_weightgain = 10 * 0.9
     individual = animals.herbivore(weight=weight, age=age, seed=245362)
-    individual.feeding(20)
+    left = individual.feeding(2000)
     assert individual.weight == (50 + yearly_weightgain)
+    assert left == 1990
 
 >>>>>>> branch_animal01
 

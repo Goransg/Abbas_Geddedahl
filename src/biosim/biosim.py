@@ -65,6 +65,7 @@ class BioSim:
     Add a population to the island
     :param population: List of dictionaries specifying population
     """
+
     @property
     def year(self):
     """Last year simulated."""

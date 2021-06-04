@@ -69,6 +69,29 @@ class island:
 
         return animal_amount
 
+    def sim_year(self):
+        # Goes through a yearly simulation
+
+        for lst in self.coord_map:
+
+            for x in lst:
+                x.update_fodder()
+                x.herb_feeding()
+                x.carn_feeding()
+                x.procreation()
+                x.migration()
+                x.aging()
+                x.death()
+
+
+    def transfer(self, migrators, destinations):
+
+        for num in range(len(migrators)):
+
+            self.coord_map[destinations[num][0]][destinations[num][1]].append(migrators[num])
+
+
+
 
 
 
