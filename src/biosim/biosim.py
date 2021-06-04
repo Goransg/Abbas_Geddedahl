@@ -61,6 +61,8 @@ class BioSim:
     :param num_years: number of years to simulate
     """
     def add_population(self, population):
+        self.island.add_population(population)
+
     """
     Add a population to the island
     :param population: List of dictionaries specifying population

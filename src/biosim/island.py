@@ -83,12 +83,20 @@ class island:
                 x.aging()
                 x.death()
 
-
     def transfer(self, migrators, destinations):
+        # Transfers given migrators to given destinations
 
         for num in range(len(migrators)):
 
             self.coord_map[destinations[num][0]][destinations[num][1]].append(migrators[num])
+
+    def add_population(self, population):
+        # Adds a population to a given cell
+
+        self.coord_map[population['loc'][0]][population['loc'][1]].add_population(population['pop'])
+
+
+
 
 
 
