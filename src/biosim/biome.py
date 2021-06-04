@@ -16,9 +16,9 @@ class biome:
     def add_population(self, pop):
         for specie in pop:
             if specie['species'] == 'Herbivore':
-                self.herb.append(herbivore(specie['age'], specie['weight']))
+                self.herb.append(herbivore(specie['weight'], specie['age']))
             elif specie['species'] == 'Carnivore':
-                self.carn.append(carnivore(specie['age'], specie['weight']))
+                self.carn.append(carnivore(specie['weight'], specie['age']))
 
     def remove_population(self):
         self.herb[:] = [specie for specie in self.herb if not specie.death()]
@@ -37,10 +37,27 @@ class biome:
     def grazing(self):
         for specie in self.herb:
             if self.fodder>0:
-                specie.feeding(self.fodder)
+                self.fodder = specie.feeding(self.fodder)
         for specie in self.carn:
             pass
 
+    # def get_age(self):
+    #     ages = []
+    #     for specie in self.herb:
+    #         ages.append(specie.age)
+    #     return ages
+    #
+    # def get_weights(self):
+    #     weights = []
+    #     for specie in self.herb:
+    #         weights.append(specie.weight)
+    #     return weights
+    #
+    # def get_fitness(self):
+    #     fitnesslist = []
+    #     for specie in self.herb:
+    #         fitnesslist.append(specie.fitness)
+    #     return fitnesslist
 
 
 class lowland(biome):
@@ -71,16 +88,27 @@ class water(biome):
         super().__init__(loc)
 
 
-A = lowland((1, 1))
-A.add_population([{'species': 'Herbivore',
-                   'age': 5,
-                   'weight': 20}])
-A.add_population([{'species': 'Herbivore',
-                   'age': 5,
-                   'weight': 20}])
-A.add_population([{'species': 'Herbivore',
-                   'age': 5,
-                   'weight': 20}])
-print(A.herb)
-A.remove_population()
-print(A.herb)
+# A = lowland((1, 1))
+# A.add_population([{'species': 'Herbivore',
+#                    'age': 5,
+#                    'weight': 200}])
+# A.add_population([{'species': 'Herbivore',
+#                    'age': 25,
+#                    'weight': 0}])
+# A.add_population([{'species': 'Herbivore',
+#                    'age': 25,
+#                    'weight': 200}])
+# print(A.herb)
+# A.remove_population()
+# print(A.herb)
+# A.aging()
+# print(A.get_age())
+# print(A.get_weights())
+# print(A.get_fitness())
+# print(A.fodder)
+# A.aging()
+# A.grazing()
+# print(A.get_age())
+# print(A.get_weights())
+# print(A.get_fitness())
+# print(A.fodder)
