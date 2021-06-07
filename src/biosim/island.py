@@ -71,14 +71,16 @@ class island:
 
     def sim_year(self):
         # Goes through a yearly simulation
-        yearly_functions = [update_fodder, herb_feeding, carn_feeding, procreation, migration, aging, death]
+        yearly_functions = [update_fodder, grazing, carn_feeding, procreation, 'migration', aging, remove_population]
 
         for func in yearly_functions:
-
+            if func == 'migration':
+                self.migration()
             for lst in self.coord_map:
 
                 for x in lst:
-                    x.func()
+                    try:
+                        func()
 
     def migration(self):
         # Transfers given migrators to given destinations
@@ -119,8 +121,8 @@ class island:
     def add_population(self, population):
         # Adds a population to a given cell
 
-        y_value = population['loc'][0]
-        x_value = population['loc'][1]
+        y_value = population['loc'][0]-1
+        x_value = population['loc'][1]-1
         pop = population['pop']
 
         self.coord_map[y_value][x_value].add_population(pop)
