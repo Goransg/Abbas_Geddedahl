@@ -1,5 +1,4 @@
 from src.biosim.biome import *
-import textwrap
 
 
 class island:
@@ -71,7 +70,7 @@ class island:
 
     def sim_year(self):
         # Goes through a yearly simulation
-        yearly_functions = [update_fodder, grazing, carn_feeding, procreation, 'migration', aging, remove_population]
+        yearly_functions = ['update_fodder', 'grazing', 'carn_feeding', 'procreation', 'migration', 'aging', 'remove_population']
 
         for func in yearly_functions:
             if func == 'migration':
@@ -79,8 +78,7 @@ class island:
             for lst in self.coord_map:
 
                 for x in lst:
-                    try:
-                        func()
+                    exec("x.%s()" % (func))
 
     def migration(self):
         # Transfers given migrators to given destinations
