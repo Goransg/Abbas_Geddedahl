@@ -12,6 +12,7 @@ class animal(object):
         self.seed = seed
         rd.seed(a=self.seed)
         self.fitness = self.fitness_update()
+        self.migrated = False
 
     def fitness_update(self):
         # Calculating the fitness of the animal; if the weight is negative or zero, the fitness will be zero.
@@ -61,7 +62,7 @@ class animal(object):
 
         migration_proba = self.mu * self.fitness
         print(self.mu)
-        if rd.uniform(0, 1) <= migration_proba:
+        if rd.uniform(0, 1) <= migration_proba and self.migrated is False:
             return True
         else:
             return False
