@@ -79,7 +79,8 @@ class island:
                 x.herb_feeding()
                 x.carn_feeding()
                 x.procreation()
-                x.migration()
+                migrators, destinations = x.migration()
+                transfer(migrators, destinations)
                 x.aging()
                 x.death()
 

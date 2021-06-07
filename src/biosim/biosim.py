@@ -56,6 +56,11 @@ class BioSim:
     :param params: Dict with valid parameter specification for landscape
     """
     def simulate(self, num_years):
+
+        for year in range(num_years):
+
+            self.island.sim_year()
+
     """
     Run simulation while visualizing the result.
     :param num_years: number of years to simulate
