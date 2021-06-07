@@ -41,7 +41,7 @@ class animal(object):
     #         else:
     #             return False
 
-    def birth(self, n_animals, avg, std):
+    def birth(self, n_animals):
         # Calculating the possibility and probability of birth, returning True if birth and false if not birth.
 
         if self.weight <= self.zeta * (self.w_birth + self.sigma_birth):
@@ -51,11 +51,11 @@ class animal(object):
             birth_proba = min(1, self.gamma * self.fitness * (n_animals - 1))
 
             if rd.uniform(0, 1) <= birth_proba:
-                nw = rd.gauss(avg, std)
-                if nw > 0 and ((self.xi * nw) > self.weight):
+                nw = rd.gauss(self.w_birth, self.sigma_birth)
+                if nw > 0 and ((self.xi * nw) < self.weight):
+                    return type(self)(nw, 0)
+                else:
                     return None
-                elif nw > 0:
-                    return type(self)(nw, 0), self.weight - (self.xi * nw)
 
             else:
                 return None
