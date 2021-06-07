@@ -51,11 +51,14 @@ class biome:
             specie.aging()
 
     def grazing(self):
+        self.herb.sort(key= lambda x: x.fitness)
+        self.carn.sort(key= lambda x: x.fitness, reverse=True)
         for specie in self.herb:
             if self.fodder > 0:
                 self.fodder = specie.feeding(self.fodder)
         for specie in self.carn:
-            pass
+            if len(self.herb) > 0:
+                specie.feeding(self.carn)
 
     def get_stats(self, lst):
         weights = []
