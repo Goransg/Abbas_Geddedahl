@@ -84,22 +84,66 @@ class island:
                 x.aging()
                 x.death()
 
-    def transfer(self, migrators, destinations):
+    def migration(self):
         # Transfers given migrators to given destinations
 
-        for num in range(len(migrators)):
+        self.migrationreset()
 
-            self.coord_map[destinations[num][0]][destinations[num][1]].append(migrators[num])
+        for y in range(len(self.coord_map)):
+
+            for x in range(len(self.coord_map[y])):
+                cur_cell = self.coord_map[x][y]
+                migrators_herb = [herbivore for herbivore in cur_cell.herb if herbivore.migrate()]
+                migrators_carn = [carnivore for carnivore in cur_cell.carn if carnivore.migrate()]
+
+                for herbivore in migrators_herb:
+
+                    new_x, new_y = migrationdestination(x, y)
+                    new_cell = self.coord_map[new_x][new_y]
+
+                    if new_cell.habitable:
+
+                        new_cell.herb.append(herbivore)
+
+                        herbivore.migrated = True
+
+                for carnivore in migrators_carn:
+
+                    new_x, new_y = migrationdestination(x, y)
+
+                    if new_cell.habitable:
+
+                        new_cell.carn.append(carnivore)
+
+                        carnivore.migrated = True
+
+                cur_cell.herb = [herbivore for herbivore in cur_cell.herb if herbivore.migrate() is False]
+                cur_cell.carn = [carnivore for carnivore in cur_cell.herb if carnivore.migrate() is False]
+
 
     def add_population(self, population):
         # Adds a population to a given cell
 
         self.coord_map[population['loc'][0]][population['loc'][1]].add_population(population['pop'])
 
+    def migrationreset(self):
+        # Sets the "Migrated" flag for animals to False
+
+        for row in self.coord_map:
+
+            for cell in self.coord_map:
+
+                for carnivore in cell.carn:
+                    carnivore.migrated = False
+
+                for herbivore in cell.herb:
+                    herbivore.migrateed = False
 
 
+def migrationdestination(cur_x, cur_y):
+    choice = random.choice([(cur_x + 1, cur_y), (cur_x - 1, cur_y), (cur_x, cur_y + 1), (cur_x, cur_y - 1)])
 
-
+    return choice[0], choice[1]
 
 
 
