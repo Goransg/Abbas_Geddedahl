@@ -3,6 +3,7 @@ from src.biosim.animals import *
 
 class biome:
     f_max = None
+    habitable = None
 
     def __init__(self, loc):
         self.loc = loc
@@ -64,6 +65,7 @@ class lowland(biome):
 
     def __init__(self, loc):
         self.f_max = 800
+        self.habitable = True
         super().__init__(loc)
 
 
@@ -71,6 +73,7 @@ class highland(biome):
 
     def __init__(self, loc):
         self.f_max = 300
+        self.habitable = True
         super().__init__(loc)
 
 
@@ -78,6 +81,7 @@ class desert(biome):
 
     def __init__(self, loc):
         self.f_max = 0
+        self.habitable = True
         super().__init__(loc)
 
 
@@ -85,6 +89,7 @@ class water(biome):
 
     def __init__(self, loc):
         self.f_max = 0
+        self.habitable = False
         super().__init__(loc)
 
 
