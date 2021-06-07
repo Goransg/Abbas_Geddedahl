@@ -1,5 +1,4 @@
 from src.biosim.animals import *
-from statistics import mean, stdev
 
 
 class biome:
@@ -54,23 +53,23 @@ class biome:
             if len(self.herb) > 0:
                 specie.feeding(sorted(self.herb, key=lambda x: x.fitness))
 
-    def get_age(self):
-        ages = []
-        for specie in self.herb:
-            ages.append(specie.age)
-        return ages
-
-    def get_weights(self):
-        weights = []
-        for specie in self.herb:
-            weights.append(specie.weight)
-        return weights
-
-    def get_fitness(self):
-        fitnesslist = []
-        for specie in self.herb:
-            fitnesslist.append(specie.fitness)
-        return fitnesslist
+    # def get_age(self):
+    #     ages = []
+    #     for specie in self.herb:
+    #         ages.append(specie.age)
+    #     return ages
+    #
+    # def get_weights(self):
+    #     weights = []
+    #     for specie in self.herb:
+    #         weights.append(specie.weight)
+    #     return weights
+    #
+    # def get_fitness(self):
+    #     fitnesslist = []
+    #     for specie in self.herb:
+    #         fitnesslist.append(specie.fitness)
+    #     return fitnesslist
 
 
 class lowland(biome):
@@ -104,33 +103,33 @@ class water(biome):
         self.habitable = False
         super().__init__(loc)
 
-A = lowland((1, 1))
-A.add_population([{'species': 'Herbivore',
-                   'age': 5,
-                   'weight': 200}])
-A.add_population([{'species': 'Herbivore',
-                   'age': 25,
-                   'weight': 0}])
-A.add_population([{'species': 'Herbivore',
-                   'age': 25,
-                   'weight': 8000}])
-print(A.herb)
-A.remove_population()
-print(A.herb)
-A.aging()
-print(A.get_age())
-print(A.get_weights())
-print(A.get_fitness())
-print(A.fodder)
-A.aging()
-A.grazing()
-print(A.get_age())
-print(A.get_weights())
-print(A.get_fitness())
-print(A.fodder)
-print(len(A.herb))
-A.breeding()
-print(len(A.herb))
-print(A.get_age())
-print(A.get_weights())
-print(A.get_fitness())
+# A = lowland((1, 1))
+# A.add_population([{'species': 'Herbivore',
+#                    'age': 5,
+#                    'weight': 200}])
+# A.add_population([{'species': 'Herbivore',
+#                    'age': 25,
+#                    'weight': 0}])
+# A.add_population([{'species': 'Herbivore',
+#                    'age': 25,
+#                    'weight': 8000}])
+# print(A.herb)
+# A.remove_population()
+# print(A.herb)
+# A.aging()
+# print(A.get_age())
+# print(A.get_weights())
+# print(A.get_fitness())
+# print(A.fodder)
+# A.aging()
+# A.grazing()
+# print(A.get_age())
+# print(A.get_weights())
+# print(A.get_fitness())
+# print(A.fodder)
+# print(len(A.herb))
+# A.breeding()
+# print(len(A.herb))
+# print(A.get_age())
+# print(A.get_weights())
+# print(A.get_fitness())
