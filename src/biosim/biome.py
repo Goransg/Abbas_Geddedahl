@@ -1,4 +1,5 @@
 from src.biosim.animals import *
+from statistics import mean, stdev
 
 
 class biome:
@@ -26,8 +27,22 @@ class biome:
         self.carn[:] = [specie for specie in self.carn if not specie.death()]
 
     def breeding(self):
-
-        pass
+        for specie in self.herb:
+            n = len(self.herb)
+            avg, std = self.get_stats(self.herb)
+            result = specie.birth(n, avg, std)
+            if result is not None:
+                child, sw = result
+                self.herb.append(child)
+                specie.weight = sw
+        for specie in self.carn:
+            n = len(self.carn)
+            avg, std = self.get_stats(self.carn)
+            result = specie.birth(n, avg, std)
+            if result is not None:
+                child, sw = result
+                self.carn.append(child)
+                specie.weight = sw
 
     def aging(self):
         for specie in self.herb:
@@ -37,10 +52,19 @@ class biome:
 
     def grazing(self):
         for specie in self.herb:
-            if self.fodder>0:
+            if self.fodder > 0:
                 self.fodder = specie.feeding(self.fodder)
         for specie in self.carn:
             pass
+
+    def get_stats(self, lst):
+        weights = []
+        for specie in lst:
+            weights.append(specie.weight)
+        avg = mean(weights)
+        std = stdev(weights)
+        return avg, std
+
 
     # def get_age(self):
     #     ages = []
@@ -92,7 +116,6 @@ class water(biome):
         self.habitable = False
         super().__init__(loc)
 
-
 # A = lowland((1, 1))
 # A.add_population([{'species': 'Herbivore',
 #                    'age': 5,
@@ -102,7 +125,7 @@ class water(biome):
 #                    'weight': 0}])
 # A.add_population([{'species': 'Herbivore',
 #                    'age': 25,
-#                    'weight': 200}])
+#                    'weight': 8000}])
 # print(A.herb)
 # A.remove_population()
 # print(A.herb)
@@ -117,3 +140,10 @@ class water(biome):
 # print(A.get_weights())
 # print(A.get_fitness())
 # print(A.fodder)
+# print(len(A.herb))
+# A.breeding()
+# print(len(A.herb))
+# print(A.get_age())
+# print(A.get_weights())
+# print(A.get_fitness())
+
