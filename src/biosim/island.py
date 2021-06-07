@@ -71,18 +71,14 @@ class island:
 
     def sim_year(self):
         # Goes through a yearly simulation
+        yearly_functions = [update_fodder, herb_feeding, carn_feeding, procreation, migration, aging, death]
 
-        for lst in self.coord_map:
+        for func in yearly_functions:
 
-            for x in lst:
-                x.update_fodder()
-                x.herb_feeding()
-                x.carn_feeding()
-                x.procreation()
-                migrators, destinations = x.migration()
-                transfer(migrators, destinations)
-                x.aging()
-                x.death()
+            for lst in self.coord_map:
+
+                for x in lst:
+                    x.func()
 
     def migration(self):
         # Transfers given migrators to given destinations
@@ -120,11 +116,14 @@ class island:
                 cur_cell.herb = [herbivore for herbivore in cur_cell.herb if herbivore.migrate() is False]
                 cur_cell.carn = [carnivore for carnivore in cur_cell.herb if carnivore.migrate() is False]
 
-
     def add_population(self, population):
         # Adds a population to a given cell
 
-        self.coord_map[population['loc'][0]][population['loc'][1]].add_population(population['pop'])
+        y_value = population['loc'][0]
+        x_value = population['loc'][1]
+        pop = population['pop']
+
+        self.coord_map[y_value][x_value].add_population(pop)
 
     def migrationreset(self):
         # Sets the "Migrated" flag for animals to False

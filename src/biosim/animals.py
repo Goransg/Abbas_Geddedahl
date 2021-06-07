@@ -67,25 +67,6 @@ class animal(object):
         else:
             return False
 
-    def feeding(self, f_available):
-        # Takes amt of available fodder, adds the fodder eaten by animal to its weight.
-        # If less than desired fodder (F) is present, it will eat all available.
-        # Returns the remaining fodder in the cell after the animal has eaten.
-
-        cur_fodder = f_available
-
-        if f_available >= self.F:
-            self.weight += (self.beta * self.F)
-            cur_fodder -= self.F
-
-        else:
-            self.weight += (self.beta * f_available)
-            cur_fodder -= f_available
-
-        self.fitness = self.fitness_update()
-
-        return cur_fodder
-
     def aging(self):
         # Increases the age of an animal and subtracts yearly weight loss
 
