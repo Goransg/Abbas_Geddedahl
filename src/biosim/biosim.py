@@ -60,11 +60,11 @@ class BioSim:
 
     def simulate(self, num_years):
 
-        for year in range(num_years):
-            print(self.island.species_count())
+        for year in range(num_years-1):
+            print(year+1, self.island.species_count())
             self.island.sim_year()
 
-        print(self.island.species_count())
+        print(year, self.island.species_count())
 
 
 

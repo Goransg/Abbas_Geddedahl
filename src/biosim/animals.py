@@ -1,6 +1,7 @@
 import math as m
 import random as rd
 import operator
+import warnings
 
 
 class animal(object):
@@ -161,7 +162,7 @@ class carnivore(animal):
     xi = 1.1
     omega = 0.8
     F = 50
-    DeltaPhiMax = 10
+    DeltaPhiMax = 5
 
     def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
         super().__init__(weight, age, seed)

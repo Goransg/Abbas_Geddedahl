@@ -49,9 +49,9 @@ class biome:
         for specie in self.herb:
             if self.fodder > 0:
                 self.fodder = specie.feeding(self.fodder)
-        # for specie in sorted(self.carn, key=lambda x: x.fitness, reverse=True):
-        #    if len(self.herb) > 0:
-        #        specie.feeding(sorted(self.herb, key=lambda x: x.fitness))
+        for specie in sorted(self.carn, key=lambda x: x.fitness, reverse=True):
+            if len(self.herb) > 0:
+                self.herb = specie.feeding(sorted(self.herb, key=lambda x: x.fitness))
 
     # def get_age(self):
     #     ages = []
@@ -133,3 +133,4 @@ class water(biome):
 # print(A.get_age())
 # print(A.get_weights())
 # print(A.get_fitness())
+# print(A.carn)
