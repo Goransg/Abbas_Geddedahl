@@ -13,6 +13,7 @@ class BioSim:
         self.vis_years = vis_years
         self.island = island(island_map)
         self.add_population(self.ini_pop)
+        rd.seed(a=self.seed)
 
     """
     :param island_map: Multi-line string specifying island geography
