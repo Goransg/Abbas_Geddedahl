@@ -4,15 +4,15 @@ from src.biosim.island import *
 class BioSim:
 
     def __init__(self, island_map, ini_pop, seed,
-    vis_years=1, ymax_animals=None, cmax_animals=None, hist_specs=None,
-    img_dir=None, img_base=None, img_fmt='png', img_years=None,
-    log_file=None):
+                 vis_years=1, ymax_animals=None, cmax_animals=None, hist_specs=None,
+                 img_dir=None, img_base=None, img_fmt='png', img_years=None,
+                 log_file=None):
         self.island_map = island_map
         self.ini_pop = ini_pop
         self.seed = seed
         self.vis_years = vis_years
         self.island = island(island_map)
-
+        self.add_population(self.ini_pop)
 
     """
     :param island_map: Multi-line string specifying island geography
@@ -42,32 +42,37 @@ class BioSim:
     img_dir and img_base must either be both None or both strings.
     """
 
-
     def set_animal_parameters(self, species, params):
-    """
-    Set parameters for animal species.
-    :param species: String, name of animal species
-    :param params: Dict with valid parameter specification for species
-    """
+
+        """
+        Set parameters for animal species.
+        :param species: String, name of animal species
+        :param params: Dict with valid parameter specification for species
+        """
+
     def set_landscape_parameters(self, landscape, params):
-    """
-    Set parameters for landscape type.
-    :param landscape: String, code letter for landscape
-    :param params: Dict with valid parameter specification for landscape
-    """
+
+        """
+        Set parameters for landscape type.
+        :param landscape: String, code letter for landscape
+        :param params: Dict with valid parameter specification for landscape
+        """
+
     def simulate(self, num_years):
 
         for year in range(num_years):
-
+            print(self.island.species_count())
             self.island.sim_year()
-            pop = self.num_animals_per_species()
-            print(pop)
+
+        print(self.island.species_count())
+
 
 
     """
     Run simulation while visualizing the result.
     :param num_years: number of years to simulate
     """
+
     def add_population(self, population):
         self.island.add_population(population)
 
@@ -78,7 +83,8 @@ class BioSim:
 
     @property
     def year(self):
-    """Last year simulated."""
+
+        """Last year simulated."""
 
     @property
     def num_animals(self):
@@ -87,14 +93,13 @@ class BioSim:
         animals_on_island = self.island.animal_count()
 
         return animals_on_island
+
     @property
     def num_animals_per_species(self):
         # Calls species_count function from island class, returning a dictionary showing the population of the two
         # species of the island
-
-        animals_per_species = self.island.species_count()
-
-        return animals_per_species
+        return self.island.species_count()
 
     def make_movie(self):
-    """Create MPEG4 movie from visualization images saved."""
+
+        """Create MPEG4 movie from visualization images saved."""

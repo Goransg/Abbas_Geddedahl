@@ -44,7 +44,7 @@ class animal(object):
     def birth(self, n_animals):
         # Calculating the possibility and probability of birth, returning True if birth and false if not birth.
 
-        if self.weight <= self.zeta * (self.w_birth + self.sigma_birth):
+        if (self.weight <= self.zeta * (self.w_birth + self.sigma_birth)) or n_animals < 2:
             return None
 
         else:
@@ -79,7 +79,6 @@ class animal(object):
         # Calculating probability of migration, and deciding whether the animal will migrate or not.
 
         migration_proba = self.mu * self.fitness
-        print(self.mu)
         if rd.uniform(0, 1) <= migration_proba and self.migrated is False:
             return True
         else:
@@ -101,7 +100,6 @@ class animal(object):
                 try:
                     paramname = classname + '.' + param
                     exec("%s = %f" % (paramname, paramchange[1][param]))
-                    print(paramchange[1][param])
 
                 except:
                     warnings.warn(param + ' ' + 'is not a valid class parameter, and will not be updated.')

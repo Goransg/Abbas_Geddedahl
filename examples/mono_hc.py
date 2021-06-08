@@ -9,7 +9,7 @@ __author__ = 'Hans Ekkehard Plesser, NMBU'
 
 
 import textwrap
-from biosim.simulation import BioSim
+from src.biosim.biosim import BioSim
 
 geogr = """WWW
            WLW
@@ -31,5 +31,5 @@ for seed in range(100, 103):
     sim = BioSim(geogr, ini_herbs, seed=seed,
                  img_dir='results', img_base=f'mono_hc_{seed:05d}', img_years=300)
     sim.simulate(50)
-    sim.add_population(ini_carns)
+    #sim.add_population(ini_carns)
     sim.simulate(251)

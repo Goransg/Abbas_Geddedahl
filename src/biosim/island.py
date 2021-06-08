@@ -1,5 +1,5 @@
 from src.biosim.biome import *
-
+import random as rd
 
 class island:
 
@@ -70,27 +70,28 @@ class island:
 
     def sim_year(self):
         # Goes through a yearly simulation
-        yearly_functions = ['update_fodder', 'grazing', 'carn_feeding', 'procreation', 'migration', 'aging', 'remove_population']
+        yearly_functions = ['update_fodder', 'grazing', 'breeding', 'migration', 'aging', 'remove_population']
 
         for func in yearly_functions:
             if func == 'migration':
                 self.migration()
-            for lst in self.coord_map:
+            else:
+                for lst in self.coord_map:
 
-                for x in lst:
-                    exec("x.%s()" % (func))
+                    for x in lst:
+                        exec("x.%s()" % (func))
 
     def migration(self):
         # Transfers given migrators to given destinations
 
         self.migrationreset()
 
-        for y in range(len(self.coord_map)):
+        for y in range(len(self.coord_map)-1):
 
-            for x in range(len(self.coord_map[y])):
+            for x in range(len(self.coord_map[y])-1):
                 cur_cell = self.coord_map[x][y]
-                migrators_herb = [herbivore for herbivore in cur_cell.herb if herbivore.migrate()]
-                migrators_carn = [carnivore for carnivore in cur_cell.carn if carnivore.migrate()]
+                migrators_herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration()]
+                migrators_carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration()]
 
                 for herbivore in migrators_herb:
 
@@ -106,6 +107,7 @@ class island:
                 for carnivore in migrators_carn:
 
                     new_x, new_y = migrationdestination(x, y)
+                    new_cell = self.coord_map[new_x][new_y]
 
                     if new_cell.habitable:
 
@@ -113,15 +115,15 @@ class island:
 
                         carnivore.migrated = True
 
-                cur_cell.herb = [herbivore for herbivore in cur_cell.herb if herbivore.migrate() is False]
-                cur_cell.carn = [carnivore for carnivore in cur_cell.herb if carnivore.migrate() is False]
+                cur_cell.herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration() is False]
+                cur_cell.carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration() is False]
 
     def add_population(self, population):
         # Adds a population to a given cell
 
-        y_value = population['loc'][0]-1
-        x_value = population['loc'][1]-1
-        pop = population['pop']
+        y_value = population[0]['loc'][0]-1
+        x_value = population[0]['loc'][1]-1
+        pop = population[0]['pop']
 
         self.coord_map[y_value][x_value].add_population(pop)
 
@@ -130,17 +132,17 @@ class island:
 
         for row in self.coord_map:
 
-            for cell in self.coord_map:
+            for cell in row:
 
                 for carnivore in cell.carn:
                     carnivore.migrated = False
 
                 for herbivore in cell.herb:
-                    herbivore.migrateed = False
+                    herbivore.migrated = False
 
 
 def migrationdestination(cur_x, cur_y):
-    choice = random.choice([(cur_x + 1, cur_y), (cur_x - 1, cur_y), (cur_x, cur_y + 1), (cur_x, cur_y - 1)])
+    choice = rd.choice([(cur_x + 1, cur_y), (cur_x - 1, cur_y), (cur_x, cur_y + 1), (cur_x, cur_y - 1)])
 
     return choice[0], choice[1]
 
