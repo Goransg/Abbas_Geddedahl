@@ -74,7 +74,7 @@ class BioSim:
     """
 
     def add_population(self, population):
-        self.island.add_population(population)
+        self.island.add_population(population, self.seed)
 
     """
     Add a population to the island
