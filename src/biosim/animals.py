@@ -186,7 +186,7 @@ class carnivore(animal):
             if rd.uniform(0, 1) <= p_eat and appetite > 0:
                 living_herbivores.remove(prey)
                 self.weight += prey.weight * self.beta
-                self.fitness = self.fitnessupdate()
+                #self.fitness = self.fitnessupdate()
 
         self.fitness = self.fitness_update()
 

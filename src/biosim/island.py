@@ -1,6 +1,7 @@
 from src.biosim.biome import *
 import random as rd
 
+
 class island:
 
     def __init__(self, map):
@@ -49,7 +50,6 @@ class island:
         for lst in self.coord_map:
 
             for x in lst:
-
                 species_amount['carnivores'] += len(x.carn)
                 species_amount['herbivores'] += len(x.herb)
 
@@ -62,7 +62,6 @@ class island:
         for lst in self.coord_map:
 
             for x in lst:
-
                 animal_amount += len(x.carn)
                 animal_amount += len(x.herb)
 
@@ -86,9 +85,9 @@ class island:
 
         self.migrationreset()
 
-        for y in range(len(self.coord_map)-1):
+        for y in range(len(self.coord_map) - 1):
 
-            for x in range(len(self.coord_map[y])-1):
+            for x in range(len(self.coord_map[y]) - 1):
                 cur_cell = self.coord_map[x][y]
                 migrators_herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration()]
                 migrators_carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration()]
@@ -99,7 +98,6 @@ class island:
                     new_cell = self.coord_map[new_x][new_y]
 
                     if new_cell.habitable:
-
                         new_cell.herb.append(herbivore)
 
                         herbivore.migrated = True
@@ -112,7 +110,6 @@ class island:
                     new_cell = self.coord_map[new_x][new_y]
 
                     if new_cell.habitable:
-
                         new_cell.carn.append(carnivore)
 
                         carnivore.migrated = True
@@ -127,8 +124,8 @@ class island:
         # pop = population[0]['pop']
         # print(pop)
         for specie in population:
-            y_value = specie['loc'][0]-1
-            x_value = specie['loc'][1]-1
+            y_value = specie['loc'][0] - 1
+            x_value = specie['loc'][1] - 1
             pop = specie['pop']
             print(pop)
             self.coord_map[y_value][x_value].add_population(pop)
@@ -165,24 +162,7 @@ class island:
         return herbdist, carndist
 
 
-
-
 def migrationdestination(cur_x, cur_y):
     choice = rd.choice([(cur_x + 1, cur_y), (cur_x - 1, cur_y), (cur_x, cur_y + 1), (cur_x, cur_y - 1)])
 
     return choice[0], choice[1]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
