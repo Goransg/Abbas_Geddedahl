@@ -82,7 +82,8 @@ class island:
                         exec("x.%s()" % (func))
 
     def migration(self):
-        # Transfers given migrators to given destinations
+        # Iterates through the cells in the island, moving the animals that are going to migrate to possible files
+        # Removes migrateed animals
 
         self.migrationreset()
 
@@ -117,7 +118,7 @@ class island:
 
                         carnivore.migrated = True
 
-                        cur_cell.herb.remove(carnivore)
+                        cur_cell.carn.remove(carnivore)
 
     def add_population(self, population):
         # Adds a population to a given cell
