@@ -5,7 +5,7 @@ import operator
 
 class animal(object):
 
-    def __init__(self, weight, age, seed=rd.randint(0,9999999)):
+    def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
         # self.species = species
         self.weight = weight
         self.age = age
@@ -22,25 +22,43 @@ class animal(object):
             fitness = 0
 
         else:
-            fitness = (1/(1+m.e**(self.phi_age*(self.age-self.a_half)))) * \
-                           (1/(1+m.e**(-self.phi_weight*(self.weight-self.w_half))))
+            fitness = (1 / (1 + m.e ** (self.phi_age * (self.age - self.a_half)))) * \
+                      (1 / (1 + m.e ** (-self.phi_weight * (self.weight - self.w_half))))
         return fitness
 
+    # def birth(self, n_animals):
+    #     # Calculating the possibility and probability of birth, returning True if birth and false if not birth.
+    #
+    #     if self.weight <= self.zeta * (self.w_birth + self.sigma_birth):
+    #         return False
+    #
+    #     else:
+    #         birth_proba = min(1, self.gamma * self.fitness * (n_animals - 1))
+    #
+    #         if rd.uniform(0, 1) <= birth_proba:
+    #             return True
+    #
+    #         else:
+    #             return False
 
     def birth(self, n_animals):
         # Calculating the possibility and probability of birth, returning True if birth and false if not birth.
 
         if self.weight <= self.zeta * (self.w_birth + self.sigma_birth):
-            return False
+            return None
 
         else:
             birth_proba = min(1, self.gamma * self.fitness * (n_animals - 1))
 
             if rd.uniform(0, 1) <= birth_proba:
-                return True
+                nw = rd.gauss(self.w_birth, self.sigma_birth)
+                if nw > 0 and ((self.xi * nw) < self.weight):
+                    return type(self)(nw, 0)
+                else:
+                    return None
 
             else:
-                return False
+                return None
 
     def death(self):
         # Calculating the probability of death, also simulating if the death will occur.
@@ -51,7 +69,7 @@ class animal(object):
         else:
             death_proba = self.omega * (1 - self.fitness)
 
-            if rd.uniform(0,1) <= death_proba:
+            if rd.uniform(0, 1) <= death_proba:
                 return True
 
             else:
@@ -86,13 +104,12 @@ class animal(object):
                     print(paramchange[1][param])
 
                 except:
-                        warnings.warn(param + ' ' + 'is not a valid class parameter, and will not be updated.')
+                    warnings.warn(param + ' ' + 'is not a valid class parameter, and will not be updated.')
             else:
                 raise ValueError('Unknown parameter inserted')
 
 
 class herbivore(animal):
-
     w_birth = 8
     sigma_birth = 1.5
     beta = 0.9
@@ -108,7 +125,7 @@ class herbivore(animal):
     omega = 0.4
     F = 10
 
-    def __init__(self, weight, age, seed = rd.randint(0,9999999)):
+    def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
         super().__init__(weight, age, seed)
 
     def feeding(self, f_available):
@@ -132,7 +149,6 @@ class herbivore(animal):
 
 
 class carnivore(animal):
-
     w_birth = 6
     sigma_birth = 1
     beta = 0.75
@@ -155,7 +171,7 @@ class carnivore(animal):
     def feeding(self, prey):
 
         # available_herbivores.sort(key=operator.attrgetter('fitness'))
-            
+
         if prey.fitness > self.fitness:
             p_eat = 0
 
@@ -163,15 +179,10 @@ class carnivore(animal):
             p_eat = 1
 
         else:
-            p_eat = (self.fitness - prey.fitness)/self.DeltaPhiMax
+            p_eat = (self.fitness - prey.fitness) / self.DeltaPhiMax
 
         if rd.uniform(0, 1) <= p_eat and appetite > 0:
             return True
 
         else:
             return False
-
-
-
-
-

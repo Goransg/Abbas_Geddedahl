@@ -73,6 +73,8 @@ def test_migration_good_fitness():
     individual = animals.carnivore(weight=weight, age=age, seed=7)
     assert individual.migration() is True
 
+<<<<<<< HEAD
+=======
 def test_aging():
     # Testing the aging and yearly weight decrease function
 
@@ -95,6 +97,7 @@ def test_feeding_herbivore():
     assert individual.weight == (50 + yearly_weightgain)
     assert left == 1990
 
+>>>>>>> branch_animal01
 
 def test_feeding_carnivore():
     # Testing the feeding function for carnivores
