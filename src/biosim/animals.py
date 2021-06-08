@@ -166,21 +166,27 @@ class carnivore(animal):
     def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
         super().__init__(weight, age, seed)
 
-    def feeding(self, prey):
+    def feeding(self, available_herbivores):
 
         # available_herbivores.sort(key=operator.attrgetter('fitness'))
 
-        if prey.fitness > self.fitness:
-            p_eat = 0
+        appetite = self.F
+        living_herbivores = available_herbivores
 
-        elif (self.fitness - prey.fitness) > self.DeltaPhiMax:
-            p_eat = 1
+        for prey in available_herbivores:
 
-        else:
-            p_eat = (self.fitness - prey.fitness) / self.DeltaPhiMax
+            if prey.fitness > self.fitness:
+                p_eat = 0
 
-        if rd.uniform(0, 1) <= p_eat and appetite > 0:
-            return True
+            elif (self.fitness - prey.fitness) > self.DeltaPhiMax:
+                p_eat = 1
 
-        else:
-            return False
+            else:
+                p_eat = (self.fitness - prey.fitness) / self.DeltaPhiMax
+
+            if rd.uniform(0, 1) <= p_eat and appetite > 0:
+                living_herbivores.remove(prey)
+                self.weight += prey.weight * self.beta
+
+            return living_herbivores
+
