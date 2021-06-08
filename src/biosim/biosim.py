@@ -60,6 +60,8 @@ class BioSim:
         for year in range(num_years):
 
             self.island.sim_year()
+            pop = self.num_animals_per_species()
+            print(pop)
 
 
     """
