@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import subprocess
 import os
+import time
 
 # Update these variables to point to your ffmpeg and convert binaries
 # If you installed ffmpeg using conda or installed both softwares in
@@ -205,9 +206,38 @@ class Graphics:
         herbivore_density = pd.DataFrame(population_distribution_herb)
         herbivore_density.columns = range(1, len(herbivore_density.columns + 1))
         herbivore_density.index = range(1, len(herbivore_density) + 1)
-        sns.heatmap(herbivore_density)
+
 
         carnivore_density = pd.DataFrame(population_distribution_carn)
         carnivore_density.columns = range(1, len(carnivore_carn.columns + 1))
         carnivore_density.index = range(1, len(herbivore_density) + 1)
-        sns.heatmap(carnivore_density)
+
+        # create the figure
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        im = ax.imshow(herbivore_density)
+        plt.show(block=False)
+
+        # create the figure
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        im = ax.imshow(np.random.random((50, 50)))
+        plt.show(block=False)
+
+        # draw some data in loop
+        for i in range(10):
+            # wait for a second
+            time.sleep(1)
+            # replace the image contents
+            im.set_array(carnivore_density)
+            # redraw the figure
+            fig.canvas.draw()
+
+        # draw some data in loop
+        for i in range(10):
+            # wait for a second
+            time.sleep(1)
+            # replace the image contents
+            im.set_array(herbivore_density)
+            # redraw the figure
+            fig.canvas.draw()
