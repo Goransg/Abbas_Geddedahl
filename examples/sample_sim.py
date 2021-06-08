@@ -11,7 +11,6 @@ import textwrap
 from src.biosim.biosim import BioSim
 
 if __name__ == '__main__':
-
     geogr = """WWWWWWWWWWWWWWWWWWWWW
                WHHHHHLLLLWWLLLLLLLWW
                WHHHHHLLLLWWLLLLLLLWW
