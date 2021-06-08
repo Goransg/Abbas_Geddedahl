@@ -8,7 +8,7 @@ Full island simulation with herbivores and carnivores.
 __author__ = 'Hans Ekkehard Plesser, NMBU'
 
 import textwrap
-from biosim.simulation import BioSim
+from src.biosim.biosim import *
 
 if __name__ == '__main__':
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
                            'weight': 20}
                           for _ in range(50)]}]
 
-    sim = BioSim(geogr, ini_herbs + ini_carns, seed=1,
+    sim = BioSim(geogr, ini_herbs, seed=1,
                  hist_specs={'fitness': {'max': 1.0, 'delta': 0.05},
                              'age': {'max': 60.0, 'delta': 2},
                              'weight': {'max': 60, 'delta': 2}},
