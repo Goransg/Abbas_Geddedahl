@@ -104,6 +104,8 @@ class island:
 
                         herbivore.migrated = True
 
+                        cur_cell.herb.remove(herbivore)
+
                 for carnivore in migrators_carn:
 
                     new_x, new_y = migrationdestination(x, y)
@@ -115,18 +117,16 @@ class island:
 
                         carnivore.migrated = True
 
-                cur_cell.herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration() is False]
-                cur_cell.carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration() is False]
+                        cur_cell.herb.remove(carnivore)
 
-    def add_population(self, population, seed):
+    def add_population(self, population):
         # Adds a population to a given cell
 
         y_value = population[0]['loc'][0]-1
         x_value = population[0]['loc'][1]-1
         pop = population[0]['pop']
-        print(pop)
 
-        self.coord_map[y_value][x_value].add_population(pop, seed)
+        self.coord_map[y_value][x_value].add_population(pop)
 
     def migrationreset(self):
         # Sets the "Migrated" flag for animals to False

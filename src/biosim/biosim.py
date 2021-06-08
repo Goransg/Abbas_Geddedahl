@@ -13,6 +13,7 @@ class BioSim:
         self.vis_years = vis_years
         self.island = island(island_map)
         self.add_population(self.ini_pop)
+        rd.seed(a=self.seed)
 
     """
     :param island_map: Multi-line string specifying island geography
@@ -74,7 +75,7 @@ class BioSim:
     """
 
     def add_population(self, population):
-        self.island.add_population(population, self.seed)
+        self.island.add_population(population)
 
     """
     Add a population to the island

@@ -1,46 +1,20 @@
+from src.biosim import island
+from src.biosim import biome
+import random as rd
 
-def migrationtest():
-    geogr = """WWWWWWWWWWWWWWWWWWWWW
-               WHHHHHLLLLWWLLLLLLLWW
-               WHHHHHLLLLWWLLLLLLLWW
-               WHHHHHLLLLWWLLLLLLLWW
-               WWHHLLLLLLLWWLLLLLLLW
-               WWHHLLLLLLLWWLLLLLLLW
-               WWWWWWWWHWWWWLLLLLLLW
-               WHHHHHLLLLWWLLLLLLLWW
-               WHHHHHHHHHWWLLLLLLWWW
-               WHHHHHDDDDDLLLLLLLWWW
-               WHHHHHDDDDDLLLLLLLWWW
-               WHHHHHDDDDDLLLLLLLWWW
-               WHHHHHDDDDDWWLLLLLWWW
-               WHHHHDDDDDDLLLLWWWWWW
-               WWHHHHDDDDDDLWWWWWWWW
-               WWHHHHDDDDDLLLWWWWWWW
-               WHHHHHDDDDDLLLLLLLWWW
-               WHHHHDDDDDDLLLLWWWWWW
-               WWHHHHDDDDDLLLWWWWWWW
-               WWWHHHHLLLLLLLWWWWWWW
-               WWWHHHHHHWWWWWWWWWWWW
-               WWWWWWWWWWWWWWWWWWWWW"""
-    geogr = textwrap.dedent(geogr)
+def test_migration():
+    rd.seed(a=16577)
+    geo = island.island('''
+    LLL
+    LLW
+    LLL''')
 
-    ini_herbs = [{'loc': (2, 7),
-                  'pop': [{'species': 'Herbivore',
+    geo.coord_map[1][1].add_population([{'species': 'Herbivore',
                            'age': 5,
                            'weight': 20}
-                          for _ in range(200)]}]
-    ini_carns = [{'loc': (2, 7),
-                  'pop': [{'species': 'Carnivore',
-                           'age': 5,
-                           'weight': 20}
-                          for _ in range(50)]}]
+                          for _ in range(50)])
+    geo.migration()
 
-    sim = BioSim(geogr, ini_herbs, seed=1,
-                 hist_specs={'fitness': {'max': 1.0, 'delta': 0.05},
-                             'age': {'max': 60.0, 'delta': 2},
-                             'weight': {'max': 60, 'delta': 2}},
-                 img_dir='results',
-                 img_base='sample')
-    sim.simulate(400)
-
-    assert
+    assert len(geo.coord_map[1][1].herb) < 50
+    assert (len(geo.coord_map[2][1].herb) + len(geo.coord_map[0][1].herb) + len(geo.coord_map[1][0].herb) + len(geo.coord_map[1][1].herb)) == 50
+    assert len(geo.coord_map[1][2].herb) == 0

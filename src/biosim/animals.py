@@ -6,12 +6,10 @@ import warnings
 
 class animal(object):
 
-    def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
+    def __init__(self, weight, age):
         # self.species = species
         self.weight = weight
         self.age = age
-        self.seed = seed
-        rd.seed(a=self.seed)
         self.fitness = self.fitness_update()
         self.migrated = False
 
@@ -124,8 +122,8 @@ class herbivore(animal):
     omega = 0.4
     F = 10
 
-    def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
-        super().__init__(weight, age, seed)
+    def __init__(self, weight, age):
+        super().__init__(weight, age)
 
     def feeding(self, f_available):
         # Takes amt of available fodder, adds the fodder eaten by animal to its weight.
@@ -164,8 +162,8 @@ class carnivore(animal):
     F = 50
     DeltaPhiMax = 5
 
-    def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
-        super().__init__(weight, age, seed)
+    def __init__(self, weight, age):
+        super().__init__(weight, age)
 
     def feeding(self, available_herbivores):
 
@@ -188,6 +186,7 @@ class carnivore(animal):
             if rd.uniform(0, 1) <= p_eat and appetite > 0:
                 living_herbivores.remove(prey)
                 self.weight += prey.weight * self.beta
+                self.fitness = self.fitnessupdate()
 
             return living_herbivores
 
