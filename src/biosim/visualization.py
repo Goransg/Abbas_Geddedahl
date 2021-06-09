@@ -1,6 +1,6 @@
 
 # -*- coding: utf-8 -*-
-
+# This file based on example files from lecture J05 in INF200 june block of 2021
 """
 :mod:`randvis.graphics` provides graphics support for RandVis.
 
@@ -66,13 +66,15 @@ class Graphics:
 
         # the following will be initialized by _setup_graphics
         self._fig = None
-        self._map_ax = None
+        self._map_ax_one = None
+        self._map_ax_two = None
         self._img_axis = None
         self._mean_ax = None
         self._mean_line = None
 
-    def update(self, step, sys_map, sys_mean):
+    def update(self, step, sys_map_first, sys_map_second):
         """
+        , sys_mean
         Updates graphics with current data and save to file if necessary.
 
         :param step: current time step
@@ -80,8 +82,9 @@ class Graphics:
         :param sys_mean: current mean value of system
         """
 
-        self._update_system_map(sys_map)
-        self._update_mean_graph(step, sys_mean)
+        self._update_system_map(sys_map_first, self._map_ax_one)
+        self._update_system_map(sys_map_second, self.map_ax_two)
+        #self._update_mean_graph(step, sys_mean)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(1e-6)  # pause required to pass control to GUI
 
@@ -148,8 +151,12 @@ class Graphics:
         # Add left subplot for images created with imshow().
         # We cannot create the actual ImageAxis object before we know
         # the size of the image, so we delay its creation.
-        if self._map_ax is None:
-            self._map_ax = self._fig.add_subplot(1, 2, 1)
+        if self._map_ax_one is None:
+            self._map_ax_one = self._fig.add_subplot(1, 2, 1)
+            self._img_axis = None
+
+        if self._map_ax_two is None:
+            self._map_ax_two = self._fig.add_subplot(1, 2, 1)
             self._img_axis = None
 
         # Add right subplot for line graph of mean.
@@ -173,13 +180,13 @@ class Graphics:
                 self._mean_line.set_data(np.hstack((x_data, x_new)),
                                          np.hstack((y_data, y_new)))
 
-    def _update_system_map(self, sys_map):
+    def _update_system_map(self, sys_map, ax):
         """Update the 2D-view of the system."""
 
         if self._img_axis is not None:
             self._img_axis.set_data(sys_map)
         else:
-            self._img_axis = self._map_ax.imshow(sys_map,
+            self._img_axis = self.ax.imshow(sys_map,
                                                  interpolation='nearest',
                                                  vmin=-0.25, vmax=0.25)
             plt.colorbar(self._img_axis, ax=self._map_ax,
@@ -201,7 +208,7 @@ class Graphics:
                                                      type=self._img_fmt))
         self._img_ctr += 1
 
-    def heatmap(self, population_distribution_herb, population_distribution_carn):
+    def heatmap(self, population_distribution_herb, population_distribution_carn, n_years):
 
         herbivore_density = pd.DataFrame(population_distribution_herb)
         herbivore_density.columns = range(1, len(herbivore_density.columns + 1))
@@ -221,23 +228,25 @@ class Graphics:
         # create the figure
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        im = ax.imshow(np.random.random((50, 50)))
+        im = ax.imshow(carnivore_density)
         plt.show(block=False)
 
-        # draw some data in loop
-        for i in range(10):
-            # wait for a second
-            time.sleep(1)
-            # replace the image contents
-            im.set_array(carnivore_density)
-            # redraw the figure
-            fig.canvas.draw()
+
 
         # draw some data in loop
-        for i in range(10):
+        for i in range(n_years):
             # wait for a second
             time.sleep(1)
             # replace the image contents
             im.set_array(herbivore_density)
+            # redraw the figure
+            fig.canvas.draw()
+
+        # draw some data in loop
+        for i in range(n_years):
+            # wait for a second
+            time.sleep(1)
+            # replace the image contents
+            im.set_array(carnivore_density)
             # redraw the figure
             fig.canvas.draw()

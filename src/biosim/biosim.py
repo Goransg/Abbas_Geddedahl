@@ -1,5 +1,5 @@
 from src.biosim.island import *
-
+from src.biosim.visualization import *
 
 class BioSim:
 
@@ -60,7 +60,7 @@ class BioSim:
         """
 
     def simulate(self, num_years):
-
+        self.graphics(num_years)
         for year in range(num_years-1):
             print(year+1, self.island.species_count())
             self.island.sim_year()
@@ -101,6 +101,24 @@ class BioSim:
         # species of the island
         return self.island.species_count()
 
+    def graphics(self, n_years):
+        if n_years == 0:
+            None
+
+        else:
+            graphs = Graphics()
+            graphs.setup(n_years, 1)
+
+            for year in n_years:
+                if n_years % self.vis_years == 0:
+                    herb, carn = self.island.distrubution()
+                    # count_herb =
+                    # count_carn =
+                    graphs.update(year, herb, carn)
+
+
     def make_movie(self):
 
         """Create MPEG4 movie from visualization images saved."""
+
+
