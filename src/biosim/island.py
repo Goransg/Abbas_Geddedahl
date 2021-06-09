@@ -121,11 +121,12 @@ class island:
     def add_population(self, population):
         # Adds a population to a given cell
 
-        y_value = population[0]['loc'][0]-1
-        x_value = population[0]['loc'][1]-1
-        pop = population[0]['pop']
+        for specie in population:
+            y_value = specie['loc'][0] - 1
+            x_value = specie['loc'][1] - 1
+            pop = specie['pop']
 
-        self.coord_map[y_value][x_value].add_population(pop)
+            self.coord_map[y_value][x_value].add_population(pop)
 
     def migrationreset(self):
         # Sets the "Migrated" flag for animals to False

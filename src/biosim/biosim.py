@@ -1,4 +1,5 @@
 from src.biosim.island import *
+from src.biosim.visualization import *
 
 
 class BioSim:
@@ -64,11 +65,14 @@ class BioSim:
 
         else:
             graphs = Graphics()
-            graphs.setup(num_years, 1)
+            graphs.setup(num_years, 1, self.island_map)
 
         for year in range(num_years-1):
             print(year+1, self.island.species_count())
             self.island.sim_year()
+            if num_years % self.vis_years == 0:
+                herb, carn = self.island.distrubution()
+                graphs.update(year, herb, carn)
 
         print(year, self.island.species_count())
 
@@ -112,7 +116,7 @@ class BioSim:
 
         else:
             graphs = Graphics()
-            graphs.setup(n_years, 1)
+            graphs.setup(n_years, 1, self.island_map)
 
             for year in range(n_years):
                 if n_years % self.vis_years == 0:

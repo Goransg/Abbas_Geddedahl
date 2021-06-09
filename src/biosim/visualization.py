@@ -72,6 +72,8 @@ class Graphics:
         self._img_axis_two = None
         self._mean_ax = None
         self._mean_line = None
+        self._geomap_axis = None
+        self._geodesc_axis = None
 
     def update(self, step, sys_map_first, sys_map_second):
         """
@@ -132,7 +134,7 @@ class Graphics:
         else:
             raise ValueError('Unknown movie format: ' + movie_fmt)
 
-    def setup(self, final_step, img_step):
+    def setup(self, final_step, img_step, geographic_map):
         """
         Prepare graphics.
 
@@ -149,22 +151,34 @@ class Graphics:
         if self._fig is None:
             self._fig = plt.figure()
 
+
         # Add left subplot for images created with imshow().
         # We cannot create the actual ImageAxis object before we know
         # the size of the image, so we delay its creation.
         if self._map_ax_one is None:
-            self._map_ax_one = self._fig.add_subplot(1, 3, 1)
+            self._map_ax_one = self._fig.add_subplot(2, 3, 5)
             self._map_ax_one.set_title('Herbivore distribution')
             self._img_axis_one = None
 
         if self._map_ax_two is None:
-            self._map_ax_two = self._fig.add_subplot(1, 3, 2)
+            self._map_ax_two = self._fig.add_subplot(2, 3, 6)
             self._map_ax_two.set_title('Carnivore distribution')
             self._img_axis_two = None
 
+        if self._geomap_axis is None:
+            self._geomap_axis = self._fig.add_subplot(2, 3, 1)
+            self._geomap_axis.set_title('Island map')
+            self._geomap_img_axis = None
+
+        if self._geodesc_axis is None:
+            self._geodesc_axis = self._fig.add_subplot(4, 6, 2)
+            self._geodesc_img_axis = None
+
+        self._fig.tight_layout()
+
         # Add right subplot for line graph of mean.
         if self._mean_ax is None:
-            self._mean_ax = self._fig.add_subplot(1, 3, 3)
+            self._mean_ax = self._fig.add_subplot(2, 3, 3)
             self._mean_ax.set_ylim(-0.05, 0.05)
 
         # needs updating on subsequent calls to simulate()
@@ -182,6 +196,10 @@ class Graphics:
                 y_new = np.full(x_new.shape, np.nan)
                 self._mean_line.set_data(np.hstack((x_data, x_new)),
                                          np.hstack((y_data, y_new)))
+
+        self._update_geography(geographic_map)
+
+
 
     def _update_system_map_one(self, sys_map):
         """Update the 2D-view of the system."""
@@ -267,3 +285,30 @@ class Graphics:
             im.set_array(carnivore_density)
             # redraw the figure
             fig.canvas.draw()
+
+    def _update_geography(self, island_map):
+        if self._geomap_img_axis is not None:
+            pass
+        else:
+            rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
+                         'L': (0.0, 0.6, 0.0),  # dark green
+                         'H': (0.5, 1.0, 0.5),  # light green
+                         'D': (1.0, 1.0, 0.5)}  # light yellow
+
+            map_rgb = [[rgb_value[column] for column in row]
+                       for row in island_map.split()]
+
+            self._geomap_axis.set_xticks(range(0, len(map_rgb[0]), 4))
+            self._geomap_axis.set_xticklabels(range(1, 1 + len(map_rgb[0]), 4))
+            self._geomap_axis.set_yticks(range(0, len(map_rgb), 4))
+            self._geomap_axis.set_yticklabels(range(1, 1 + len(map_rgb), 4))
+            self._geomap_img_axis = self._geomap_axis.imshow(map_rgb) # llx, lly, w, h
+
+            for ix, name in enumerate(('Water', 'Lowland',
+                                       'Highland', 'Desert')):
+                self._geodesc_axis.axis('off')
+                self._geodesc_axis.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1,
+                                              edgecolor='none',
+                                              facecolor=rgb_value[name[0]]))
+                self._geodesc_axis.text(0.35, ix * 0.2, name, transform=self._geodesc_axis.transAxes)
+
