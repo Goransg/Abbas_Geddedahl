@@ -1,5 +1,5 @@
 from src.biosim.island import *
-from src.biosim.visualization import *
+
 
 class BioSim:
 
@@ -13,7 +13,6 @@ class BioSim:
         self.vis_years = vis_years
         self.island = island(island_map)
         self.add_population(self.ini_pop)
-        rd.seed(a=self.seed)
 
     """
     :param island_map: Multi-line string specifying island geography
@@ -70,8 +69,6 @@ class BioSim:
         for year in range(num_years-1):
             print(year+1, self.island.species_count())
             self.island.sim_year()
-            herb, carn = self.island.distrubution()
-            graphs.update(year, herb, carn)
 
         print(year, self.island.species_count())
 
@@ -126,5 +123,3 @@ class BioSim:
     def make_movie(self):
 
         """Create MPEG4 movie from visualization images saved."""
-
-

@@ -4,7 +4,6 @@ import random as rd
 class island:
 
     def __init__(self, map):
-        # Takes a map as a string and makes cells in correlating locations based on the letters in the string.
         map_list = map.split()
         coord_map = []
         x = 0
@@ -70,7 +69,7 @@ class island:
         return animal_amount
 
     def sim_year(self):
-        # Goes through a yearly simulation, in the sequence specified in the list
+        # Goes through a yearly simulation
         yearly_functions = ['update_fodder', 'grazing', 'breeding', 'migration', 'aging', 'remove_population']
 
         for func in yearly_functions:
@@ -83,8 +82,7 @@ class island:
                         exec("x.%s()" % (func))
 
     def migration(self):
-        # Iterates through the cells in the island, moving the animals that are going to migrate to possible files
-        # Removes migrated animals
+        # Transfers given migrators to given destinations
 
         self.migrationreset()
 
@@ -106,8 +104,6 @@ class island:
 
                         herbivore.migrated = True
 
-                        cur_cell.herb.remove(herbivore)
-
                 for carnivore in migrators_carn:
 
                     new_x, new_y = migrationdestination(x, y)
@@ -119,7 +115,8 @@ class island:
 
                         carnivore.migrated = True
 
-                        cur_cell.carn.remove(carnivore)
+                cur_cell.herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration() is False]
+                cur_cell.carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration() is False]
 
     def add_population(self, population):
         # Adds a population to a given cell
