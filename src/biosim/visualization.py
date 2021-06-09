@@ -68,7 +68,8 @@ class Graphics:
         self._fig = None
         self._map_ax_one = None
         self._map_ax_two = None
-        self._img_axis = None
+        self._img_axis_one = None
+        self._img_axis_two = None
         self._mean_ax = None
         self._mean_line = None
 
@@ -82,8 +83,8 @@ class Graphics:
         :param sys_mean: current mean value of system
         """
 
-        self._update_system_map(sys_map_first, self._map_ax_one)
-        self._update_system_map(sys_map_second, self.map_ax_two)
+        self._update_system_map_one(sys_map_first)
+        self._update_system_map_two(sys_map_second)
         #self._update_mean_graph(step, sys_mean)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(1e-6)  # pause required to pass control to GUI
@@ -152,16 +153,16 @@ class Graphics:
         # We cannot create the actual ImageAxis object before we know
         # the size of the image, so we delay its creation.
         if self._map_ax_one is None:
-            self._map_ax_one = self._fig.add_subplot(1, 2, 1)
-            self._img_axis = None
+            self._map_ax_one = self._fig.add_subplot(1, 3, 1)
+            self._img_axis_one = None
 
         if self._map_ax_two is None:
-            self._map_ax_two = self._fig.add_subplot(1, 2, 1)
-            self._img_axis = None
+            self._map_ax_two = self._fig.add_subplot(1, 3, 2)
+            self._img_axis_two = None
 
         # Add right subplot for line graph of mean.
         if self._mean_ax is None:
-            self._mean_ax = self._fig.add_subplot(1, 2, 2)
+            self._mean_ax = self._fig.add_subplot(1, 3, 3)
             self._mean_ax.set_ylim(-0.05, 0.05)
 
         # needs updating on subsequent calls to simulate()
@@ -180,16 +181,28 @@ class Graphics:
                 self._mean_line.set_data(np.hstack((x_data, x_new)),
                                          np.hstack((y_data, y_new)))
 
-    def _update_system_map(self, sys_map, ax):
+    def _update_system_map_one(self, sys_map):
         """Update the 2D-view of the system."""
 
-        if self._img_axis is not None:
-            self._img_axis.set_data(sys_map)
+        if self._img_axis_one is not None:
+            self._img_axis_one.set_data(sys_map)
         else:
-            self._img_axis = self.ax.imshow(sys_map,
+            self._img_axis_one = self._map_ax_one.imshow(sys_map,
                                                  interpolation='nearest',
-                                                 vmin=-0.25, vmax=0.25)
-            plt.colorbar(self._img_axis, ax=self._map_ax,
+                                                 vmin=0, vmax=200)
+            plt.colorbar(self._img_axis_one, ax=self._map_ax_one,
+                         orientation='horizontal')
+
+    def _update_system_map_two(self, sys_map):
+        """Update the 2D-view of the system."""
+
+        if self._img_axis_two is not None:
+            self._img_axis_two.set_data(sys_map)
+        else:
+            self._img_axis_two = self._map_ax_two.imshow(sys_map,
+                                                 interpolation='nearest',
+                                                 vmin=0, vmax=200)
+            plt.colorbar(self._img_axis_two, ax=self._map_ax_two,
                          orientation='horizontal')
 
     def _update_mean_graph(self, step, mean):

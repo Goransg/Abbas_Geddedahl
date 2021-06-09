@@ -60,10 +60,18 @@ class BioSim:
         """
 
     def simulate(self, num_years):
-        self.graphics(num_years)
+        if num_years == 0:
+            None
+
+        else:
+            graphs = Graphics()
+            graphs.setup(num_years, 1)
+
         for year in range(num_years-1):
             print(year+1, self.island.species_count())
             self.island.sim_year()
+            herb, carn = self.island.distrubution()
+            graphs.update(year, herb, carn)
 
         print(year, self.island.species_count())
 
@@ -109,11 +117,9 @@ class BioSim:
             graphs = Graphics()
             graphs.setup(n_years, 1)
 
-            for year in n_years:
+            for year in range(n_years):
                 if n_years % self.vis_years == 0:
                     herb, carn = self.island.distrubution()
-                    # count_herb =
-                    # count_carn =
                     graphs.update(year, herb, carn)
 
 
