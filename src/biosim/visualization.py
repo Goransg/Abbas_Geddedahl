@@ -154,10 +154,12 @@ class Graphics:
         # the size of the image, so we delay its creation.
         if self._map_ax_one is None:
             self._map_ax_one = self._fig.add_subplot(1, 3, 1)
+            self._map_ax_one.set_title('Herbivore distribution')
             self._img_axis_one = None
 
         if self._map_ax_two is None:
             self._map_ax_two = self._fig.add_subplot(1, 3, 2)
+            self._map_ax_two.set_title('Carnivore distribution')
             self._img_axis_two = None
 
         # Add right subplot for line graph of mean.
@@ -190,6 +192,7 @@ class Graphics:
             self._img_axis_one = self._map_ax_one.imshow(sys_map,
                                                  interpolation='nearest',
                                                  vmin=0, vmax=200)
+
             plt.colorbar(self._img_axis_one, ax=self._map_ax_one,
                          orientation='horizontal')
 
@@ -202,6 +205,7 @@ class Graphics:
             self._img_axis_two = self._map_ax_two.imshow(sys_map,
                                                  interpolation='nearest',
                                                  vmin=0, vmax=200)
+
             plt.colorbar(self._img_axis_two, ax=self._map_ax_two,
                          orientation='horizontal')
 
