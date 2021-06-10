@@ -71,12 +71,18 @@ class Graphics:
         self._img_axis_one = None
         self._img_axis_two = None
         self._mean_ax = None
-        self._mean_ax2 = None
+        self._mean_fit_ax = None
+        self._mean_fit_line = None
+        self._mean_fit_line_2 = None
+        self._mean_age_ax = None
+        self._mean_age_line = None
+        self._mean_age_line_2 = None
         self._mean_line = None
         self._mean_line_2 = None
         self._mean_line_3 = None
         self._geomap_axis = None
         self._geodesc_axis = None
+        self.count_ax = None
 
     def update(self, step, sys_map_first, sys_map_second, all_animals, n_herbivores, n_carnivores):
         """
@@ -92,9 +98,18 @@ class Graphics:
         self._update_system_map_two(sys_map_second)
         self._update_mean_graph(step, all_animals, n_herbivores, n_carnivores)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
-        plt.pause(1e-6)  # pause required to pass control to GUI
 
+        template = 'Count: {:5d}'
+        txt = self.count_ax.text(0.5, 0.5, template.format(0),
+                                 horizontalalignment='center',
+                                 verticalalignment='center',
+                                 transform=self.count_ax.transAxes)
+        txt.set_text(template.format(step))
+
+        plt.pause(1e-6)
         self._save_graphics(step)
+
+        # pause required to pass control to GUI
 
     def make_movie(self, movie_fmt=None):
         """
@@ -160,17 +175,17 @@ class Graphics:
         # the size of the image, so we delay its creation.
         if self._map_ax_one is None:
             self._map_ax_one = self._fig.add_subplot(2, 3, 5)
-            self._map_ax_one.set_title('Herbivore distribution')
+            self._map_ax_one.set_title('Herbivore distribution', fontsize=10)
             self._img_axis_one = None
 
         if self._map_ax_two is None:
             self._map_ax_two = self._fig.add_subplot(2, 3, 6)
-            self._map_ax_two.set_title('Carnivore distribution')
+            self._map_ax_two.set_title('Carnivore distribution', fontsize=10)
             self._img_axis_two = None
 
         if self._geomap_axis is None:
             self._geomap_axis = self._fig.add_subplot(2, 3, 1)
-            self._geomap_axis.set_title('Island map')
+            self._geomap_axis.set_title('Island map', fontsize=10)
             self._geomap_img_axis = None
 
         if self._geodesc_axis is None:
@@ -182,12 +197,14 @@ class Graphics:
         # Add right subplot for line graph of mean.
         if self._mean_ax is None:
             self._mean_ax = self._fig.add_subplot(2, 2, 2)
-            self._mean_ax2 = self._mean_ax.twinx()
-            self._mean_ax.set_ylim(0, 10000)
-            self._mean_ax2.set_ylim(0, 5000)
             self._mean_ax.set_xlabel("year")
-            self._mean_ax.set_ylabel("Total count")
-            self._mean_ax2.set_ylabel("species count")
+            self._mean_ax.set_ylabel("Count")
+            self._mean_ax.set_title("Animal count", fontsize=10)
+
+        if self.count_ax is None:
+            self.count_ax = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])
+            self.count_ax.axis('off')
+
 
         # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
@@ -197,7 +214,6 @@ class Graphics:
             mean_plot = self._mean_ax.plot(np.arange(0, final_step+1),
                                            np.full(final_step+1, np.nan), label='Overall population')
             self._mean_line = mean_plot[0]
-            self._mean_ax.legend()
         else:
             x_data, y_data = self._mean_line.get_data()
             x_new = np.arange(x_data[-1] + 1, final_step+1)
@@ -207,10 +223,9 @@ class Graphics:
                                          np.hstack((y_data, y_new)))
 
         if self._mean_line_2 is None:
-            mean_plot_2 = self._mean_ax2.plot(np.arange(0, final_step+1),
+            mean_plot_2 = self._mean_ax.plot(np.arange(0, final_step+1),
                                            np.full(final_step+1, np.nan), c='g', label='Herbivores')
             self._mean_line_2 = mean_plot_2[0]
-            self._mean_ax2.legend()
         else:
             x_data, y_data = self._mean_line_2.get_data()
             x_new = np.arange(x_data[-1] + 1, final_step+1)
@@ -220,9 +235,10 @@ class Graphics:
                                          np.hstack((y_data, y_new)))
 
         if self._mean_line_3 is None:
-            mean_plot_3 = self._mean_ax2.plot(np.arange(0, final_step+1),
+            mean_plot_3 = self._mean_ax.plot(np.arange(0, final_step+1),
                                            np.full(final_step+1, np.nan), c='r', label='Carnivores')
             self._mean_line_3 = mean_plot_3[0]
+            self._mean_ax.legend(prop={'size': 6})
         else:
             x_data, y_data = self._mean_line_3.get_data()
             x_new = np.arange(x_data[-1] + 1, final_step+1)
@@ -230,6 +246,8 @@ class Graphics:
                 y_new = np.full(x_new.shape, np.nan)
                 self._mean_line_3.set_data(np.hstack((x_data, x_new)),
                                          np.hstack((y_data, y_new)))
+
+
 
         self._update_geography(geographic_map)
 
@@ -263,6 +281,7 @@ class Graphics:
         y_data = self._mean_line.get_ydata()
         y_data[step] = all_animals
         self._mean_line.set_ydata(y_data)
+        self._mean_ax.set_ylim(0, max(y_data) + 1000)
 
         y_data_2 = self._mean_line_2.get_ydata()
         y_data_2[step] = n_herbivores
