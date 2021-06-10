@@ -71,11 +71,14 @@ class Graphics:
         self._img_axis_one = None
         self._img_axis_two = None
         self._mean_ax = None
+        self._mean_ax2 = None
         self._mean_line = None
+        self._mean_line_2 = None
+        self._mean_line_3 = None
         self._geomap_axis = None
         self._geodesc_axis = None
 
-    def update(self, step, sys_map_first, sys_map_second):
+    def update(self, step, sys_map_first, sys_map_second, all_animals, n_herbivores, n_carnivores):
         """
         , sys_mean
         Updates graphics with current data and save to file if necessary.
@@ -87,7 +90,7 @@ class Graphics:
 
         self._update_system_map_one(sys_map_first)
         self._update_system_map_two(sys_map_second)
-        #self._update_mean_graph(step, sys_mean)
+        self._update_mean_graph(step, all_animals, n_herbivores, n_carnivores)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
         plt.pause(1e-6)  # pause required to pass control to GUI
 
@@ -178,8 +181,13 @@ class Graphics:
 
         # Add right subplot for line graph of mean.
         if self._mean_ax is None:
-            self._mean_ax = self._fig.add_subplot(2, 3, 3)
-            self._mean_ax.set_ylim(-0.05, 0.05)
+            self._mean_ax = self._fig.add_subplot(2, 2, 2)
+            self._mean_ax2 = self._mean_ax.twinx()
+            self._mean_ax.set_ylim(0, 10000)
+            self._mean_ax2.set_ylim(0, 5000)
+            self._mean_ax.set_xlabel("year")
+            self._mean_ax.set_ylabel("Total count")
+            self._mean_ax2.set_ylabel("species count")
 
         # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
@@ -187,8 +195,9 @@ class Graphics:
 
         if self._mean_line is None:
             mean_plot = self._mean_ax.plot(np.arange(0, final_step+1),
-                                           np.full(final_step+1, np.nan))
+                                           np.full(final_step+1, np.nan), label='Overall population')
             self._mean_line = mean_plot[0]
+            self._mean_ax.legend()
         else:
             x_data, y_data = self._mean_line.get_data()
             x_new = np.arange(x_data[-1] + 1, final_step+1)
@@ -197,9 +206,32 @@ class Graphics:
                 self._mean_line.set_data(np.hstack((x_data, x_new)),
                                          np.hstack((y_data, y_new)))
 
+        if self._mean_line_2 is None:
+            mean_plot_2 = self._mean_ax2.plot(np.arange(0, final_step+1),
+                                           np.full(final_step+1, np.nan), c='g', label='Herbivores')
+            self._mean_line_2 = mean_plot_2[0]
+            self._mean_ax2.legend()
+        else:
+            x_data, y_data = self._mean_line_2.get_data()
+            x_new = np.arange(x_data[-1] + 1, final_step+1)
+            if len(x_new) > 0:
+                y_new = np.full(x_new.shape, np.nan)
+                self._mean_line_2.set_data(np.hstack((x_data, x_new)),
+                                         np.hstack((y_data, y_new)))
+
+        if self._mean_line_3 is None:
+            mean_plot_3 = self._mean_ax2.plot(np.arange(0, final_step+1),
+                                           np.full(final_step+1, np.nan), c='r', label='Carnivores')
+            self._mean_line_3 = mean_plot_3[0]
+        else:
+            x_data, y_data = self._mean_line_3.get_data()
+            x_new = np.arange(x_data[-1] + 1, final_step+1)
+            if len(x_new) > 0:
+                y_new = np.full(x_new.shape, np.nan)
+                self._mean_line_3.set_data(np.hstack((x_data, x_new)),
+                                         np.hstack((y_data, y_new)))
+
         self._update_geography(geographic_map)
-
-
 
     def _update_system_map_one(self, sys_map):
         """Update the 2D-view of the system."""
@@ -227,10 +259,18 @@ class Graphics:
             plt.colorbar(self._img_axis_two, ax=self._map_ax_two,
                          orientation='horizontal')
 
-    def _update_mean_graph(self, step, mean):
+    def _update_mean_graph(self, step, all_animals, n_herbivores, n_carnivores):
         y_data = self._mean_line.get_ydata()
-        y_data[step] = mean
+        y_data[step] = all_animals
         self._mean_line.set_ydata(y_data)
+
+        y_data_2 = self._mean_line_2.get_ydata()
+        y_data_2[step] = n_herbivores
+        self._mean_line_2.set_ydata(y_data_2)
+
+        y_data_3 = self._mean_line_3.get_ydata()
+        y_data_3[step] = n_carnivores
+        self._mean_line_3.set_ydata(y_data_3)
 
     def _save_graphics(self, step):
         """Saves graphics to file if file name given."""
@@ -242,49 +282,6 @@ class Graphics:
                                                      num=self._img_ctr,
                                                      type=self._img_fmt))
         self._img_ctr += 1
-
-    def heatmap(self, population_distribution_herb, population_distribution_carn, n_years):
-
-        herbivore_density = pd.DataFrame(population_distribution_herb)
-        herbivore_density.columns = range(1, len(herbivore_density.columns + 1))
-        herbivore_density.index = range(1, len(herbivore_density) + 1)
-
-
-        carnivore_density = pd.DataFrame(population_distribution_carn)
-        carnivore_density.columns = range(1, len(carnivore_carn.columns + 1))
-        carnivore_density.index = range(1, len(herbivore_density) + 1)
-
-        # create the figure
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        im = ax.imshow(herbivore_density)
-        plt.show(block=False)
-
-        # create the figure
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        im = ax.imshow(carnivore_density)
-        plt.show(block=False)
-
-
-
-        # draw some data in loop
-        for i in range(n_years):
-            # wait for a second
-            time.sleep(1)
-            # replace the image contents
-            im.set_array(herbivore_density)
-            # redraw the figure
-            fig.canvas.draw()
-
-        # draw some data in loop
-        for i in range(n_years):
-            # wait for a second
-            time.sleep(1)
-            # replace the image contents
-            im.set_array(carnivore_density)
-            # redraw the figure
-            fig.canvas.draw()
 
     def _update_geography(self, island_map):
         if self._geomap_img_axis is not None:

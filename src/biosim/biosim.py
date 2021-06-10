@@ -82,7 +82,10 @@ class BioSim:
             self.island.sim_year()
             if num_years % self.vis_years == 0:
                 herb, carn = self.island.distrubution()
-                graphs.update(year, herb, carn)
+                all_animals = self.island.animal_count()
+                n_herbivores = self.island.species_count()['herbivores']
+                n_carnivores = self.island.species_count()['carnivores']
+                graphs.update(year, herb, carn, all_animals, n_herbivores, n_carnivores)
 
 
 
