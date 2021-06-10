@@ -7,7 +7,7 @@ class island:
     def __init__(self, map):
 
         """
-            Number of animals per species in island, as dictionary.
+            An object representing the group of cells, acting as an island.
             :param map: text-string consisting of letters H, L, D, W representing Highland, Lowland, Desert and Water.
             This sets the geographical map of the island.
             the map cannot have other than water cells in its outer boundary.
