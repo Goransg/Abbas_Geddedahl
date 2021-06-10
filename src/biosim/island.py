@@ -16,24 +16,29 @@ class island:
 
             line_list = []
             y += 1
+            if (y == 1 and line != 'W'*len(line)) or (y == len(map_list) and line != 'W' * len(line)):
+                raise TypeError('The outline cells of the map needs to be water cells!')
+            elif line[-1] != 'W' or line[0] != 'W':
+                raise TypeError('The outline cells of the map needs to be water cells!')
+            else:
+                for cell in line:
+                    x += 1
 
-            for cell in line:
-                x += 1
+                    if cell.upper() == 'W':
+                        line_list.append(water((x, y)))
 
-                if cell.upper() == 'W':
-                    line_list.append(water((x, y)))
+                    elif cell.upper() == 'H':
+                        line_list.append(highland((x, y)))
 
-                elif cell.upper() == 'H':
-                    line_list.append(highland((x, y)))
+                    elif cell.upper() == 'L':
+                        line_list.append(lowland((x, y)))
 
-                elif cell.upper() == 'L':
-                    line_list.append(lowland((x, y)))
+                    elif cell.upper() == 'D':
+                        line_list.append(desert((x, y)))
 
-                elif cell.upper() == 'D':
-                    line_list.append(desert((x, y)))
+                    else:
+                        raise ValueError(cell + ' ' + 'Is an unrecognized biome type')
 
-                else:
-                    raise ValueError(cell + ' ' + 'Is an unrecognized biome type')
 
             coord_map.append(line_list)
 
