@@ -1,9 +1,18 @@
 from src.biosim.biome import *
 import random as rd
 
+
 class island:
 
     def __init__(self, map):
+
+        """
+            Number of animals per species in island, as dictionary.
+            :param map: text-string consisting of letters H, L, D, W representing Highland, Lowland, Desert and Water.
+            This sets the geographical map of the island.
+            the map cannot have other than water cells in its outer boundary.
+            """
+
         map_list = map.split()
         coord_map = []
         x = 0
@@ -39,13 +48,15 @@ class island:
                     else:
                         raise ValueError(cell + ' ' + 'Is an unrecognized biome type')
 
-
             coord_map.append(line_list)
 
         self.coord_map = coord_map
 
     def species_count(self):
-        # Counts the number of animal per species on the entire Island, and returns it as a dictionary
+        """
+            Counts the number of animal per species on the entire Island.
+            :return species_amount: Integer representing the number of animals on the island.
+        """
 
         species_amount = {
             'carnivores': 0,
@@ -61,7 +72,11 @@ class island:
         return species_amount
 
     def animal_count(self):
-        # Counts the number of animal per species on the entire Island, and returns it as a dictionary
+        """
+            Counts the number of animal per species on the entire Island.
+            :return animal_amount: a dictionary providing the count of each the two species on the island.
+        """
+
 
         animal_amount = 0
         for lst in self.coord_map:
@@ -74,7 +89,9 @@ class island:
         return animal_amount
 
     def sim_year(self):
-        # Goes through a yearly simulation
+        """
+            Goes through a yearly simulation, and executes the yearly function in sequence.
+            """
         yearly_functions = ['update_fodder', 'grazing', 'breeding', 'migration', 'aging', 'remove_population']
 
         for func in yearly_functions:
@@ -87,7 +104,10 @@ class island:
                         exec("x.%s()" % (func))
 
     def migration(self):
-        # Transfers given migrators to given destinations
+        """
+            Finds animals that are going to migrate, checks where they want to migrate, then moves them to the
+            desired cell if it is habitable.
+            """
 
         self.migrationreset()
 
@@ -124,7 +144,11 @@ class island:
                 cur_cell.carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration() is False]
 
     def add_population(self, population):
-        # Adds a population to a given cell
+        """
+            Adds animals to a given cell.
+            :param population: a list with a dictionary specifying the location of the animals,
+            and a list of dictionaries specifying where to place the animals.
+            """
 
         for specie in population:
             y_value = specie['loc'][0] - 1
@@ -134,8 +158,9 @@ class island:
             self.coord_map[y_value][x_value].add_population(pop)
 
     def migrationreset(self):
-        # Sets the "Migrated" flag for animals to False
-
+        """
+            Sets the "Migrated" flag for all animals to false, allowing them to migrate.
+            """
         for row in self.coord_map:
 
             for cell in row:
@@ -147,7 +172,11 @@ class island:
                     herbivore.migrated = False
 
     def distrubution(self):
-        # Returns the distribution of the different type of animals in the various cells
+        """
+            Counts the number of animal per species on the entire Island.
+            :return herbdist: a nested list representing the amount of herbivores per cell.
+            :return carndist: a nested list representing the amount of carnivores per cell.
+            """
 
         herbdist = []
         carndist = []
@@ -166,24 +195,14 @@ class island:
         return herbdist, carndist
 
 
-
-
 def migrationdestination(cur_x, cur_y):
+    """
+         Decides where a given animal want to go to
+        :param cur_x: Integer representing the x-location of the current cell of residence.
+        :param cur_y: Integer representing the y-location of the current cell of residence.
+        :return choice[0]: x-coordinate of the cell the animal want to go
+        :return choice[1]: y-coordinate of the cell the animal want to go
+        """
     choice = rd.choice([(cur_x + 1, cur_y), (cur_x - 1, cur_y), (cur_x, cur_y + 1), (cur_x, cur_y - 1)])
 
     return choice[0], choice[1]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,5 +1,6 @@
 from src.biosim.island import *
 from src.biosim.visualization import *
+import random as rd
 
 
 class BioSim:
@@ -8,40 +9,43 @@ class BioSim:
                  vis_years=1, ymax_animals=None, cmax_animals=None, hist_specs=None,
                  img_dir=None, img_base=None, img_fmt='png', img_years=None,
                  log_file=None):
+
+        """
+            :param island_map: Multi-line string specifying island geography
+            :param ini_pop: List of dictionaries specifying initial population
+            :param seed: Integer used as random number seed
+            :param ymax_animals: Number specifying y-axis limit for graph showing animal numbers
+            :param cmax_animals: Dict specifying color-code limits for animal densities
+            :param hist_specs: Specifications for histograms, see below
+            :param vis_years: years between visualization updates (if 0, disable graphics)
+            :param img_dir: String with path to directory for figures
+            :param img_base: String with beginning of file name for figures
+            :param img_fmt: String with file type for figures, e.g. 'png'
+            :param img_years: years between visualizations saved to files (default: vis_years)
+            :param log_file: If given, write animal counts to this file
+            If ymax_animals is None, the y-axis limit should be adjusted automatically.
+            If cmax_animals is None, sensible, fixed default values should be used.
+            cmax_animals is a dict mapping species names to numbers, e.g.,
+            {'Herbivore': 50, 'Carnivore': 20}
+            hist_specs is a dictionary with one entry per property for which a histogram shall be shown.
+            For each property, a dictionary providing the maximum value and the bin width must be
+            given, e.g.,
+            {'weight': {'max': 80, 'delta': 2}, 'fitness': {'max': 1.0, 'delta': 0.05}}
+            Permitted properties are 'weight', 'age', 'fitness'.
+            If img_dir is None, no figures are written to file. Filenames are formed as
+            f'{os.path.join(img_dir, img_base}_{img_number:05d}.{img_fmt}'
+            where img_number are consecutive image numbers starting from 0.
+            img_dir and img_base must either be both None or both strings.
+            """
         self.island_map = island_map
         self.ini_pop = ini_pop
         self.seed = seed
         self.vis_years = vis_years
         self.island = island(island_map)
         self.add_population(self.ini_pop)
+        rd.seed(a=self.seed)
 
-    """
-    :param island_map: Multi-line string specifying island geography
-    :param ini_pop: List of dictionaries specifying initial population
-    :param seed: Integer used as random number seed
-    :param ymax_animals: Number specifying y-axis limit for graph showing animal numbers
-    :param cmax_animals: Dict specifying color-code limits for animal densities
-    :param hist_specs: Specifications for histograms, see below
-    :param vis_years: years between visualization updates (if 0, disable graphics)
-    :param img_dir: String with path to directory for figures
-    :param img_base: String with beginning of file name for figures
-    :param img_fmt: String with file type for figures, e.g. 'png'
-    :param img_years: years between visualizations saved to files (default: vis_years)
-    :param log_file: If given, write animal counts to this file
-    If ymax_animals is None, the y-axis limit should be adjusted automatically.
-    If cmax_animals is None, sensible, fixed default values should be used.
-    cmax_animals is a dict mapping species names to numbers, e.g.,
-    {'Herbivore': 50, 'Carnivore': 20}
-    hist_specs is a dictionary with one entry per property for which a histogram shall be shown.
-    For each property, a dictionary providing the maximum value and the bin width must be
-    given, e.g.,
-    {'weight': {'max': 80, 'delta': 2}, 'fitness': {'max': 1.0, 'delta': 0.05}}
-    Permitted properties are 'weight', 'age', 'fitness'.
-    If img_dir is None, no figures are written to file. Filenames are formed as
-    f'{os.path.join(img_dir, img_base}_{img_number:05d}.{img_fmt}'
-    where img_number are consecutive image numbers starting from 0.
-    img_dir and img_base must either be both None or both strings.
-    """
+
 
     def set_animal_parameters(self, species, params):
 
@@ -60,6 +64,12 @@ class BioSim:
         """
 
     def simulate(self, num_years):
+
+        """
+            Runing simulation while visualizing the result.
+            :param num_years: number of years to simulate
+            """
+
         if num_years == 0:
             None
 
@@ -74,22 +84,21 @@ class BioSim:
                 herb, carn = self.island.distrubution()
                 graphs.update(year, herb, carn)
 
-        print(year, self.island.species_count())
 
 
 
-    """
-    Run simulation while visualizing the result.
-    :param num_years: number of years to simulate
-    """
+
+
 
     def add_population(self, population):
+        """
+            Add a population to the island
+            :param population: List of dictionaries specifying population
+            """
+
         self.island.add_population(population)
 
-    """
-    Add a population to the island
-    :param population: List of dictionaries specifying population
-    """
+
 
     @property
     def year(self):
@@ -98,7 +107,8 @@ class BioSim:
 
     @property
     def num_animals(self):
-        # Calls animal_count function from  class, returning the number of animals on the island
+        """Total number of animals on island.
+        :return animals_on_island: Integer representing the number of animals on the island."""
 
         animals_on_island = self.island.animal_count()
 
@@ -106,8 +116,10 @@ class BioSim:
 
     @property
     def num_animals_per_species(self):
-        # Calls species_count function from island class, returning a dictionary showing the population of the two
-        # species of the island
+        """Number of animals per species in island, as dictionary.
+        :return island.species_count: dictionary with species as key and
+        integers representing species counts as values."""
+
         return self.island.species_count()
 
     def graphics(self, n_years):
