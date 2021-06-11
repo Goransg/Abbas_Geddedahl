@@ -103,7 +103,7 @@ class Graphics:
 
         self.txt.set_text(self.template.format(step))
 
-        plt.pause(1e-6)
+        plt.pause(1e-20)
         self._save_graphics(step)
 
         # pause required to pass control to GUI
