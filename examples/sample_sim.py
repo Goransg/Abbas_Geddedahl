@@ -52,7 +52,7 @@ if __name__ == '__main__':
                              'weight': {'max': 60, 'delta': 2}},
                  img_dir='results',
                  img_base='sample')
-    sim.simulate(50)
+    sim.simulate(400)
     sim.make_movie()
 
     input('Press ENTER')

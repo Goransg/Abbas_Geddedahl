@@ -53,6 +53,34 @@ class biome:
             if len(self.herb) > 0:
                 self.herb = specie.feeding(sorted(self.herb, key=lambda x: x.fitness))
 
+    def migration(self, cell_list):
+        # for specie in self.herb:
+        #     if specie.migration():
+        #         choice = rd.choice(cell_list)
+        #         if choice.habitable:
+        #             choice.immigration(specie)
+        #             self.herb.remove(specie)
+        # for specie in self.carn:
+        #     if specie.migration():
+        #         choice = rd.choice(cell_list)
+        #         if choice.habitable:
+        #             choice.immigration(specie)
+        #             self.carn.remove(specie)
+        for i in range(len(self.herb) - 1, -1, -1):
+            if self.herb[i].migration():
+                choice = rd.choice(cell_list)
+                if choice.habitable:
+                    self.herb[i].migrated = True
+                    choice.herb.append(self.herb[i])
+                    del self.herb[i]
+        for i in range(len(self.carn) - 1, -1, -1):
+            if self.carn[i].migration():
+                choice = rd.choice(cell_list)
+                if choice.habitable:
+                    self.carn[i].migrated = True
+                    choice.carn.append(self.carn[i])
+                    del self.carn[i]
+
     # def get_age(self):
     #     ages = []
     #     for specie in self.herb:
@@ -103,6 +131,7 @@ class water(biome):
         self.habitable = False
         super().__init__(loc)
 
+
 # A = lowland((1, 1))
 # A.add_population([{'species': 'Herbivore',
 #                    'age': 5,
@@ -134,3 +163,32 @@ class water(biome):
 # print(A.get_weights())
 # print(A.get_fitness())
 # print(A.carn)
+
+# # Test Migration
+# A = lowland((5, 5))
+# B = lowland((5, 4))
+# C = highland((5, 6))
+# D = water((4, 5))
+# E = desert((6, 5))
+# A.add_population([{'species': 'Herbivore',
+#                    'age': 25,
+#                    'weight': 8000}])
+# A.add_population([{'species': 'Herbivore',
+#                    'age': 25,
+#                    'weight': 0}])
+# A.add_population([{'species': 'Herbivore',
+#                    'age': 25,
+#                    'weight': 8000}])
+# print(len(A.herb)+len(A.carn))
+# print(len(B.herb)+len(B.carn))
+# print(len(C.herb)+len(C.carn))
+# print(len(D.herb)+len(D.carn))
+# print(len(E.herb)+len(E.carn))
+# lst = [B, C, D, E]
+# print(lst)
+# A.migration(lst)
+# print(len(A.herb) + len(A.carn))
+# print(len(B.herb) + len(B.carn))
+# print(len(C.herb) + len(C.carn))
+# print(len(D.herb) + len(D.carn))
+# print(len(E.herb) + len(E.carn))
