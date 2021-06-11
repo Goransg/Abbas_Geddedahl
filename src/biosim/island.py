@@ -1,4 +1,5 @@
 from src.biosim.biome import *
+import numpy as np
 import random as rd
 import warnings
 
@@ -199,6 +200,35 @@ class island:
             carndist.append(ycarn)
 
         return herbdist, carndist
+
+    def get_bincounts(self):
+        herbweights = []
+        carnweights = []
+        herbfitness = []
+        carnfitness = []
+        herbage = []
+        carnage = []
+
+        for row in self.coord_map:
+            for cell in row:
+                if len(cell.herb) > 0:
+                    herbweights.append(np.array([int(animal.weight) for animal in cell.herb], dtype=object))
+                    herbfitness.append(np.array([round(animal.fitness, 1) for animal in cell.herb], dtype=object))
+                    herbage.append(np.array([int(animal.age) for animal in cell.herb], dtype=object))
+
+
+                if len(cell.herb) > 0:
+                    carnweights.append(np.array([int(animal.weight) for animal in cell.carn], dtype=object))
+                    carnfitness.append(np.array([round(animal.fitness, 1) for animal in cell.carn], dtype=object))
+                    carnage.append(np.array([int(animal.age) for animal in cell.carn], dtype=object))
+
+
+        return np.array(herbweights, dtype=object), np.array(carnweights, dtype=object),\
+               np.array(herbfitness, dtype=object), np.array(carnfitness, dtype=object), \
+               np.array(herbage, dtype=object), np.array(carnage, dtype=object)
+
+
+
 
 # def migrationdestination(cur_x, cur_y):
 #     """

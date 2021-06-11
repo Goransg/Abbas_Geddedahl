@@ -23,6 +23,7 @@ import numpy as np
 import subprocess
 import os
 import time
+import matplotlib.gridspec as gridspec
 
 # Update these variables to point to your ffmpeg and convert binaries
 # If you installed ffmpeg using conda or installed both softwares in
@@ -37,11 +38,10 @@ _DEFAULT_GRAPHICS_NAME = 'dv'
 _DEFAULT_IMG_FORMAT = 'png'
 _DEFAULT_MOVIE_FORMAT = 'mp4'   # alternatives: mp4, gif
 
-
 class Graphics:
     """Provides graphics support for RandVis."""
 
-    def __init__(self, img_dir=None, img_name=None, img_fmt=None):
+    def __init__(self, hist_specs, img_dir=None, img_name=None, img_fmt=None):
         """
         :param img_dir: directory for image files; no images if None
         :type img_dir: str
@@ -64,8 +64,19 @@ class Graphics:
         self._img_ctr = 0
         self._img_step = 1
 
+        n_points_w = int(round(hist_specs['weight']['max'] / hist_specs['weight']['delta'])) + 1
+        self._limits_w = np.linspace(0, hist_specs['weight']['max'], num=n_points_w)
+        self._ymax = 10
+
+        n_points_f = int(round(hist_specs['fitness']['max'] / hist_specs['fitness']['delta'])) + 1
+        self._limits_f = np.linspace(0, hist_specs['fitness']['max'], num=n_points_f)
+
+        n_points_a = int(round(hist_specs['age']['max'] / hist_specs['age']['delta'])) + 1
+        self._limits_a = np.linspace(0, hist_specs['age']['max'], num=n_points_a)
+
         # the following will be initialized by _setup_graphics
         self._fig = None
+        self._gs = None
         self._map_ax_one = None
         self._map_ax_two = None
         self._img_axis_one = None
@@ -82,11 +93,20 @@ class Graphics:
         self._mean_line_3 = None
         self._geomap_axis = None
         self._geodesc_axis = None
-        self.count_ax = None
-        self.txt = None
-        self.template = None
+        self._count_ax = None
+        self._txt = None
+        self._template = None
+        self._histw_ax = None
+        self._histw_line = None
+        self._histw_line_2 = None
+        self._histf_ax = None
+        self._histf_line = None
+        self._histf_line_2 = None
+        self._hista_ax = None
+        self._hista_line = None
+        self._hista_line_2 = None
 
-    def update(self, step, sys_map_first, sys_map_second, all_animals, n_herbivores, n_carnivores):
+    def update(self, step, sys_map_first, sys_map_second, all_animals, n_herbivores, n_carnivores, w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores):
         """
         , sys_mean
         Updates graphics with current data and save to file if necessary.
@@ -99,9 +119,12 @@ class Graphics:
         self._update_system_map_one(sys_map_first)
         self._update_system_map_two(sys_map_second)
         self._update_mean_graph(step, all_animals, n_herbivores, n_carnivores)
+        self._update_hist_w(w_herbivores, w_carnivores)
+        self._update_hist_f(f_herbivores, f_carnivores)
+        self._update_hist_a(a_herbivores, a_carnivores)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
 
-        self.txt.set_text(self.template.format(step))
+        self._txt.set_text(self._template.format(step))
 
         plt.pause(1e-20)
         self._save_graphics(step)
@@ -165,42 +188,40 @@ class Graphics:
         # create new figure window
         if self._fig is None:
             self._fig = plt.figure()
+            self._gs = gridspec.GridSpec(ncols=9, nrows=9, figure=self._fig)
 
 
         # Add left subplot for images created with imshow().
         # We cannot create the actual ImageAxis object before we know
         # the size of the image, so we delay its creation.
         if self._map_ax_one is None:
-            self._map_ax_one = self._fig.add_subplot(2, 3, 5)
+            self._map_ax_one = self._fig.add_subplot(self._gs[3:7,3:6])
             self._map_ax_one.set_title('Herbivore distribution', fontsize=10)
             self._img_axis_one = None
 
         if self._map_ax_two is None:
-            self._map_ax_two = self._fig.add_subplot(2, 3, 6)
+            self._map_ax_two = self._fig.add_subplot(self._gs[3:7,6:9])
             self._map_ax_two.set_title('Carnivore distribution', fontsize=10)
             self._img_axis_two = None
 
         if self._geomap_axis is None:
-            self._geomap_axis = self._fig.add_subplot(2, 3, 1)
+            self._geomap_axis = self._fig.add_subplot(self._gs[:3,:3])
             self._geomap_axis.set_title('Island map', fontsize=10)
             self._geomap_img_axis = None
 
         if self._geodesc_axis is None:
-            self._geodesc_axis = self._fig.add_subplot(4, 6, 2)
+            self._geodesc_axis = self._fig.add_subplot(self._gs[4,4])
             self._geodesc_img_axis = None
 
-        self._fig.tight_layout()
+
 
         # Add right subplot for line graph of mean.
         if self._mean_ax is None:
-            self._mean_ax = self._fig.add_subplot(2, 2, 2)
+            self._mean_ax = self._fig.add_subplot(self._gs[:3,6:])
             self._mean_ax.set_xlabel("year")
             self._mean_ax.set_ylabel("Count")
             self._mean_ax.set_title("Animal count", fontsize=10)
 
-        if self.count_ax is None:
-            self.count_ax = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])
-            self.count_ax.axis('off')
 
 
         # needs updating on subsequent calls to simulate()
@@ -244,11 +265,51 @@ class Graphics:
                 self._mean_line_3.set_data(np.hstack((x_data, x_new)),
                                          np.hstack((y_data, y_new)))
 
-        self.template = 'Year: {:5d}'
-        self.txt = self.count_ax.text(0.5, 0.5,self.template.format(0),
-                                      horizontalalignment='center',
-                                      verticalalignment='center',
-                                      transform=self.count_ax.transAxes)
+        if self._histw_ax is None:
+            self._histw_ax = self._fig.add_subplot(self._gs[7:, :3])
+            self._histw_ax.set_xlabel("weight")
+            self._histw_ax.set_ylabel("Count")
+            self._histw_ax.set_title("Animal weights", fontsize=10)
+            self._histw_line = self._histw_ax.step(self._limits_w[:-1], np.zeros_like(self._limits_w[:-1]),
+                                                 where='mid', lw=2)[0]
+            self._histw_line_2 = self._histw_ax.step(self._limits_w[:-1], np.zeros_like(self._limits_w[:-1]),
+                                                   where='mid', lw=2)[0]
+            self._histw_ax.set_xlim(self._limits_w[0], self._limits_w[-1])
+            self._histw_ax.set_ylim(0, self._ymax)
+
+        if self._histf_ax is None:
+            self._histf_ax = self._fig.add_subplot(self._gs[7:, 3:6])
+            self._histf_ax.set_xlabel("fitness")
+            self._histf_ax.set_ylabel("Count")
+            self._histf_ax.set_title("Animal fitness", fontsize=10)
+            self._histf_line = self._histf_ax.step(self._limits_f[:-1], np.zeros_like(self._limits_f[:-1]),
+                                                 where='mid', lw=2)[0]
+            self._histf_line_2 = self._histf_ax.step(self._limits_f[:-1], np.zeros_like(self._limits_f[:-1]),
+                                                   where='mid', lw=2)[0]
+            self._histf_ax.set_xlim(self._limits_f[0], self._limits_f[-1])
+            self._histf_ax.set_ylim(0, self._ymax)
+
+        if self._hista_ax is None:
+            self._hista_ax = self._fig.add_subplot(self._gs[7:, 6:])
+            self._hista_ax.set_xlabel("age")
+            self._hista_ax.set_ylabel("Count")
+            self._hista_ax.set_title("Animal age", fontsize=10)
+            self._hista_line = self._hista_ax.step(self._limits_a[:-1], np.zeros_like(self._limits_a[:-1]),
+                                                 where='mid', lw=2)[0]
+            self._hista_line_2 = self._hista_ax.step(self._limits_a[:-1], np.zeros_like(self._limits_a[:-1]),
+                                                   where='mid', lw=2)[0]
+            self._hista_ax.set_xlim(self._limits_a[0], self._limits_a[-1])
+            self._hista_ax.set_ylim(0, self._ymax)
+
+        if self._count_ax is None:
+            self._count_ax = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])
+            self._count_ax.axis('off')
+
+        self._template = 'Year: {:5d}'
+        self._txt = self._count_ax.text(0.5, 0.5, self._template.format(0),
+                                        horizontalalignment='center',
+                                        verticalalignment='center',
+                                        transform=self._count_ax.transAxes)
 
         self._update_geography(geographic_map)
 
@@ -291,6 +352,30 @@ class Graphics:
         y_data_3 = self._mean_line_3.get_ydata()
         y_data_3[step] = n_carnivores
         self._mean_line_3.set_ydata(y_data_3)
+
+    def _update_hist_w(self, w_herbivores, w_carnivores):
+        countswh = np.histogram(np.hstack(w_herbivores), self._limits_w)[0]
+        self._histw_line.set_ydata(countswh)
+        countswc = np.histogram(np.hstack(w_carnivores), self._limits_w)[0]
+        self._histw_line_2.set_ydata(countswc)
+        self._ymax = max(self._ymax, 1.05 * max(countswh))
+        self._histw_ax.set_ylim(0, self._ymax)
+
+    def _update_hist_f(self, f_herbivores, f_carnivores):
+        countsfh = np.histogram(np.hstack(f_herbivores), self._limits_f)[0]
+        self._histf_line.set_ydata(countsfh)
+        countsfc = np.histogram(np.hstack(f_carnivores), self._limits_f)[0]
+        self._histf_line_2.set_ydata(countsfc)
+        self._ymax = max(self._ymax, 1.05 * max(countsfh))
+        self._histf_ax.set_ylim(0, self._ymax)
+
+    def _update_hist_a(self, a_herbivores, a_carnivores):
+        countsah = np.histogram(np.hstack(a_herbivores), self._limits_a)[0]
+        self._hista_line.set_ydata(countsah)
+        countsac = np.histogram(np.hstack(a_carnivores), self._limits_a)[0]
+        self._hista_line_2.set_ydata(countsac)
+        self._ymax = max(self._ymax, 1.05 * max(countsah))
+        self._hista_ax.set_ylim(0, self._ymax)
 
     def _save_graphics(self, step):
         """Saves graphics to file if file name given."""

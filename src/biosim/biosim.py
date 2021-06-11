@@ -37,6 +37,7 @@ class BioSim:
             where img_number are consecutive image numbers starting from 0.
             img_dir and img_base must either be both None or both strings.
             """
+        self.hist_specs = hist_specs
         self.island_map = island_map
         self.ini_pop = ini_pop
         self.seed = seed
@@ -72,7 +73,7 @@ class BioSim:
             None
 
         else:
-            graphs = Graphics()
+            graphs = Graphics(self.hist_specs)
             graphs.setup(num_years, 1, self.island_map)
 
         for year in range(num_years - 1):
@@ -83,7 +84,8 @@ class BioSim:
                 all_animals = self.island.animal_count()
                 n_herbivores = self.island.species_count()['herbivores']
                 n_carnivores = self.island.species_count()['carnivores']
-                graphs.update(year, herb, carn, all_animals, n_herbivores, n_carnivores)
+                w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores = self.island.get_bincounts()
+                graphs.update(year, herb, carn, all_animals, n_herbivores, n_carnivores, w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores)
 
     def add_population(self, population):
         """
