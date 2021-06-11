@@ -202,6 +202,11 @@ class island:
         return herbdist, carndist
 
     def get_bincounts(self):
+
+        """
+            Fetches the information for the histograms.
+            :return 6 x 2d-arrays: representing weight, fitness and age for the different animals in the cells.
+        """
         herbweights = []
         carnweights = []
         herbfitness = []

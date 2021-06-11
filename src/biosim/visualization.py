@@ -106,7 +106,8 @@ class Graphics:
         self._hista_line = None
         self._hista_line_2 = None
 
-    def update(self, step, sys_map_first, sys_map_second, all_animals, n_herbivores, n_carnivores, w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores):
+    def update(self, step, sys_map_first, sys_map_second, all_animals, n_herbivores, n_carnivores,
+               w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores):
         """
         , sys_mean
         Updates graphics with current data and save to file if necessary.
@@ -188,43 +189,45 @@ class Graphics:
         # create new figure window
         if self._fig is None:
             self._fig = plt.figure()
-            self._gs = gridspec.GridSpec(ncols=9, nrows=9, figure=self._fig)
+            self._gs = gridspec.GridSpec(ncols=36, nrows=36, figure=self._fig)
 
 
         # Add left subplot for images created with imshow().
         # We cannot create the actual ImageAxis object before we know
         # the size of the image, so we delay its creation.
         if self._map_ax_one is None:
-            self._map_ax_one = self._fig.add_subplot(self._gs[3:7,3:6])
-            self._map_ax_one.set_title('Herbivore distribution', fontsize=10)
+            self._map_ax_one = self._fig.add_subplot(self._gs[16:36,10:24])
+            self._map_ax_one.set_title('Herbivore distribution', fontsize=8)
             self._img_axis_one = None
 
         if self._map_ax_two is None:
-            self._map_ax_two = self._fig.add_subplot(self._gs[3:7,6:9])
-            self._map_ax_two.set_title('Carnivore distribution', fontsize=10)
+            self._map_ax_two = self._fig.add_subplot(self._gs[16:36,26:36])
+            self._map_ax_two.set_title('Carnivore distribution', fontsize=8)
             self._img_axis_two = None
 
         if self._geomap_axis is None:
-            self._geomap_axis = self._fig.add_subplot(self._gs[:3,:3])
-            self._geomap_axis.set_title('Island map', fontsize=10)
+            self._geomap_axis = self._fig.add_subplot(self._gs[:12, 28:])
+            self._geomap_axis.set_title('Island map', fontsize=8)
             self._geomap_img_axis = None
 
         if self._geodesc_axis is None:
-            self._geodesc_axis = self._fig.add_subplot(self._gs[4,4])
+            self._geodesc_axis = self._fig.add_subplot(self._gs[:8, 24])
             self._geodesc_img_axis = None
 
 
 
         # Add right subplot for line graph of mean.
         if self._mean_ax is None:
-            self._mean_ax = self._fig.add_subplot(self._gs[:3,6:])
-            self._mean_ax.set_xlabel("year")
-            self._mean_ax.set_ylabel("Count")
-            self._mean_ax.set_title("Animal count", fontsize=10)
+            self._mean_ax = self._fig.add_subplot(self._gs[:10, :14])
+            self._mean_ax.set_xlabel("            year", fontsize=8)
+            self._mean_ax.set_ylabel("Count", fontsize=8)
+            self._mean_ax.set_title("Animal count", fontsize=8)
+            plt.setp(self._mean_ax.get_xticklabels(), Fontsize=6)
+            plt.setp(self._mean_ax.get_yticklabels(), Fontsize=6)
 
 
 
-        # needs updating on subsequent calls to simulate()
+            # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
         self._mean_ax.set_xlim(0, final_step+1)
 
@@ -266,40 +269,46 @@ class Graphics:
                                          np.hstack((y_data, y_new)))
 
         if self._histw_ax is None:
-            self._histw_ax = self._fig.add_subplot(self._gs[7:, :3])
-            self._histw_ax.set_xlabel("weight")
-            self._histw_ax.set_ylabel("Count")
-            self._histw_ax.set_title("Animal weights", fontsize=10)
+            self._histw_ax = self._fig.add_subplot(self._gs[12:18, :8])
+            self._histw_ax.set_xlabel("weight", fontsize=6)
+            self._histw_ax.set_ylabel("Count", fontsize=6)
+            self._histw_ax.set_title("Animal weights", fontsize=8)
             self._histw_line = self._histw_ax.step(self._limits_w[:-1], np.zeros_like(self._limits_w[:-1]),
                                                  where='mid', lw=2)[0]
             self._histw_line_2 = self._histw_ax.step(self._limits_w[:-1], np.zeros_like(self._limits_w[:-1]),
                                                    where='mid', lw=2)[0]
             self._histw_ax.set_xlim(self._limits_w[0], self._limits_w[-1])
             self._histw_ax.set_ylim(0, self._ymax)
+            plt.setp(self._histw_ax.get_xticklabels(), Fontsize=6)
+            plt.setp(self._histw_ax.get_yticklabels(), Fontsize=6)
 
         if self._histf_ax is None:
-            self._histf_ax = self._fig.add_subplot(self._gs[7:, 3:6])
-            self._histf_ax.set_xlabel("fitness")
-            self._histf_ax.set_ylabel("Count")
-            self._histf_ax.set_title("Animal fitness", fontsize=10)
+            self._histf_ax = self._fig.add_subplot(self._gs[21:27, :8])
+            self._histf_ax.set_xlabel("fitness", fontsize=6)
+            self._histf_ax.set_ylabel("Count", fontsize=6)
+            self._histf_ax.set_title("Animal fitness", fontsize=8)
             self._histf_line = self._histf_ax.step(self._limits_f[:-1], np.zeros_like(self._limits_f[:-1]),
                                                  where='mid', lw=2)[0]
             self._histf_line_2 = self._histf_ax.step(self._limits_f[:-1], np.zeros_like(self._limits_f[:-1]),
                                                    where='mid', lw=2)[0]
             self._histf_ax.set_xlim(self._limits_f[0], self._limits_f[-1])
             self._histf_ax.set_ylim(0, self._ymax)
+            plt.setp(self._histf_ax.get_xticklabels(), Fontsize=6)
+            plt.setp(self._histf_ax.get_yticklabels(), Fontsize=6)
 
         if self._hista_ax is None:
-            self._hista_ax = self._fig.add_subplot(self._gs[7:, 6:])
-            self._hista_ax.set_xlabel("age")
-            self._hista_ax.set_ylabel("Count")
-            self._hista_ax.set_title("Animal age", fontsize=10)
+            self._hista_ax = self._fig.add_subplot(self._gs[30:36, :8])
+            self._hista_ax.set_xlabel("age", Fontsize=6)
+            self._hista_ax.set_ylabel("Count", Fontsize=6)
+            self._hista_ax.set_title("Animal age", fontsize=8)
             self._hista_line = self._hista_ax.step(self._limits_a[:-1], np.zeros_like(self._limits_a[:-1]),
                                                  where='mid', lw=2)[0]
             self._hista_line_2 = self._hista_ax.step(self._limits_a[:-1], np.zeros_like(self._limits_a[:-1]),
                                                    where='mid', lw=2)[0]
             self._hista_ax.set_xlim(self._limits_a[0], self._limits_a[-1])
             self._hista_ax.set_ylim(0, self._ymax)
+            plt.setp(self._hista_ax.get_xticklabels(), Fontsize=6)
+            plt.setp(self._hista_ax.get_yticklabels(), Fontsize=6)
 
         if self._count_ax is None:
             self._count_ax = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])
