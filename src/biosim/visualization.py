@@ -83,6 +83,8 @@ class Graphics:
         self._geomap_axis = None
         self._geodesc_axis = None
         self.count_ax = None
+        self.txt = None
+        self.template = None
 
     def update(self, step, sys_map_first, sys_map_second, all_animals, n_herbivores, n_carnivores):
         """
@@ -99,12 +101,7 @@ class Graphics:
         self._update_mean_graph(step, all_animals, n_herbivores, n_carnivores)
         self._fig.canvas.flush_events()  # ensure every thing is drawn
 
-        template = 'Count: {:5d}'
-        txt = self.count_ax.text(0.5, 0.5, template.format(0),
-                                 horizontalalignment='center',
-                                 verticalalignment='center',
-                                 transform=self.count_ax.transAxes)
-        txt.set_text(template.format(step))
+        self.txt.set_text(self.template.format(step))
 
         plt.pause(1e-6)
         self._save_graphics(step)
@@ -247,7 +244,11 @@ class Graphics:
                 self._mean_line_3.set_data(np.hstack((x_data, x_new)),
                                          np.hstack((y_data, y_new)))
 
-
+        self.template = 'Year: {:5d}'
+        self.txt = self.count_ax.text(0.5, 0.5,self.template.format(0),
+                                      horizontalalignment='center',
+                                      verticalalignment='center',
+                                      transform=self.count_ax.transAxes)
 
         self._update_geography(geographic_map)
 
@@ -272,7 +273,7 @@ class Graphics:
         else:
             self._img_axis_two = self._map_ax_two.imshow(sys_map,
                                                  interpolation='nearest',
-                                                 vmin=0, vmax=200)
+                                                 vmin=0, vmax=50)
 
             plt.colorbar(self._img_axis_two, ax=self._map_ax_two,
                          orientation='horizontal')
