@@ -72,6 +72,10 @@ class island:
 
         return species_amount
 
+    def change_animalparams(self, species, params):
+
+        self.coord_map[0][0].change_animalparams(species, params)
+
     def animal_count(self):
         """
             Counts the number of animal per species on the entire Island.

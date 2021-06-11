@@ -53,6 +53,7 @@ class BioSim:
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
+        self.island.change_animalparams(species, params)
 
     def set_landscape_parameters(self, landscape, params):
 

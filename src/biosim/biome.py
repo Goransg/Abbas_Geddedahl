@@ -14,6 +14,19 @@ class biome:
     def update_fodder(self):
         self.fodder = self.f_max
 
+    def change_animalparams(self, species, params):
+        """
+        Changes the constant parameters of a given animal type
+        :param species: a text string representing the animal type to be updated
+        :param params: a dictionary of constant names to be updated, with values they are going to be set to as values.
+        """
+        if species.lower == 'herbivore':
+            herbivore.update_params(params)
+        elif species.lower == 'carnivore':
+            carnivore.update_params(params)
+        else:
+            raise KeyError('unknown species specified')
+
     def add_population(self, pop):
         for specie in pop:
             if specie['species'] == 'Herbivore':
