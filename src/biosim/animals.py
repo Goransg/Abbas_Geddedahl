@@ -64,7 +64,6 @@ class animal(object):
 
         else:
             death_proba = self.omega * (1 - self.fitness)
-
             if rd.uniform(0, 1) <= death_proba:
                 return True
 
@@ -93,6 +92,7 @@ class animal(object):
         self.weight -= (self.eta * self.weight)
 
         self.fitness = self.fitness_update()
+        self.migrated = False
 
     @classmethod
     def update_params(cls, paramchange):
