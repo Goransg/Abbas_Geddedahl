@@ -168,7 +168,7 @@ class carnivore(animal):
     xi = 1.1
     omega = 0.8
     F = 50
-    DeltaPhiMax = 8
+    DeltaPhiMax = 10
 
     def __init__(self, weight, age):
         super().__init__(weight, age)
