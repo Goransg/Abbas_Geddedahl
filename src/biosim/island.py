@@ -1,5 +1,6 @@
 from src.biosim.biome import *
 import random as rd
+import warnings
 
 
 class island:
@@ -25,7 +26,7 @@ class island:
 
             line_list = []
             y += 1
-            if (y == 1 and line != 'W'*len(line)) or (y == len(map_list) and line != 'W' * len(line)):
+            if (y == 1 and line != 'W' * len(line)) or (y == len(map_list) and line != 'W' * len(line)):
                 raise TypeError('The outline cells of the map needs to be water cells!')
             elif line[-1] != 'W' or line[0] != 'W':
                 raise TypeError('The outline cells of the map needs to be water cells!')
@@ -65,7 +66,6 @@ class island:
         for lst in self.coord_map:
 
             for x in lst:
-
                 species_amount['carnivores'] += len(x.carn)
                 species_amount['herbivores'] += len(x.herb)
 
@@ -77,12 +77,10 @@ class island:
             :return animal_amount: a dictionary providing the count of each the two species on the island.
         """
 
-
         animal_amount = 0
         for lst in self.coord_map:
 
             for x in lst:
-
                 animal_amount += len(x.carn)
                 animal_amount += len(x.herb)
 
@@ -109,39 +107,47 @@ class island:
             desired cell if it is habitable.
             """
 
-        self.migrationreset()
+        # self.migrationreset()
 
-        for y in range(len(self.coord_map)-1):
+        for y in range(len(self.coord_map) - 1):
 
-            for x in range(len(self.coord_map[y])-1):
+            for x in range(len(self.coord_map[y]) - 1):
                 cur_cell = self.coord_map[x][y]
-                migrators_herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration()]
-                migrators_carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration()]
+                try:
+                    neighbours = [self.coord_map[x][y - 1], self.coord_map[x][y + 1], self.coord_map[x - 1][y],
+                                  self.coord_map[x + 1][y]]
+                except:
+                    pass
+                if len(neighbours) > 0:
+                    cur_cell.migration(neighbours)
 
-                for herbivore in migrators_herb:
-
-                    new_x, new_y = migrationdestination(x, y)
-                    new_cell = self.coord_map[new_x][new_y]
-
-                    if new_cell.habitable:
-
-                        new_cell.herb.append(herbivore)
-
-                        herbivore.migrated = True
-
-                for carnivore in migrators_carn:
-
-                    new_x, new_y = migrationdestination(x, y)
-                    new_cell = self.coord_map[new_x][new_y]
-
-                    if new_cell.habitable:
-
-                        new_cell.carn.append(carnivore)
-
-                        carnivore.migrated = True
-
-                cur_cell.herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration() is False]
-                cur_cell.carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration() is False]
+                # migrators_herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration()]
+                # migrators_carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration()]
+                #
+                # for herbivore in migrators_herb:
+                #
+                #     new_x, new_y = migrationdestination(x, y)
+                #     new_cell = self.coord_map[new_x][new_y]
+                #
+                #     if new_cell.habitable:
+                #
+                #         new_cell.herb.append(herbivore)
+                #
+                #         herbivore.migrated = True
+                #
+                # for carnivore in migrators_carn:
+                #
+                #     new_x, new_y = migrationdestination(x, y)
+                #     new_cell = self.coord_map[new_x][new_y]
+                #
+                #     if new_cell.habitable:
+                #
+                #         new_cell.carn.append(carnivore)
+                #
+                #         carnivore.migrated = True
+                #
+                # cur_cell.herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration() is False]
+                # cur_cell.carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration() is False]
 
     def add_population(self, population):
         """
@@ -157,19 +163,19 @@ class island:
 
             self.coord_map[y_value][x_value].add_population(pop)
 
-    def migrationreset(self):
-        """
-            Sets the "Migrated" flag for all animals to false, allowing them to migrate.
-            """
-        for row in self.coord_map:
-
-            for cell in row:
-
-                for carnivore in cell.carn:
-                    carnivore.migrated = False
-
-                for herbivore in cell.herb:
-                    herbivore.migrated = False
+    # def migrationreset(self):
+    #     """
+    #         Sets the "Migrated" flag for all animals to false, allowing them to migrate.
+    #         """
+    #     for row in self.coord_map:
+    #
+    #         for cell in row:
+    #
+    #             for carnivore in cell.carn:
+    #                 carnivore.migrated = False
+    #
+    #             for herbivore in cell.herb:
+    #                 herbivore.migrated = False
 
     def distrubution(self):
         """
@@ -194,15 +200,14 @@ class island:
 
         return herbdist, carndist
 
-
-def migrationdestination(cur_x, cur_y):
-    """
-         Decides where a given animal want to go to
-        :param cur_x: Integer representing the x-location of the current cell of residence.
-        :param cur_y: Integer representing the y-location of the current cell of residence.
-        :return choice[0]: x-coordinate of the cell the animal want to go
-        :return choice[1]: y-coordinate of the cell the animal want to go
-        """
-    choice = rd.choice([(cur_x + 1, cur_y), (cur_x - 1, cur_y), (cur_x, cur_y + 1), (cur_x, cur_y - 1)])
-
-    return choice[0], choice[1]
+# def migrationdestination(cur_x, cur_y):
+#     """
+#          Decides where a given animal want to go to
+#         :param cur_x: Integer representing the x-location of the current cell of residence.
+#         :param cur_y: Integer representing the y-location of the current cell of residence.
+#         :return choice[0]: x-coordinate of the cell the animal want to go
+#         :return choice[1]: y-coordinate of the cell the animal want to go
+#         """
+#     choice = rd.choice([(cur_x + 1, cur_y), (cur_x - 1, cur_y), (cur_x, cur_y + 1), (cur_x, cur_y - 1)])
+#
+#     return choice[0], choice[1]

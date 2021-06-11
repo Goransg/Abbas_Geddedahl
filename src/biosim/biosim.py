@@ -45,8 +45,6 @@ class BioSim:
         self.add_population(self.ini_pop)
         rd.seed(a=self.seed)
 
-
-
     def set_animal_parameters(self, species, params):
 
         """
@@ -77,8 +75,8 @@ class BioSim:
             graphs = Graphics()
             graphs.setup(num_years, 1, self.island_map)
 
-        for year in range(num_years-1):
-            print(year+1, self.island.species_count())
+        for year in range(num_years - 1):
+            print(year + 1, self.island.species_count())
             self.island.sim_year()
             if num_years % self.vis_years == 0:
                 herb, carn = self.island.distrubution()
@@ -87,12 +85,6 @@ class BioSim:
                 n_carnivores = self.island.species_count()['carnivores']
                 graphs.update(year, herb, carn, all_animals, n_herbivores, n_carnivores)
 
-
-
-
-
-
-
     def add_population(self, population):
         """
             Add a population to the island
@@ -100,8 +92,6 @@ class BioSim:
             """
 
         self.island.add_population(population)
-
-
 
     @property
     def year(self):
@@ -137,7 +127,6 @@ class BioSim:
                 if n_years % self.vis_years == 0:
                     herb, carn = self.island.distrubution()
                     graphs.update(year, herb, carn)
-
 
     def make_movie(self):
 
