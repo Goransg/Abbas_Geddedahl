@@ -1,6 +1,7 @@
 from src.biosim import animals
 import random as rd
 import math as m
+from scipy import stats
 
 def test_creation_herb():
     # Testing if the weight and age of the individual are correct.
@@ -118,8 +119,39 @@ def test_parameterupdate_oneinstance():
     individual2.update_params(('carnivore', {'beta': 0.5}))
     assert individual2.beta == 0.5
 
+def test_stat_death():
+    # Statistical test for probability of death, checking that the
+    test_animals = [animals.carnivore(age=2, weight=50) for _ in range(50)]
+    p = test_animals[0].omega * (1 - test_animals[0].fitness)
+    successes = [subject for subject in test_animals if subject.death() is True]
+    p_hyp = stats.binom_test(len(successes), n=len(test_animals), p=p)
+    assert p_hyp >= 0.05
 
+def test_stat_birth():
+    # Statistical test for probability of birth
+    test_animals = [animals.carnivore(age=5, weight=20) for _ in range(50)]
+    p = min(1, test_animals[0].gamma * test_animals[0].fitness * 49)
+    all_res = [subject for subject in test_animals]
+    successes = [i for i in all_res if i]
+    p_hyp = stats.binom_test(len(successes), n=len(test_animals), p=p)
+    assert p_hyp >= 0.05
 
+def test_stat_migr():
+    # Statistical test for probability of death
+    test_animals = [animals.carnivore(age=5, weight=30) for _ in range(50)]
+    p = test_animals[0].mu * test_animals[0].fitness
+    successes = [subject for subject in test_animals if subject.migration() is True]
+    p_hyp = stats.binom_test(len(successes), n=len(test_animals), p=p)
+    assert p_hyp >= 0.05
+
+def test_stat_prey():
+    # Statistical test for probability of death
+    test_carnivore = animals.carnivore(age=3, weight=30)
+    test_herbivores = [animals.herbivore(age=10, weight=10) for _ in range(50)]
+    p = (test_carnivore.fitness - test_herbivores[0].fitness) / test_carnivore.DeltaPhiMax
+    survivors = test_carnivore.feeding(test_herbivores)
+    p_hyp = stats.binom_test(len(survivors), n=50, p=(1-p))
+    assert p_hyp >= 0.05
 
 
 
