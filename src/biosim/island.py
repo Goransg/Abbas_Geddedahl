@@ -1,19 +1,19 @@
-from src.biosim.biome import *
+from .biome import *
 import numpy as np
 import random as rd
 import warnings
 
 
 class island:
+    """
+    An object representing the group of cells, acting as an island.
+    :param map: text-string consisting of letters H, L, D, W representing Highland, Lowland, Desert and Water.
+    This sets the geographical map of the island.
+    the map cannot have other than water cells in its outer boundary.
+
+    """
 
     def __init__(self, map):
-
-        """
-            An object representing the group of cells, acting as an island.
-            :param map: text-string consisting of letters H, L, D, W representing Highland, Lowland, Desert and Water.
-            This sets the geographical map of the island.
-            the map cannot have other than water cells in its outer boundary.
-            """
 
         map_list = map.split()
         coord_map = []
@@ -60,8 +60,9 @@ class island:
 
     def species_count(self):
         """
-            Counts the number of animal per species on the entire Island.
-            :return species_amount: Integer representing the number of animals on the island.
+        :return species_amount: Integer representing the number of animals on the island.
+        Counts the number of animal per species on the entire Island.
+
         """
 
         species_amount = {
@@ -78,7 +79,6 @@ class island:
 
     def change_animalparams(self, species, params):
         """
-
         :param species:
         :param params:
         """
@@ -86,8 +86,9 @@ class island:
 
     def animal_count(self):
         """
-            Counts the number of animal per species on the entire Island.
-            :return animal_amount: a dictionary providing the count of each the two species on the island.
+        :return animal_amount: a dictionary providing the count of each the two species on the island.
+        Counts the number of animal per species on the entire Island.
+
         """
 
         animal_amount = 0
@@ -101,8 +102,9 @@ class island:
 
     def sim_year(self):
         """
-            Goes through a yearly simulation, and executes the yearly function in sequence.
-            """
+        Goes through a yearly simulation, and executes the yearly function in sequence.
+
+        """
         yearly_functions = ['update_fodder', 'grazing', 'breeding', 'migration', 'aging', 'remove_population']
 
         for func in yearly_functions:
@@ -116,9 +118,10 @@ class island:
 
     def migration(self):
         """
-            Finds animals that are going to migrate, checks where they want to migrate, then moves them to the
-            desired cell if it is habitable.
-            """
+        Finds animals that are going to migrate, checks where they want to migrate, then moves them to the
+        desired cell if it is habitable.
+
+        """
 
         # self.migrationreset()
 
@@ -164,10 +167,11 @@ class island:
 
     def add_population(self, population):
         """
-            Adds animals to a given cell.
-            :param population: a list with a dictionary specifying the location of the animals,
-            and a list of dictionaries specifying where to place the animals.
-            """
+        :param population: a list with a dictionary specifying the location of the animals,
+        Adds animals to a given cell.
+        and a list of dictionaries specifying where to place the animals.
+
+        """
 
         for specie in population:
             y_value = specie['loc'][0] - 1
@@ -192,10 +196,11 @@ class island:
 
     def distrubution(self):
         """
-            Counts the number of animal per species on the entire Island.
-            :return herbdist: a nested list representing the amount of herbivores per cell.
-            :return carndist: a nested list representing the amount of carnivores per cell.
-            """
+        :return herbdist: a nested list representing the amount of herbivores per cell.
+        :return carndist: a nested list representing the amount of carnivores per cell.
+        Counts the number of animal per species on the entire Island.
+
+        """
 
         herbdist = []
         carndist = []
@@ -214,10 +219,10 @@ class island:
         return herbdist, carndist
 
     def get_bincounts(self):
-
         """
-            Fetches the information for the histograms.
-            :return 6 x 2d-arrays: representing weight, fitness and age for the different animals in the cells.
+        :return 6 x 2d-arrays: representing weight, fitness and age for the different animals in the cells.
+        Fetches the information for the histograms.
+
         """
         herbweights = []
         carnweights = []

@@ -1,4 +1,4 @@
-from src.biosim.animals import *
+from .animals import *
 
 
 class biome:

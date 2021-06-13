@@ -3,31 +3,31 @@ import random as rd
 import math as m
 from scipy import stats
 
+
 def test_creation_herb():
     # Testing if the weight and age of the individual are correct.
-
-    weight = rd.randint(0,50)
-    age = rd.randint(0,20)
+    weight = rd.randint(0, 50)
+    age = rd.randint(0, 20)
     fitness = (1/(1+m.e**(0.6*(age-40))) * (1/(1+m.e**(-0.1*(weight-10)))))
     individual_herb = animals.herbivore(weight=weight, age=age)
     assert individual_herb.weight == weight
     assert individual_herb.age == age
     assert individual_herb.fitness == fitness
 
+
 def test_creation_carn():
     # Testing if the weight and age of the individual are correct.
-
-    weight = rd.randint(0,50)
-    age = rd.randint(0,20)
+    weight = rd.randint(0, 50)
+    age = rd.randint(0, 20)
     fitness = (1/(1+m.e**(0.3*(age-40))) * (1/(1+m.e**(-0.4*(weight-4)))))
     individual_carn = animals.carnivore(weight=weight, age=age)
     assert individual_carn.weight == weight
     assert individual_carn.age == age
     assert individual_carn.fitness == fitness
 
+
 def test_death_bad_fitness():
     # Testing if an animal will die if the fitness is poor
-
     weight = 0
     age = 100
     individual = animals.carnivore(weight=weight, age=age)
@@ -36,50 +36,49 @@ def test_death_bad_fitness():
 
 def test_death_good_fitness():
     # Testing if an animal will not die if the fitness is good
-
     weight = 50
     age = 2
     individual = animals.carnivore(weight=weight, age=age)
     assert individual.death() is False
 
+
 def test_birth_bad_recreation(mocker):
     # Testing if an animal will recreate if the fitness is poor
-
     weight = 0
     age = 100
     individual = animals.carnivore(weight=weight, age=age)
     mocker.patch('src.biosim.animals.animal.migration', return_value=None)
     assert individual.birth(n_animals=0) is None
 
+
 def test_birth_good_recreation():
     # Testing if an animal will recreate if the fitness is good
-
     weight = 100
     age = 5
     individual = animals.carnivore(weight=weight, age=age)
     assert individual.birth(n_animals=500) is not None
 
+
 def test_migration_bad_fitness(mocker):
     # Testing if an animal will migrate if the fitness is poor
-
     weight = 0
     age = 100
     individual = animals.carnivore(weight=weight, age=age)
     mocker.patch('src.biosim.animals.animal.migration', return_value=False)
     assert individual.migration() is False
 
+
 def test_migration_good_fitness(mocker):
     # Testing if an animal will migrate if the fitness is good
-
     weight = 500
     age = 2
     individual = animals.carnivore(weight=weight, age=age)
     mocker.patch('src.biosim.animals.animal.migration', return_value=True)
     assert individual.migration() is True
 
+
 def test_aging():
     # Testing the aging and yearly weight decrease function
-
     weight = 50
     age = 2
     yearly_weightloss = 50 * 0.05
@@ -90,7 +89,6 @@ def test_aging():
 
 def test_feeding_herbivore():
     # Testing the feeding function for herbivores
-
     weight = 50
     age = 2
     yearly_weightgain = 10 * 0.9
@@ -102,7 +100,6 @@ def test_feeding_herbivore():
 
 def test_feeding_carnivore():
     # Testing the feeding function for carnivores
-
     weight = 50
     age = 2
     yearly_weightgain = 10 * 0.75
@@ -115,12 +112,13 @@ def test_feeding_carnivore():
 
 
 def test_parameterupdate_oneinstance():
-     # Test if parameter updating affects the unintended subclass.
+    # Test if parameter updating affects the unintended subclass.
     weight = 50
     age = 2
     individual2 = animals.carnivore(age=age, weight=weight)
     individual2.update_params(({'beta': 0.5}))
     assert individual2.beta == 0.5
+
 
 def test_stat_death():
     # Statistical test for probability of death, checking that the probabilty of hypothesis correctness is more than 5%
@@ -129,6 +127,7 @@ def test_stat_death():
     successes = [subject for subject in test_animals if subject.death() is True]
     p_hyp = stats.binom_test(len(successes), n=len(test_animals), p=p)
     assert p_hyp >= 0.05
+
 
 def test_stat_birth():
     # Statistical test for probability of birth, checking if probabilty of hypothesis correctness is more than 5%
@@ -139,6 +138,7 @@ def test_stat_birth():
     p_hyp = stats.binom_test(len(successes), n=len(test_animals), p=p)
     assert p_hyp >= 0.05
 
+
 def test_stat_migr():
     # Statistical test for probability of migration, checking if probabilty of hypothesis correctness is more than 5%
     test_animals = [animals.carnivore(age=5, weight=30) for _ in range(50)]
@@ -146,6 +146,7 @@ def test_stat_migr():
     successes = [subject for subject in test_animals if subject.migration() is True]
     p_hyp = stats.binom_test(len(successes), n=len(test_animals), p=p)
     assert p_hyp >= 0.05
+
 
 def test_stat_prey():
     # Statistical test for probability of preying, checking if probabilty of hypothesis correctness is more than 5%
