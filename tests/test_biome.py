@@ -1,67 +1,89 @@
-import unittest
+import pytest
 from src.biosim.biome import *
 import random as rd
 
 
-class biome_test(unittest.TestCase):
-
-    def test_lowland_create(self):
-        a = rd.randint(1, 50)
-        b = rd.randint(1, 50)
-        f_max = 800
-        cell = lowland((a, b))
-        self.assertEqual(cell.f_max, f_max)
-        self.assertEqual(cell.habitable, True)
-
-    def test_highland_create(self):
-        a = rd.randint(1, 50)
-        b = rd.randint(1, 50)
-        f_max = 300
-        cell = highland((a, b))
-        self.assertEqual(cell.f_max, f_max)
-        self.assertEqual(cell.habitable, True)
-
-    def test_water_create(self):
-        a = rd.randint(1, 50)
-        b = rd.randint(1, 50)
-        f_max = 0
-        cell = water((a, b))
-        self.assertEqual(cell.f_max, f_max)
-        self.assertEqual(cell.habitable, False)
-
-    def test_desert_create(self):
-        a = rd.randint(1, 50)
-        b = rd.randint(1, 50)
-        f_max = 0
-        cell = desert((a, b))
-        self.assertEqual(cell.f_max, f_max)
-        self.assertEqual(cell.habitable, True)
-
-    def test_add_population(self):
-        pop_size = 20
-        pop = [{'species': 'Carnivore',
-                'age': 5,
-                'weight': 20}
-               for _ in range(pop_size)]
-        a = rd.randint(1, 50)
-        b = rd.randint(1, 50)
-        cell = desert((a, b))
-        cell.add_population(pop)
-        self.assertEqual(len(cell.carn)+len(cell.herb), pop_size)
-
-    def test_remove_population(self):
-        pop_size = 20
-        pop = [{'species': 'Carnivore',
-                'age': 50,
-                'weight': 5}
-               for _ in range(pop_size)]
-        a = rd.randint(1, 50)
-        b = rd.randint(1, 50)
-        cell = desert((a, b))
-        cell.add_population(pop)
-        cell.remove_population()
-        self.assertEqual(len(cell.carn) + len(cell.herb) < pop_size, True)
+def test_lowland_create():
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    f_max = 800
+    cell = lowland((a, b))
+    assert cell.f_max == f_max
+    assert cell.habitable == True
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_highland_create():
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    f_max = 300
+    cell = highland((a, b))
+    assert cell.f_max == f_max
+    assert cell.habitable == True
+
+
+def test_water_create():
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    f_max = 0
+    cell = water((a, b))
+    assert cell.f_max == f_max
+    assert cell.habitable == False
+
+
+def test_desert_create():
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    f_max = 0
+    cell = desert((a, b))
+    assert cell.f_max == f_max
+    assert cell.habitable == True
+
+
+def test_add_population():
+    pop_size = 20
+    pop = [{'species': 'Carnivore',
+            'age': 5,
+            'weight': 20}
+           for _ in range(pop_size)]
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    cell = desert((a, b))
+    cell.add_population(pop)
+    assert len(cell.carn) + len(cell.herb) == pop_size
+
+
+def test_remove_population():
+    pop_size = 20
+    pop = [{'species': 'Carnivore',
+            'age': 50,
+            'weight': 5}
+           for _ in range(pop_size)]
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    cell = desert((a, b))
+    cell.add_population(pop)
+    cell.remove_population()
+    assert len(cell.carn) + len(cell.herb) < pop_size
+
+
+def test_migration(mocker):
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    A = lowland((a, b))
+    B = lowland((a - 1, b))
+    C = highland((a + 1, b))
+    D = water((a, b - 1))
+    E = desert((a, b + 1))
+    cell_lst = [B, C, D, E]
+    pop_size = 20
+    pop = [{'species': 'Carnivore',
+            'age': 5,
+            'weight': 20}
+           for _ in range(pop_size)]
+    A.add_population(pop)
+    mocker.patch('src.biosim.biome.animal.migration', return_value=True)
+    A.migration(cell_lst)
+    total_pop = len(A.carn) + len(A.herb) + len(B.carn) + len(B.herb) + len(C.carn) + len(C.herb) + len(D.carn) + len(
+        D.herb) + len(E.carn) + len(E.herb)
+    assert total_pop == pop_size
+    assert len(A.carn) + len(A.herb) < total_pop

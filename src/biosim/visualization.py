@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 # This file based on example files from lecture J05 in INF200 june block of 2021
 """
@@ -36,7 +35,8 @@ _MAGICK_BINARY = 'magick'
 _DEFAULT_GRAPHICS_DIR = os.path.join('..', 'data')
 _DEFAULT_GRAPHICS_NAME = 'dv'
 _DEFAULT_IMG_FORMAT = 'png'
-_DEFAULT_MOVIE_FORMAT = 'mp4'   # alternatives: mp4, gif
+_DEFAULT_MOVIE_FORMAT = 'mp4'  # alternatives: mp4, gif
+
 
 class Graphics:
     """Provides graphics support for RandVis."""
@@ -191,17 +191,16 @@ class Graphics:
             self._fig = plt.figure()
             self._gs = gridspec.GridSpec(ncols=36, nrows=36, figure=self._fig)
 
-
         # Add left subplot for images created with imshow().
         # We cannot create the actual ImageAxis object before we know
         # the size of the image, so we delay its creation.
         if self._map_ax_one is None:
-            self._map_ax_one = self._fig.add_subplot(self._gs[16:36,10:24])
+            self._map_ax_one = self._fig.add_subplot(self._gs[16:36, 10:24])
             self._map_ax_one.set_title('Herbivore distribution', fontsize=8)
             self._img_axis_one = None
 
         if self._map_ax_two is None:
-            self._map_ax_two = self._fig.add_subplot(self._gs[16:36,26:36])
+            self._map_ax_two = self._fig.add_subplot(self._gs[16:36, 26:36])
             self._map_ax_two.set_title('Carnivore distribution', fontsize=8)
             self._img_axis_two = None
 
@@ -214,59 +213,55 @@ class Graphics:
             self._geodesc_axis = self._fig.add_subplot(self._gs[:8, 24])
             self._geodesc_img_axis = None
 
-
-
         # Add right subplot for line graph of mean.
         if self._mean_ax is None:
             self._mean_ax = self._fig.add_subplot(self._gs[:10, :14])
             self._mean_ax.set_xlabel("            year", fontsize=8)
             self._mean_ax.set_ylabel("Count", fontsize=8)
             self._mean_ax.set_title("Animal count", fontsize=8)
-            plt.setp(self._mean_ax.get_xticklabels(), Fontsize=6)
-            plt.setp(self._mean_ax.get_yticklabels(), Fontsize=6)
-
-
+            plt.setp(self._mean_ax.get_xticklabels(), fontsize=6)
+            plt.setp(self._mean_ax.get_yticklabels(), fontsize=6)
 
             # needs updating on subsequent calls to simulate()
         # add 1 so we can show values for time zero and time final_step
-        self._mean_ax.set_xlim(0, final_step+1)
+        self._mean_ax.set_xlim(0, final_step + 1)
 
         if self._mean_line is None:
-            mean_plot = self._mean_ax.plot(np.arange(0, final_step+1),
-                                           np.full(final_step+1, np.nan), label='Overall population')
+            mean_plot = self._mean_ax.plot(np.arange(0, final_step + 1),
+                                           np.full(final_step + 1, np.nan), label='Overall population')
             self._mean_line = mean_plot[0]
         else:
             x_data, y_data = self._mean_line.get_data()
-            x_new = np.arange(x_data[-1] + 1, final_step+1)
+            x_new = np.arange(x_data[-1] + 1, final_step + 1)
             if len(x_new) > 0:
                 y_new = np.full(x_new.shape, np.nan)
                 self._mean_line.set_data(np.hstack((x_data, x_new)),
                                          np.hstack((y_data, y_new)))
 
         if self._mean_line_2 is None:
-            mean_plot_2 = self._mean_ax.plot(np.arange(0, final_step+1),
-                                           np.full(final_step+1, np.nan), c='g', label='Herbivores')
+            mean_plot_2 = self._mean_ax.plot(np.arange(0, final_step + 1),
+                                             np.full(final_step + 1, np.nan), c='g', label='Herbivores')
             self._mean_line_2 = mean_plot_2[0]
         else:
             x_data, y_data = self._mean_line_2.get_data()
-            x_new = np.arange(x_data[-1] + 1, final_step+1)
+            x_new = np.arange(x_data[-1] + 1, final_step + 1)
             if len(x_new) > 0:
                 y_new = np.full(x_new.shape, np.nan)
                 self._mean_line_2.set_data(np.hstack((x_data, x_new)),
-                                         np.hstack((y_data, y_new)))
+                                           np.hstack((y_data, y_new)))
 
         if self._mean_line_3 is None:
-            mean_plot_3 = self._mean_ax.plot(np.arange(0, final_step+1),
-                                           np.full(final_step+1, np.nan), c='r', label='Carnivores')
+            mean_plot_3 = self._mean_ax.plot(np.arange(0, final_step + 1),
+                                             np.full(final_step + 1, np.nan), c='r', label='Carnivores')
             self._mean_line_3 = mean_plot_3[0]
             self._mean_ax.legend(prop={'size': 6})
         else:
             x_data, y_data = self._mean_line_3.get_data()
-            x_new = np.arange(x_data[-1] + 1, final_step+1)
+            x_new = np.arange(x_data[-1] + 1, final_step + 1)
             if len(x_new) > 0:
                 y_new = np.full(x_new.shape, np.nan)
                 self._mean_line_3.set_data(np.hstack((x_data, x_new)),
-                                         np.hstack((y_data, y_new)))
+                                           np.hstack((y_data, y_new)))
 
         if self._histw_ax is None:
             self._histw_ax = self._fig.add_subplot(self._gs[12:18, :8])
@@ -274,13 +269,13 @@ class Graphics:
             self._histw_ax.set_ylabel("Count", fontsize=6)
             self._histw_ax.set_title("Animal weights", fontsize=8)
             self._histw_line = self._histw_ax.step(self._limits_w[:-1], np.zeros_like(self._limits_w[:-1]),
-                                                 where='mid', lw=2)[0]
-            self._histw_line_2 = self._histw_ax.step(self._limits_w[:-1], np.zeros_like(self._limits_w[:-1]),
                                                    where='mid', lw=2)[0]
+            self._histw_line_2 = self._histw_ax.step(self._limits_w[:-1], np.zeros_like(self._limits_w[:-1]),
+                                                     where='mid', lw=2)[0]
             self._histw_ax.set_xlim(self._limits_w[0], self._limits_w[-1])
             self._histw_ax.set_ylim(0, self._ymax)
-            plt.setp(self._histw_ax.get_xticklabels(), Fontsize=6)
-            plt.setp(self._histw_ax.get_yticklabels(), Fontsize=6)
+            plt.setp(self._histw_ax.get_xticklabels(), fontsize=6)
+            plt.setp(self._histw_ax.get_yticklabels(), fontsize=6)
 
         if self._histf_ax is None:
             self._histf_ax = self._fig.add_subplot(self._gs[21:27, :8])
@@ -288,27 +283,27 @@ class Graphics:
             self._histf_ax.set_ylabel("Count", fontsize=6)
             self._histf_ax.set_title("Animal fitness", fontsize=8)
             self._histf_line = self._histf_ax.step(self._limits_f[:-1], np.zeros_like(self._limits_f[:-1]),
-                                                 where='mid', lw=2)[0]
-            self._histf_line_2 = self._histf_ax.step(self._limits_f[:-1], np.zeros_like(self._limits_f[:-1]),
                                                    where='mid', lw=2)[0]
+            self._histf_line_2 = self._histf_ax.step(self._limits_f[:-1], np.zeros_like(self._limits_f[:-1]),
+                                                     where='mid', lw=2)[0]
             self._histf_ax.set_xlim(self._limits_f[0], self._limits_f[-1])
             self._histf_ax.set_ylim(0, self._ymax)
-            plt.setp(self._histf_ax.get_xticklabels(), Fontsize=6)
-            plt.setp(self._histf_ax.get_yticklabels(), Fontsize=6)
+            plt.setp(self._histf_ax.get_xticklabels(), fontsize=6)
+            plt.setp(self._histf_ax.get_yticklabels(), fontsize=6)
 
         if self._hista_ax is None:
             self._hista_ax = self._fig.add_subplot(self._gs[30:36, :8])
-            self._hista_ax.set_xlabel("age", Fontsize=6)
-            self._hista_ax.set_ylabel("Count", Fontsize=6)
+            self._hista_ax.set_xlabel("age", fontsize=6)
+            self._hista_ax.set_ylabel("Count", fontsize=6)
             self._hista_ax.set_title("Animal age", fontsize=8)
             self._hista_line = self._hista_ax.step(self._limits_a[:-1], np.zeros_like(self._limits_a[:-1]),
-                                                 where='mid', lw=2)[0]
-            self._hista_line_2 = self._hista_ax.step(self._limits_a[:-1], np.zeros_like(self._limits_a[:-1]),
                                                    where='mid', lw=2)[0]
+            self._hista_line_2 = self._hista_ax.step(self._limits_a[:-1], np.zeros_like(self._limits_a[:-1]),
+                                                     where='mid', lw=2)[0]
             self._hista_ax.set_xlim(self._limits_a[0], self._limits_a[-1])
             self._hista_ax.set_ylim(0, self._ymax)
-            plt.setp(self._hista_ax.get_xticklabels(), Fontsize=6)
-            plt.setp(self._hista_ax.get_yticklabels(), Fontsize=6)
+            plt.setp(self._hista_ax.get_xticklabels(), fontsize=6)
+            plt.setp(self._hista_ax.get_yticklabels(), fontsize=6)
 
         if self._count_ax is None:
             self._count_ax = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])
@@ -329,8 +324,8 @@ class Graphics:
             self._img_axis_one.set_data(sys_map)
         else:
             self._img_axis_one = self._map_ax_one.imshow(sys_map,
-                                                 interpolation='nearest',
-                                                 vmin=0, vmax=200)
+                                                         interpolation='nearest',
+                                                         vmin=0, vmax=200)
 
             plt.colorbar(self._img_axis_one, ax=self._map_ax_one,
                          orientation='horizontal')
@@ -342,8 +337,8 @@ class Graphics:
             self._img_axis_two.set_data(sys_map)
         else:
             self._img_axis_two = self._map_ax_two.imshow(sys_map,
-                                                 interpolation='nearest',
-                                                 vmin=0, vmax=50)
+                                                         interpolation='nearest',
+                                                         vmin=0, vmax=50)
 
             plt.colorbar(self._img_axis_two, ax=self._map_ax_two,
                          orientation='horizontal')
@@ -413,13 +408,12 @@ class Graphics:
             self._geomap_axis.set_xticklabels(range(1, 1 + len(map_rgb[0]), 4))
             self._geomap_axis.set_yticks(range(0, len(map_rgb), 4))
             self._geomap_axis.set_yticklabels(range(1, 1 + len(map_rgb), 4))
-            self._geomap_img_axis = self._geomap_axis.imshow(map_rgb) # llx, lly, w, h
+            self._geomap_img_axis = self._geomap_axis.imshow(map_rgb)  # llx, lly, w, h
 
             for ix, name in enumerate(('Water', 'Lowland',
                                        'Highland', 'Desert')):
                 self._geodesc_axis.axis('off')
                 self._geodesc_axis.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1,
-                                              edgecolor='none',
-                                              facecolor=rgb_value[name[0]]))
+                                                           edgecolor='none',
+                                                           facecolor=rgb_value[name[0]]))
                 self._geodesc_axis.text(0.35, ix * 0.2, name, transform=self._geodesc_axis.transAxes)
-
