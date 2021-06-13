@@ -101,12 +101,16 @@ class animal(object):
             :param paramchange: A dictionary with the parameters to be changed, and the value they shall be changed to.
             Parameter has to be known in the animals' class.
             """
-        for param in paramchange[1].keys():
+        # for param in paramchange[1].keys():
+        #     classname = cls.__name__
+        #     if param in dir(cls):
+        #         paramname = classname + '.' + param
+        #         exec("%s = %f" % (paramname, paramchange[1][param]))
+        for param in paramchange.keys():
             classname = cls.__name__
             if param in dir(cls):
                 paramname = classname + '.' + param
-                exec("%s = %f" % (paramname, paramchange[1][param]))
-
+                exec("%s = %f" % (paramname, paramchange[param]))
             else:
                 raise ValueError('Unknown parameter inserted')
 
@@ -205,6 +209,7 @@ class carnivore(animal):
             if rd.uniform(0, 1) <= p_eat and appetite > 0:
                 living_herbivores.remove(prey)
                 self.weight += prey.weight * self.beta
+                appetite -= prey.weight
 
         self.fitness = self.fitness_update()
 

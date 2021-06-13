@@ -2,6 +2,9 @@ from src.biosim.animals import *
 
 
 class biome:
+    """
+    The biome class
+    """
     f_max = None
     habitable = None
 
@@ -12,6 +15,9 @@ class biome:
         self.carn = []
 
     def update_fodder(self):
+        """
+        Function to update fodder amount on yearly cycle
+        """
         self.fodder = self.f_max
 
     def change_animalparams(self, species, params):
@@ -20,14 +26,18 @@ class biome:
         :param species: a text string representing the animal type to be updated
         :param params: a dictionary of constant names to be updated, with values they are going to be set to as values.
         """
-        if species.lower == 'herbivore':
+        if species.lower() == 'herbivore':
             herbivore.update_params(params)
-        elif species.lower == 'carnivore':
+        elif species.lower() == 'carnivore':
             carnivore.update_params(params)
         else:
             raise KeyError('unknown species specified')
 
     def add_population(self, pop):
+        """
+        Function to add population in a specific cell
+        :param pop: List of dictionaries
+        """
         for specie in pop:
             if specie['species'] == 'Herbivore':
                 self.herb.append(herbivore(specie['weight'], specie['age']))
@@ -35,30 +45,44 @@ class biome:
                 self.carn.append(carnivore(specie['weight'], specie['age']))
 
     def remove_population(self):
+        """
+
+        """
         self.herb[:] = [specie for specie in self.herb if not specie.death()]
         self.carn[:] = [specie for specie in self.carn if not specie.death()]
 
     def breeding(self):
+        """
+
+        """
         for specie in self.herb:
             n = len(self.herb)
             result = specie.birth(n)
             if result is not None:
                 self.herb.append(result)
                 specie.weight -= specie.xi * result.weight
+                specie.fitness_update()
         for specie in self.carn:
             n = len(self.carn)
             result = specie.birth(n)
             if result is not None:
                 self.carn.append(result)
                 specie.weight -= specie.xi * result.weight
+                specie.fitness_update()
 
     def aging(self):
+        """
+
+        """
         for specie in self.herb:
             specie.aging()
         for specie in self.carn:
             specie.aging()
 
     def grazing(self):
+        """
+
+        """
         for specie in self.herb:
             if self.fodder > 0:
                 self.fodder = specie.feeding(self.fodder)
@@ -67,6 +91,10 @@ class biome:
                 self.herb = specie.feeding(sorted(self.herb, key=lambda x: x.fitness))
 
     def migration(self, cell_list):
+        """
+
+        :param cell_list:
+        """
         # for specie in self.herb:
         #     if specie.migration():
         #         choice = rd.choice(cell_list)
@@ -143,7 +171,6 @@ class water(biome):
         self.f_max = 0
         self.habitable = False
         super().__init__(loc)
-
 
 # A = lowland((1, 1))
 # A.add_population([{'species': 'Herbivore',

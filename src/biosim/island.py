@@ -19,6 +19,7 @@ class island:
         coord_map = []
         x = 0
         y = 0
+        line_len = len(map_list[0])
 
         for line in map_list:
 
@@ -27,10 +28,13 @@ class island:
 
             line_list = []
             y += 1
+            if len(line) != line_len:
+                raise ValueError('Inconsistent line length')
+
             if (y == 1 and line != 'W' * len(line)) or (y == len(map_list) and line != 'W' * len(line)):
-                raise TypeError('The outline cells of the map needs to be water cells!')
+                raise ValueError('The outline cells of the map needs to be water cells!')
             elif line[-1] != 'W' or line[0] != 'W':
-                raise TypeError('The outline cells of the map needs to be water cells!')
+                raise ValueError('The outline cells of the map needs to be water cells!')
             else:
                 for cell in line:
                     x += 1
@@ -73,7 +77,11 @@ class island:
         return species_amount
 
     def change_animalparams(self, species, params):
+        """
 
+        :param species:
+        :param params:
+        """
         self.coord_map[0][0].change_animalparams(species, params)
 
     def animal_count(self):
@@ -104,7 +112,7 @@ class island:
                 for lst in self.coord_map:
 
                     for x in lst:
-                        exec("x.%s()" % (func))
+                        exec("x.%s()" % func)
 
     def migration(self):
         """
@@ -121,7 +129,7 @@ class island:
                 try:
                     neighbours = [self.coord_map[x][y - 1], self.coord_map[x][y + 1], self.coord_map[x - 1][y],
                                   self.coord_map[x + 1][y]]
-                except:
+                except IndexError:
                     pass
                 if len(neighbours) > 0:
                     cur_cell.migration(neighbours)
@@ -225,19 +233,14 @@ class island:
                     herbfitness.append(np.array([round(animal.fitness, 1) for animal in cell.herb], dtype=object))
                     herbage.append(np.array([int(animal.age) for animal in cell.herb], dtype=object))
 
-
                 if len(cell.herb) > 0:
                     carnweights.append(np.array([int(animal.weight) for animal in cell.carn], dtype=object))
                     carnfitness.append(np.array([round(animal.fitness, 1) for animal in cell.carn], dtype=object))
                     carnage.append(np.array([int(animal.age) for animal in cell.carn], dtype=object))
 
-
-        return np.array(herbweights, dtype=object), np.array(carnweights, dtype=object),\
+        return np.array(herbweights, dtype=object), np.array(carnweights, dtype=object), \
                np.array(herbfitness, dtype=object), np.array(carnfitness, dtype=object), \
                np.array(herbage, dtype=object), np.array(carnage, dtype=object)
-
-
-
 
 # def migrationdestination(cur_x, cur_y):
 #     """
