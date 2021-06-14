@@ -90,7 +90,7 @@ class BioSim:
 
         for year in range(self.cur_year, self.cur_year + num_years):
             self.cur_year += 1
-            #print(self.year, self.island.species_count())
+            print(self.year, self.island.species_count())
             self.island.sim_year()
             if self.vis_years != 0 and self.ini_pop != [] and self.hist_specs is not None:
                 if year % self.vis_years == 0:

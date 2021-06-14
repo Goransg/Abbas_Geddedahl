@@ -63,7 +63,9 @@ class Graphics:
 
         self._img_ctr = 0
         self._img_step = 1
-        if hist_specs is not None:
+        if hist_specs is not None and hist_specs.__contains__('weight') and hist_specs.__contains__('fitness') \
+                and hist_specs.__contains__('age'):
+            print("Yayyy in here!")
             n_points_w = int(round(hist_specs['weight']['max'] / hist_specs['weight']['delta'])) + 1
             self._limits_w = np.linspace(0, hist_specs['weight']['max'], num=n_points_w)
             self._ymax = 10
@@ -73,6 +75,8 @@ class Graphics:
 
             n_points_a = int(round(hist_specs['age']['max'] / hist_specs['age']['delta'])) + 1
             self._limits_a = np.linspace(0, hist_specs['age']['max'], num=n_points_a)
+        # else:
+        #     raise ValueError('Invalid hist_specs')
 
         # the following will be initialized by _setup_graphics
         self._fig = None
@@ -309,12 +313,12 @@ class Graphics:
             self._count_ax = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])
             self._count_ax.axis('off')
 
-
-        self._template = 'Year: {:5d}'
-        self._txt = self._count_ax.text(0.5, 0.5, self._template.format(0),
-                                        horizontalalignment='center',
-                                        verticalalignment='center',
-                                        transform=self._count_ax.transAxes)
+        if self._template is None:
+            self._template = 'Year: {:5d}'
+            self._txt = self._count_ax.text(0.5, 0.5, self._template.format(0),
+                                            horizontalalignment='center',
+                                            verticalalignment='center',
+                                            transform=self._count_ax.transAxes)
 
         self._update_geography(geographic_map)
 
