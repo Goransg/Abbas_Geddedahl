@@ -59,16 +59,17 @@ class biome:
         """
         Simulates the yearly births in the cell, adding the child objects and removing weight from mother.
         """
+        n_herb = len(self.herb)
         for specie in self.herb:
-            n = len(self.herb)
-            result = specie.birth(n)
+            result = specie.birth(n_herb)
             if result is not None:
                 self.herb.append(result)
                 specie.weight -= specie.xi * result.weight
                 specie.fitness_update()
+
+        n_carn = len(self.carn)
         for specie in self.carn:
-            n = len(self.carn)
-            result = specie.birth(n)
+            result = specie.birth(n_carn)
             if result is not None:
                 self.carn.append(result)
                 specie.weight -= specie.xi * result.weight

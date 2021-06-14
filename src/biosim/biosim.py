@@ -93,14 +93,14 @@ class BioSim:
             print(self.year, self.island.species_count())
             self.island.sim_year()
             if self.vis_years != 0 and self.ini_pop != [] and self.hist_specs is not None:
-                if year % self.vis_years == 0:
+                if self.cur_year % self.vis_years == 0:
                     herb, carn = self.island.distrubution()
                     all_animals = self.island.animal_count()
                     n_herbivores = self.island.species_count()['Herbivore']
                     n_carnivores = self.island.species_count()['Carnivore']
                     w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores = \
                         self.island.get_bincounts()
-                    self.graphs.update(year, herb, carn, all_animals, n_herbivores, n_carnivores, w_herbivores, w_carnivores,
+                    self.graphs.update(self.cur_year, herb, carn, all_animals, n_herbivores, n_carnivores, w_herbivores, w_carnivores,
                                   f_herbivores, f_carnivores, a_herbivores, a_carnivores)
 
     def add_population(self, population):

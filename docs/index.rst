@@ -10,7 +10,12 @@ Welcome to T02_Abbas_GeddeDahl BioSim documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   biosim_modules
+   animaldoc
+   celldoc
+   islanddoc
+   biosim
+   visualization
+
 
 Indices and tables
 ==================

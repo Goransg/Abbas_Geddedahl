@@ -20,10 +20,12 @@ class animal(object):
     def fitness_update(self):
         """
         Calculating the fitness of the animal; if the weight is negative or zero, the fitness will be zero.
+        The fitness is calculated as follows:
+        .. math::
+            \phi = \frac{1}{0}
 
         :return fitness: float number between 0 and 1
         """
-
 
         if self.weight <= 0:
             fitness = 0

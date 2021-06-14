@@ -1,29 +1,16 @@
 BioSim
 ==================================
 
-The Animal module
---------------------
-
-.. math::
-    \theta
-
-.. automodule:: biosim.animals
-  :members:
+    animaldoc
 
 
-The cell module
---------------------
-
-
-.. automodule:: biosim.biome
-  :members:
 
 
 The Island module
 --------------------
 
 
-.. automodule:: biosim.island
+.. automodule:: biosim.island.island
   :members:
 
 
@@ -31,12 +18,12 @@ The BioSim module
 --------------------
 
 
-.. automodule:: biosim.biosim
+.. automodule:: biosim.biosim.change_animalparams
   :members:
 
 The Visualization module
 --------------------
 
 
-.. automodule:: biosim.biosim
+.. automodule:: visualization
   :members:
