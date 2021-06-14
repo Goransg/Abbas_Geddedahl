@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to T02_Abbas_GeddeDahl BioSim documentation!
-=====================================================
+=============================================================
 
 .. toctree::
    :maxdepth: 2
@@ -14,7 +14,7 @@ Welcome to T02_Abbas_GeddeDahl BioSim documentation!
    celldoc
    islanddoc
    biosim
-   visualization
+   visualizationdoc
 
 
 Indices and tables

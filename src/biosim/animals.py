@@ -20,11 +20,14 @@ class animal(object):
     def fitness_update(self):
         """
         Calculating the fitness of the animal; if the weight is negative or zero, the fitness will be zero.
-        The fitness is calculated as follows:
-        .. math::
-            \phi = \frac{1}{0}
+        The fitness is otherwise calculated as follows:
 
+        .. math::
+            \\frac{1}{1-e^{\\theta_{a}({a-a_{\\frac{1}{2}}})}}\\times\\frac{1}{1-e^{-\\theta_{w}({w-w_{\\frac{1}{2}}})}}
+
+        Where a is the animal age, w is the animal weight, and the rest are constants from the animals' species.
         :return fitness: float number between 0 and 1
+
         """
 
         if self.weight <= 0:
@@ -38,9 +41,19 @@ class animal(object):
     def birth(self, n_animals):
         """
         Calculating the probability of an individual animal giving birth, and whether it should happen or not.
+        If the weight of the mother is less than the weight of the child + the standard deviation of birthweight, the
+        birth will not occur.
+        Otherwise, the probability of an animal giving birth is:
+
+        .. math::
+            min(1, \\gamma \\times \\Phi \\times(N-1)
+
+        Where Phi is the animal fitness and N is the number of animals in the cell of the same species.
+        The rest are constants from the animals' subclass
 
         :param n_animals: Integer representing the number of animals on the island.
         :return child object/None: returning a child object if birth is given, or None if not.
+
         """
 
         if (self.weight <= self.zeta * (self.w_birth + self.sigma_birth)) or n_animals < 2:
@@ -62,8 +75,16 @@ class animal(object):
     def death(self):
         """
         Calculating the probability of death for a given animal, and deciding if death will occur or not.
+        If an animal's weight is zero or less, the animal will die. Otherwise, the probability of any anymal dying
+        during any year is:
+
+        .. math::
+            \\omega(1-\\Phi)
+
+        Where omega is a constant from the animal species, and Phi is the fitness of the animal.
 
         :return boolean: returning True if the animal dies and false if it survives.
+
         """
 
         if self.weight <= 0:
@@ -81,7 +102,15 @@ class animal(object):
         """
         Calculating probability of migration, and deciding whether the animal will migrate or not.
 
+        The probability of an animal migrating in a given year is as follows:
+
+        .. math::
+            \\mu \\times \\Phi
+
+        Where Phi is the animal's fitness and my is a constant of the species.
+
         :return boolean: returning True if the animal migrates and false if it stays in its current cell.
+
         """
 
         migration_proba = self.mu * self.fitness
@@ -110,6 +139,7 @@ class animal(object):
         Parameter has to be known in the animals' class.
 
         :param paramchange: A dictionary with the parameters to be changed, and the value they shall be changed to.
+
         """
         # for param in paramchange[1].keys():
         #     classname = cls.__name__
@@ -131,6 +161,7 @@ class herbivore(animal):
 
     :param age: Age of the animal
     :param weight: Weight of the animal
+
     """
     w_birth = 8
     sigma_birth = 1.5
@@ -157,6 +188,7 @@ class herbivore(animal):
 
         :param f_available: Integer representing the amount of available fodder in the cell.
         :return cur_fodder: Integer representing the amount of fodder left in the cell after the animal has eaten.
+
         """
 
         cur_fodder = f_available
@@ -180,6 +212,7 @@ class carnivore(animal):
 
     :param age: Age of the animal
     :param weight: Weight of the animal
+
     """
     w_birth = 6
     sigma_birth = 1
@@ -202,14 +235,19 @@ class carnivore(animal):
 
     def feeding(self, available_herbivores):
         """
-        Iterates through a list of available herbivores and simulates the carnivore trying to eat the herbivores.
-        The carnivore will try to eat herbivores as long as it has appetite (F), or all herbivores are hunted.
+        Simulates the carnivore trying to eat the herbivores in a cell.
+        The carnivore will try to eat herbivores as long as it has appetite (F), or until all herbivores are hunted.
         This is done by calculating the probability of the carnivore eating a given herbivore,
         and decides whether it will happen or not.
         If the fitness of a herbivore is larger than that of the carnivore, the probability of the carnivore eating
         the herbivore is 0. If the carnivore has DeltaPhiMax more fitness than the herbivore, the probability is 1.
-        If none of the above occur, the probability is calculated.
         If the carnivore eats a herbivore, its weight is increased, and herbivore is removed from cell.
+        If none of the above occur, the probability is calculated as follows:
+
+        .. math::
+            \\frac{\\Phi_{carn}-\\Phi_{herb}}{\\Delta\\Phi_{max}}
+
+        Where Theta is the fitness of the respective animals and DeltaPhiMax is a constant of the carnivores.
         Fitness of the carnivore is updated after it has eaten what it wants or hunted all herbivores.
 
         :param available_herbivores: list of herbivores available in the cell, sorted by ascending fitness.

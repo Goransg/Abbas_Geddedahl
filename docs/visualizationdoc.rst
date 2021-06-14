@@ -2,5 +2,5 @@ The Visualization module
 --------------------
 
 
-.. automodule:: visualization
+.. automodule:: biosim.visualization
   :members:

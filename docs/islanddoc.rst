@@ -1,6 +1,6 @@
 The Island module
-===================
+=======================
 
 
-.. automodule:: biosim.island.island
+.. automodule:: biosim.island
   :members:

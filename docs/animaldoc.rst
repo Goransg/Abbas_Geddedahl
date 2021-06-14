@@ -4,8 +4,5 @@ The Animal module
 animal
 --------------------
 
-.. automodule:: biosim.animal
+.. automodule:: biosim.animals
   :members:
-
-.. math::
-    \theta
