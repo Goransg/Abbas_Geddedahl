@@ -124,6 +124,12 @@ class animal(object):
 
 
 class herbivore(animal):
+    """
+    Object representing an animal of the herbivore kind.
+
+    :param age: Age of the animal
+    :param weight: Weight of the animal
+    """
     w_birth = 8
     sigma_birth = 1.5
     beta = 0.9
@@ -167,6 +173,12 @@ class herbivore(animal):
 
 
 class carnivore(animal):
+    """
+    Object representing an animal of the carnivore kind.
+
+    :param age: Age of the animal
+    :param weight: Weight of the animal
+    """
     w_birth = 6
     sigma_birth = 1
     beta = 0.75

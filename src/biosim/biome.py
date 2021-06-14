@@ -4,6 +4,8 @@ from .animals import *
 class biome:
     """
     The biome class
+
+    :param loc: a tuple containing the coordinates of the cell.
     """
     f_max = None
     habitable = None
@@ -37,6 +39,7 @@ class biome:
     def add_population(self, pop):
         """
         Function to add population in a specific cell
+
         :param pop: List of dictionaries
         """
         for specie in pop:
@@ -47,14 +50,14 @@ class biome:
 
     def remove_population(self):
         """
-
+        Simulates the yearly deaths in the cell
         """
         self.herb[:] = [specie for specie in self.herb if not specie.death()]
         self.carn[:] = [specie for specie in self.carn if not specie.death()]
 
     def breeding(self):
         """
-
+        Simulates the yearly births in the cell, adding the child objects and removing weight from mother.
         """
         for specie in self.herb:
             n = len(self.herb)
@@ -73,7 +76,7 @@ class biome:
 
     def aging(self):
         """
-
+        Running the aging process for all animals in the cell, adding age and removing yearly weight loss.
         """
         for specie in self.herb:
             specie.aging()
@@ -82,7 +85,8 @@ class biome:
 
     def grazing(self):
         """
-
+        Simulates the yearly eating for the two species in the cell.
+        Herbivores eat in random order, and carnivores eat in the order of descending fitness.
         """
         for specie in self.herb:
             if self.fodder > 0:
@@ -93,6 +97,8 @@ class biome:
 
     def migration(self, cell_list):
         """
+        Runs the migration for all animals in the cell, finding where the animal wants to go, and if it is possible.
+        If it is possible, the animals are moved.
 
         :param cell_list:
         """
@@ -143,6 +149,11 @@ class biome:
 
 
 class lowland(biome):
+    """
+    Representing a cell of type lowland.
+
+    :param loc: a tuple containing the coordinates of the cell.
+    """
 
     def __init__(self, loc):
         self.f_max = 800
@@ -151,6 +162,11 @@ class lowland(biome):
 
 
 class highland(biome):
+    """
+    Representing a cell of type highland.
+
+    :param loc: a tuple containing the coordinates of the cell.
+    """
 
     def __init__(self, loc):
         self.f_max = 300
@@ -159,6 +175,11 @@ class highland(biome):
 
 
 class desert(biome):
+    """
+    Representing a cell of type desert
+
+    :param loc: a tuple containing the coordinates of the cell.
+    """
 
     def __init__(self, loc):
         self.f_max = 0
@@ -167,6 +188,11 @@ class desert(biome):
 
 
 class water(biome):
+    """
+    Representing a cell of type water.
+
+    :param loc: a tuple containing the coordinates of the cell.
+    """
 
     def __init__(self, loc):
         self.f_max = 0
