@@ -116,6 +116,8 @@ class BioSim:
     def year(self):
         """
         Last year simulated.
+
+        :return self.cur_year: Integer indicating the last year being simulated in the simulation.
         """
         return self.cur_year
 
@@ -145,6 +147,8 @@ class BioSim:
     def make_movie(self, movie_format):
         """
         Create MPEG4 movie from visualization images saved.
+
+        :param movie_format: String indicating the desired format of the movie.
         """
 
         self.graphs.make_movie(movie_format)

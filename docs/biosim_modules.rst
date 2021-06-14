@@ -33,3 +33,10 @@ The BioSim module
 
 .. automodule:: biosim.biosim
   :members:
+
+The Visualization module
+--------------------
+
+
+.. automodule:: biosim.biosim
+  :members:
