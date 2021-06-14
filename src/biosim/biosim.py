@@ -36,7 +36,13 @@ class BioSim:
                  vis_years=1, ymax_animals=None, cmax_animals=None, hist_specs=None,
                  img_dir=None, img_base=None, img_fmt='png', img_years=None,
                  log_file=None):
-
+        self.ymax_animals = ymax_animals
+        self.cmax_animals = cmax_animals
+        self.img_dir = img_dir
+        self.img_base = img_base
+        self.img_fmt = img_fmt
+        self.img_years = img_years
+        self.log_file = log_file
         self.hist_specs = hist_specs
         self.island_map = island_map
         self.ini_pop = ini_pop
@@ -50,9 +56,10 @@ class BioSim:
 
     def set_animal_parameters(self, species, params):
         """
+        Set parameters for animal species.
+
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
-        Set parameters for animal species.
         """
         if species.lower() not in ['herbivore', 'carnivore']:
             raise ValueError('Invalid specie')
@@ -62,13 +69,15 @@ class BioSim:
     def set_landscape_parameters(self, landscape, params):
         """
         Set parameters for landscape type.
-            :param landscape: String, code letter for landscape
-            :param params: Dict with valid parameter specification for landscape
+
+        :param landscape: String, code letter for landscape
+        :param params: Dict with valid parameter specification for landscape
         """
 
     def simulate(self, num_years):
         """
         Running simulation while visualizing the result.
+
         :param num_years: number of years to simulate
         """
 
@@ -97,6 +106,7 @@ class BioSim:
     def add_population(self, population):
         """
         Add a population to the island
+
         :param population: List of dictionaries specifying population
         """
 
@@ -113,6 +123,7 @@ class BioSim:
     def num_animals(self):
         """
         Total number of animals on island.
+
         :return animals_on_island: Integer representing the number of animals on the island.
         """
 
@@ -124,6 +135,7 @@ class BioSim:
     def num_animals_per_species(self):
         """
         Number of animals per species in island, as dictionary.
+
         :return island.species_count: dictionary with species as key and
         integers representing species counts as values.
         """
@@ -150,3 +162,5 @@ class BioSim:
         """
         Create MPEG4 movie from visualization images saved.
         """
+
+

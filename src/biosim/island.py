@@ -7,10 +7,10 @@ import warnings
 class island:
     """
     An object representing the group of cells, acting as an island.
-    :param map: text-string consisting of letters H, L, D, W representing Highland, Lowland, Desert and Water.
     This sets the geographical map of the island.
     the map cannot have other than water cells in its outer boundary.
 
+    :param map: text-string consisting of letters H, L, D, W representing Highland, Lowland, Desert and Water.
     """
 
     def __init__(self, map):
@@ -60,9 +60,9 @@ class island:
 
     def species_count(self):
         """
-        :return species_amount: Integer representing the number of animals on the island.
         Counts the number of animal per species on the entire Island.
 
+        :return species_amount: Integer representing the number of animals on the island.
         """
 
         species_amount = {
@@ -86,9 +86,9 @@ class island:
 
     def animal_count(self):
         """
-        :return animal_amount: a dictionary providing the count of each the two species on the island.
         Counts the number of animal per species on the entire Island.
 
+        :return animal_amount: a dictionary providing the count of each the two species on the island.
         """
 
         animal_amount = 0
@@ -167,10 +167,10 @@ class island:
 
     def add_population(self, population):
         """
-        :param population: a list with a dictionary specifying the location of the animals,
         Adds animals to a given cell.
         and a list of dictionaries specifying where to place the animals.
 
+        :param population: a list with a dictionary specifying the location of the animals,
         """
 
         for specie in population:
@@ -196,10 +196,10 @@ class island:
 
     def distrubution(self):
         """
-        :return herbdist: a nested list representing the amount of herbivores per cell.
-        :return carndist: a nested list representing the amount of carnivores per cell.
         Counts the number of animal per species on the entire Island.
 
+        :return herbdist: a nested list representing the amount of herbivores per cell.
+        :return carndist: a nested list representing the amount of carnivores per cell.
         """
 
         herbdist = []
@@ -220,9 +220,9 @@ class island:
 
     def get_bincounts(self):
         """
-        :return 6 x 2d-arrays: representing weight, fitness and age for the different animals in the cells.
-        Fetches the information for the histograms.
+        Fetches information for the histograms.
 
+        :return 6 x 2d-arrays: representing weight, fitness and age for the different animals in the cells.
         """
         herbweights = []
         carnweights = []
