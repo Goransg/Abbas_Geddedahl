@@ -4,10 +4,10 @@ import random as rd
 
 class animal(object):
     """
+    Represents an individual animal of any of the two kinds.
+
     :param weight: Float number representing the weight of an animal
     :param age: Integer representing the age of an animal
-    Represents an individual animal of any kind.
-
     """
 
     def __init__(self, weight, age):
@@ -19,9 +19,9 @@ class animal(object):
 
     def fitness_update(self):
         """
-        :return fitness: float number between 0 and 1
         Calculating the fitness of the animal; if the weight is negative or zero, the fitness will be zero.
 
+        :return fitness: float number between 0 and 1
         """
 
 
@@ -35,10 +35,10 @@ class animal(object):
 
     def birth(self, n_animals):
         """
-        :param n_animals: Integer representing the number of animals on the island.
-        :return child object/None: returning a child object if birth is given, or None if not.
         Calculating the probability of an individual animal giving birth, and whether it should happen or not.
 
+        :param n_animals: Integer representing the number of animals on the island.
+        :return child object/None: returning a child object if birth is given, or None if not.
         """
 
         if (self.weight <= self.zeta * (self.w_birth + self.sigma_birth)) or n_animals < 2:
@@ -59,9 +59,9 @@ class animal(object):
 
     def death(self):
         """
-        :return boolean: returning True if the animal dies and false if it survives.
         Calculating the probability of death for a given animal, and deciding if death will occur or not.
 
+        :return boolean: returning True if the animal dies and false if it survives.
         """
 
         if self.weight <= 0:
@@ -77,9 +77,9 @@ class animal(object):
 
     def migration(self):
         """
-        :return boolean: returning True if the animal migrates and false if it stays in its current cell.
         Calculating probability of migration, and deciding whether the animal will migrate or not.
 
+        :return boolean: returning True if the animal migrates and false if it stays in its current cell.
         """
 
         migration_proba = self.mu * self.fitness
@@ -104,10 +104,10 @@ class animal(object):
     @classmethod
     def update_params(cls, paramchange):
         """
-        :param paramchange: A dictionary with the parameters to be changed, and the value they shall be changed to.
         Changes the constant parameters for a given animal type.
         Parameter has to be known in the animals' class.
 
+        :param paramchange: A dictionary with the parameters to be changed, and the value they shall be changed to.
         """
         # for param in paramchange[1].keys():
         #     classname = cls.__name__
@@ -144,11 +144,11 @@ class herbivore(animal):
 
     def feeding(self, f_available):
         """
-        :param f_available: Integer representing the amount of available fodder in the cell.
-        :return cur_fodder: Integer representing the amount of fodder left in the cell after the animal has eaten.
         Takes amount of available fodder, adds the fodder eaten by animal to its weight, and updates fitness.
         If less than desired fodder (F) is present, it will eat all available.
 
+        :param f_available: Integer representing the amount of available fodder in the cell.
+        :return cur_fodder: Integer representing the amount of fodder left in the cell after the animal has eaten.
         """
 
         cur_fodder = f_available
@@ -188,8 +188,6 @@ class carnivore(animal):
 
     def feeding(self, available_herbivores):
         """
-        :param available_herbivores: list of herbivores available in the cell, sorted by ascending fitness.
-        :return living_herbivores: list of herbivores alive in the cell after the carnivore has hunted.
         Iterates through a list of available herbivores and simulates the carnivore trying to eat the herbivores.
         The carnivore will try to eat herbivores as long as it has appetite (F), or all herbivores are hunted.
         This is done by calculating the probability of the carnivore eating a given herbivore,
@@ -200,6 +198,8 @@ class carnivore(animal):
         If the carnivore eats a herbivore, its weight is increased, and herbivore is removed from cell.
         Fitness of the carnivore is updated after it has eaten what it wants or hunted all herbivores.
 
+        :param available_herbivores: list of herbivores available in the cell, sorted by ascending fitness.
+        :return living_herbivores: list of herbivores alive in the cell after the carnivore has hunted.
         """
 
         appetite = self.F
