@@ -186,13 +186,14 @@ class Graphics:
 
         :param final_step: last time step to be visualised (upper limit of x-axis)
         :param img_step: interval between saving image to file
+        :param geographic_map:
         """
 
         self._img_step = img_step
 
         # create new figure window
         if self._fig is None:
-            self._fig = plt.figure(figsize=(70, 40))
+            self._fig = plt.figure(figsize=(19, 10))
             self._gs = gridspec.GridSpec(ncols=36, nrows=36, figure=self._fig)
 
         # Add left subplot for images created with imshow().
@@ -323,7 +324,7 @@ class Graphics:
                                         verticalalignment='center',
                                         transform=self._count_ax.transAxes)
 
-        self._update_geography(geographic_map)
+        self._init_geography(geographic_map)
 
 
     def _update_system_map_one(self, sys_map):
@@ -402,7 +403,7 @@ class Graphics:
                                                          type=self._img_fmt))
             self._img_ctr += 1
 
-    def _update_geography(self, island_map):
+    def _init_geography(self, island_map):
 
         if self._geomap_img_axis is not None:
             pass
