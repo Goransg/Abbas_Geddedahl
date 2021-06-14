@@ -35,7 +35,7 @@ _MAGICK_BINARY = 'magick'
 _DEFAULT_GRAPHICS_DIR = os.path.join('..', 'data')
 _DEFAULT_GRAPHICS_NAME = 'dv'
 _DEFAULT_IMG_FORMAT = 'png'
-_DEFAULT_MOVIE_FORMAT = 'mp4'  # alternatives: mp4, gif
+_DEFAULT_MOVIE_FORMAT = 'gif'  # alternatives: mp4, gif
 
 
 class Graphics:
@@ -58,6 +58,9 @@ class Graphics:
             self._img_base = os.path.join(img_dir, img_name)
         else:
             self._img_base = None
+
+        if not os.path.isdir(img_dir):
+           os.makedirs(img_dir)
 
         self._img_fmt = img_fmt if img_fmt is not None else _DEFAULT_IMG_FORMAT
 
@@ -128,6 +131,7 @@ class Graphics:
         self._txt.set_text(self._template.format(step))
 
         plt.pause(1e-20)
+
         self._save_graphics(step)
 
         # pause required to pass control to GUI
@@ -188,7 +192,7 @@ class Graphics:
 
         # create new figure window
         if self._fig is None:
-            self._fig = plt.figure()
+            self._fig = plt.figure(figsize=(70, 40))
             self._gs = gridspec.GridSpec(ncols=36, nrows=36, figure=self._fig)
 
         # Add left subplot for images created with imshow().
@@ -269,11 +273,12 @@ class Graphics:
             self._histw_ax.set_ylabel("Count", fontsize=6)
             self._histw_ax.set_title("Animal weights", fontsize=8)
             self._histw_line = self._histw_ax.step(self._limits_w[:-1], np.zeros_like(self._limits_w[:-1]),
-                                                   where='mid', lw=2)[0]
+                                                   where='mid', lw=2, label='Herbivores')[0]
             self._histw_line_2 = self._histw_ax.step(self._limits_w[:-1], np.zeros_like(self._limits_w[:-1]),
-                                                     where='mid', lw=2)[0]
+                                                     where='mid', lw=2, label='Carnivores')[0]
             self._histw_ax.set_xlim(self._limits_w[0], self._limits_w[-1])
             self._histw_ax.set_ylim(0, self._ymax)
+            self._histw_ax.legend(prop={'size': 6})
             plt.setp(self._histw_ax.get_xticklabels(), fontsize=6)
             plt.setp(self._histw_ax.get_yticklabels(), fontsize=6)
 
@@ -283,11 +288,12 @@ class Graphics:
             self._histf_ax.set_ylabel("Count", fontsize=6)
             self._histf_ax.set_title("Animal fitness", fontsize=8)
             self._histf_line = self._histf_ax.step(self._limits_f[:-1], np.zeros_like(self._limits_f[:-1]),
-                                                   where='mid', lw=2)[0]
+                                                   where='mid', lw=2, label='Herbivores')[0]
             self._histf_line_2 = self._histf_ax.step(self._limits_f[:-1], np.zeros_like(self._limits_f[:-1]),
-                                                     where='mid', lw=2)[0]
+                                                     where='mid', lw=2, label='Carnivores')[0]
             self._histf_ax.set_xlim(self._limits_f[0], self._limits_f[-1])
             self._histf_ax.set_ylim(0, self._ymax)
+            self._histf_ax.legend(prop={'size': 6})
             plt.setp(self._histf_ax.get_xticklabels(), fontsize=6)
             plt.setp(self._histf_ax.get_yticklabels(), fontsize=6)
 
@@ -297,11 +303,12 @@ class Graphics:
             self._hista_ax.set_ylabel("Count", fontsize=6)
             self._hista_ax.set_title("Animal age", fontsize=8)
             self._hista_line = self._hista_ax.step(self._limits_a[:-1], np.zeros_like(self._limits_a[:-1]),
-                                                   where='mid', lw=2)[0]
+                                                   where='mid', lw=2, label='Herbivores')[0]
             self._hista_line_2 = self._hista_ax.step(self._limits_a[:-1], np.zeros_like(self._limits_a[:-1]),
-                                                     where='mid', lw=2)[0]
+                                                     where='mid', lw=2, label='Carnivores')[0]
             self._hista_ax.set_xlim(self._limits_a[0], self._limits_a[-1])
             self._hista_ax.set_ylim(0, self._ymax)
+            self._hista_ax.legend(prop={'size': 6})
             plt.setp(self._hista_ax.get_xticklabels(), fontsize=6)
             plt.setp(self._hista_ax.get_yticklabels(), fontsize=6)
 
@@ -309,14 +316,15 @@ class Graphics:
             self._count_ax = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])
             self._count_ax.axis('off')
 
-
-        self._template = 'Year: {:5d}'
-        self._txt = self._count_ax.text(0.5, 0.5, self._template.format(0),
+        if self._template is None:
+            self._template = 'Year: {:5d}'
+            self._txt = self._count_ax.text(0.5, 0.5, self._template.format(0),
                                         horizontalalignment='center',
                                         verticalalignment='center',
                                         transform=self._count_ax.transAxes)
 
         self._update_geography(geographic_map)
+
 
     def _update_system_map_one(self, sys_map):
         """Update the 2D-view of the system."""
@@ -385,15 +393,17 @@ class Graphics:
     def _save_graphics(self, step):
         """Saves graphics to file if file name given."""
 
-        if self._img_base is None or step % self._img_step != 0:
-            return
+        if (self._img_base is None) or (step % self._img_step != 0):
+            return None
 
-        plt.savefig('{base}_{num:05d}.{type}'.format(base=self._img_base,
-                                                     num=self._img_ctr,
-                                                     type=self._img_fmt))
-        self._img_ctr += 1
+        else:
+            self._fig.savefig('{base}_{num:05d}.{type}'.format(base=self._img_base,
+                                                         num=self._img_ctr,
+                                                         type=self._img_fmt))
+            self._img_ctr += 1
 
     def _update_geography(self, island_map):
+
         if self._geomap_img_axis is not None:
             pass
         else:
