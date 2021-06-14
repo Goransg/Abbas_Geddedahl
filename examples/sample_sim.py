@@ -57,6 +57,6 @@ if __name__ == '__main__':
                  img_dir='results2',
                  img_base='sample', img_years=1)
     sim.simulate(50)
-    sim.make_movie('gif')
+    sim.make_movie('mp4')
 
     input('Press ENTER')

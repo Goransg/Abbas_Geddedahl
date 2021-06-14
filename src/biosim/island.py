@@ -128,10 +128,10 @@ class island:
         for y in range(len(self.coord_map) - 1):
 
             for x in range(len(self.coord_map[y]) - 1):
-                cur_cell = self.coord_map[x][y]
+                cur_cell = self.coord_map[y][x]
                 try:
-                    neighbours = [self.coord_map[x][y - 1], self.coord_map[x][y + 1], self.coord_map[x - 1][y],
-                                  self.coord_map[x + 1][y]]
+                    neighbours = [self.coord_map[y][x - 1], self.coord_map[y][x + 1], self.coord_map[y - 1][x],
+                                  self.coord_map[y + 1][x]]
                 except IndexError:
                     pass
                 if len(neighbours) > 0:
