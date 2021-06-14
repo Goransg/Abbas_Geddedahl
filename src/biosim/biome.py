@@ -23,6 +23,7 @@ class biome:
     def change_animalparams(self, species, params):
         """
         Changes the constant parameters of a given animal type
+
         :param species: a text string representing the animal type to be updated
         :param params: a dictionary of constant names to be updated, with values they are going to be set to as values.
         """

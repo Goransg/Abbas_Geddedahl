@@ -52,7 +52,7 @@ class BioSim:
         self.add_population(self.ini_pop)
         rd.seed(a=self.seed)
         self.cur_year = 0
-        self.graphs = Graphics(self.hist_specs)
+        self.graphs = Graphics(self.hist_specs, self.img_dir, self.img_base, self.img_fmt)
 
     def set_animal_parameters(self, species, params):
         """
@@ -86,7 +86,7 @@ class BioSim:
 
         elif self.hist_specs is not None:
             #graphs = Graphics(self.hist_specs)
-            self.graphs.setup(self.cur_year + num_years, 1, self.island_map)
+            self.graphs.setup(self.cur_year + num_years, self.img_years, self.island_map)
 
         for year in range(self.cur_year, self.cur_year + num_years):
             self.cur_year += 1
@@ -116,6 +116,8 @@ class BioSim:
     def year(self):
         """
         Last year simulated.
+
+        :return self.cur_year: Integer indicating the last year being simulated in the simulation.
         """
         return self.cur_year
 
@@ -142,25 +144,11 @@ class BioSim:
 
         return self.island.species_count()
 
-    def graphics(self, n_years):
-        """
-        :param n_years:
-        """
-        if n_years == 0:
-            None
-
-        else:
-            graphs = Graphics()
-            graphs.setup(n_years, 1, self.island_map)
-
-            for year in range(n_years):
-                if n_years % self.vis_years == 0:
-                    herb, carn = self.island.distrubution()
-                    graphs.update(year, herb, carn)
-
-    def make_movie(self):
+    def make_movie(self, movie_format):
         """
         Create MPEG4 movie from visualization images saved.
+
+        :param movie_format: String indicating the desired format of the movie.
         """
 
-
+        self.graphs.make_movie(movie_format)
