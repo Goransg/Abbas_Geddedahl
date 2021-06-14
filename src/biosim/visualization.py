@@ -112,12 +112,20 @@ class Graphics:
     def update(self, step, sys_map_first, sys_map_second, all_animals, n_herbivores, n_carnivores,
                w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores):
         """
-        , sys_mean
-        Updates graphics with current data and save to file if necessary.
+        Updates graphics and year count with current data and save to file if necessary.
 
         :param step: current time step
-        :param sys_map: current system status (2d array)
-        :param sys_mean: current mean value of system
+        :param sys_map_first: current system status of herbivores (2d array)
+        :param sys_map_second: current system status of herbivores (2d array)
+        :param all_animals: current number of animals
+        :param n_herbivores: current number of herbivores
+        :param n_carnivores: current number of carnivores
+        :param w_herbivores: current weights of carnivores
+        :param w_carnivores: current weights of herbivores
+        :param f_herbivores: current fitness of carnivores
+        :param f_carnivores: current fitness of herbivores
+        :param a_herbivores: current fitness of carnivores
+        :param a_carnivores: current fitness of herbivores
         """
 
         self._update_system_map_one(sys_map_first)
@@ -142,6 +150,8 @@ class Graphics:
 
         .. :note:
             Requires ffmpeg for MP4 and magick for GIF
+
+        :param movie_fmt: str indicating the format of the movie
 
         The movie is stored as img_base + movie_fmt
         """
@@ -186,7 +196,7 @@ class Graphics:
 
         :param final_step: last time step to be visualised (upper limit of x-axis)
         :param img_step: interval between saving image to file
-        :param geographic_map:
+        :param geographic_map: The map of the Island
         """
 
         self._img_step = img_step
@@ -328,7 +338,11 @@ class Graphics:
 
 
     def _update_system_map_one(self, sys_map):
-        """Update the 2D-view of the system."""
+        """
+        Update the 2D-view of the system for herbivore distribution.
+
+        :param sys_map: A nested list indicating the distribution of herbivores
+        """
 
         if self._img_axis_one is not None:
             self._img_axis_one.set_data(sys_map)
@@ -338,10 +352,14 @@ class Graphics:
                                                          vmin=0, vmax=200)
 
             plt.colorbar(self._img_axis_one, ax=self._map_ax_one,
-                         orientation='horizontal')
+                         orientation='horizontal', shrink=0.5)
 
     def _update_system_map_two(self, sys_map):
-        """Update the 2D-view of the system."""
+        """
+        Update the 2D-view of the system for carnivore distribution.
+
+        :param sys_map: A nested list indicating the distribution of carnivores
+        """
 
         if self._img_axis_two is not None:
             self._img_axis_two.set_data(sys_map)
@@ -351,9 +369,18 @@ class Graphics:
                                                          vmin=0, vmax=50)
 
             plt.colorbar(self._img_axis_two, ax=self._map_ax_two,
-                         orientation='horizontal')
+                         orientation='horizontal', shrink=0.75)
 
     def _update_mean_graph(self, step, all_animals, n_herbivores, n_carnivores):
+        """
+        Updates the graph of animal populations
+
+        :param step: INT the current year of simulation
+        :param all_animals: INT the current amount of animals on the island
+        :param n_herbivores: INT the current amount of herbivores on the island
+        :param n_carnivores: INT the current amount of carnivores on the island
+        """
+
         y_data = self._mean_line.get_ydata()
         y_data[step] = all_animals
         self._mean_line.set_ydata(y_data)
@@ -368,6 +395,13 @@ class Graphics:
         self._mean_line_3.set_ydata(y_data_3)
 
     def _update_hist_w(self, w_herbivores, w_carnivores):
+        """
+        Updates the histograms of animal weight distribution
+
+        :param w_herbivores: Nested Array containing the current weights of herbivores on the island
+        :param w_carnivores: Nested Array containing the current weights of carnivores on the island
+        """
+
         countswh = np.histogram(np.hstack(w_herbivores), self._limits_w)[0]
         self._histw_line.set_ydata(countswh)
         countswc = np.histogram(np.hstack(w_carnivores), self._limits_w)[0]
@@ -376,6 +410,12 @@ class Graphics:
         self._histw_ax.set_ylim(0, self._ymax)
 
     def _update_hist_f(self, f_herbivores, f_carnivores):
+        """
+        Updates the histograms of animal weight distribution
+
+        :param f_herbivores: Nested Array containing the current fitness of herbivores on the island
+        :param f_carnivores: Nested Array containing the current fitness of carnivores on the island
+        """
         countsfh = np.histogram(np.hstack(f_herbivores), self._limits_f)[0]
         self._histf_line.set_ydata(countsfh)
         countsfc = np.histogram(np.hstack(f_carnivores), self._limits_f)[0]
@@ -384,6 +424,13 @@ class Graphics:
         self._histf_ax.set_ylim(0, self._ymax)
 
     def _update_hist_a(self, a_herbivores, a_carnivores):
+        """
+        Updates the histograms of animal weight distribution
+
+        :param a_herbivores: Nested Array containing the current age of herbivores on the island
+        :param a_carnivores: Nested Array containing the current age of carnivores on the island
+        """
+
         countsah = np.histogram(np.hstack(a_herbivores), self._limits_a)[0]
         self._hista_line.set_ydata(countsah)
         countsac = np.histogram(np.hstack(a_carnivores), self._limits_a)[0]
@@ -392,7 +439,11 @@ class Graphics:
         self._hista_ax.set_ylim(0, self._ymax)
 
     def _save_graphics(self, step):
-        """Saves graphics to file if file name given."""
+        """
+        Saves graphics to file if file name given.
+
+        :param step: the current year of simulation
+        """
 
         if (self._img_base is None) or (step % self._img_step != 0):
             return None
@@ -404,6 +455,11 @@ class Graphics:
             self._img_ctr += 1
 
     def _init_geography(self, island_map):
+        """
+        Plots a geographical map of the island.
+
+        :param island_map: A text string indicating the layout of the island.
+        """
 
         if self._geomap_img_axis is not None:
             pass

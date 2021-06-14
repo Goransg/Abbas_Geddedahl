@@ -86,7 +86,7 @@ class BioSim:
 
         elif self.hist_specs is not None:
             #graphs = Graphics(self.hist_specs)
-            self.graphs.setup(self.cur_year + num_years, self.img_years, self.island_map, )
+            self.graphs.setup(self.cur_year + num_years, self.img_years, self.island_map)
 
         for year in range(self.cur_year, self.cur_year + num_years):
             self.cur_year += 1
