@@ -69,9 +69,7 @@ if __name__ == '__main__':
 
     sim = BioSim(island_map='W', ini_pop=[], seed=1, ymax_animals=20,
            cmax_animals={'Herbivore': 10, 'Carnivore': 20},
-           hist_specs={'fitness': {'max': 1.0, 'delta': 0.05},
-                          'age': {'max': 60.0, 'delta': 2},
-                          'weight': {'max': 60, 'delta': 2}})
+           hist_specs={'fitness': {'max': 1.0, 'delta': 0.05}})
 
 
     sim.simulate(num_years=2)

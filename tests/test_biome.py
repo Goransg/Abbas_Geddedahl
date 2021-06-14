@@ -1,5 +1,5 @@
 import pytest
-from src.biosim.biome import *
+from biosim.biome import lowland, highland, desert, water
 import random as rd
 
 
@@ -81,7 +81,7 @@ def test_migration(mocker):
             'weight': 20}
            for _ in range(pop_size)]
     A.add_population(pop)
-    mocker.patch('src.biosim.biome.animal.migration', return_value=True)
+    mocker.patch('biosim.biome.animal.migration', return_value=True)
     A.migration(cell_lst)
     total_pop = len(A.carn) + len(A.herb) + len(B.carn) + len(B.herb) + len(C.carn) + len(C.herb) + len(D.carn) + len(
         D.herb) + len(E.carn) + len(E.herb)

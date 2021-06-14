@@ -35,7 +35,7 @@ _MAGICK_BINARY = 'magick'
 _DEFAULT_GRAPHICS_DIR = os.path.join('..', 'data')
 _DEFAULT_GRAPHICS_NAME = 'dv'
 _DEFAULT_IMG_FORMAT = 'png'
-_DEFAULT_MOVIE_FORMAT = 'gif'  # alternatives: mp4, gif
+_DEFAULT_MOVIE_FORMAT = 'mp4'  # alternatives: mp4, gif
 
 
 class Graphics:
@@ -67,7 +67,8 @@ class Graphics:
 
         self._img_ctr = 0
         self._img_step = 1
-        if hist_specs is not None:
+        if hist_specs is not None and hist_specs.__contains__('weight') and hist_specs.__contains__('fitness') \
+                and hist_specs.__contains__('age'):
             n_points_w = int(round(hist_specs['weight']['max'] / hist_specs['weight']['delta'])) + 1
             self._limits_w = np.linspace(0, hist_specs['weight']['max'], num=n_points_w)
             self._ymax = 10
@@ -77,6 +78,8 @@ class Graphics:
 
             n_points_a = int(round(hist_specs['age']['max'] / hist_specs['age']['delta'])) + 1
             self._limits_a = np.linspace(0, hist_specs['age']['max'], num=n_points_a)
+        # else:
+        #     raise ValueError('Invalid hist_specs')
 
         # the following will be initialized by _setup_graphics
         self._fig = None
