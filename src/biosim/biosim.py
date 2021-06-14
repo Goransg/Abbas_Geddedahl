@@ -35,7 +35,13 @@ class BioSim:
                  vis_years=1, ymax_animals=None, cmax_animals=None, hist_specs=None,
                  img_dir=None, img_base=None, img_fmt='png', img_years=None,
                  log_file=None):
-
+        self.ymax_animals = ymax_animals
+        self.cmax_animals = cmax_animals
+        self.img_dir = img_dir
+        self.img_base = img_base
+        self.img_fmt = img_fmt
+        self.img_years = img_years
+        self.log_file = log_file
         self.hist_specs = hist_specs
         self.island_map = island_map
         self.ini_pop = ini_pop
@@ -153,3 +159,5 @@ class BioSim:
         """
         Create MPEG4 movie from visualization images saved.
         """
+
+
