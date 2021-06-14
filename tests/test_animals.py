@@ -102,12 +102,11 @@ def test_feeding_carnivore():
     # Testing the feeding function for carnivores
     weight = 50
     age = 2
-    yearly_weightgain = 10 * 0.75
     individual = animals.carnivore(weight=weight, age=age)
     individual.DeltaPhiMax = 1
-    left = individual.feeding([animals.herbivore(weight=10, age=300), animals.herbivore(weight=60, age=1)])
+    left = individual.feeding([animals.herbivore(weight=10, age=300), animals.herbivore(weight=100, age=1)])
     assert len(left) == 1
-    assert individual.weight == (weight + yearly_weightgain)
+    assert individual.weight == (weight + 10 * individual.beta)
 
 
 
