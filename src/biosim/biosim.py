@@ -31,6 +31,7 @@ class BioSim:
     where img_number are consecutive image numbers starting from 0.
     img_dir and img_base must either be both None or both strings.
     """
+
     def __init__(self, island_map, ini_pop, seed,
                  vis_years=1, ymax_animals=None, cmax_animals=None, hist_specs=None,
                  img_dir=None, img_base=None, img_fmt='png', img_years=None,
@@ -45,6 +46,7 @@ class BioSim:
         self.add_population(self.ini_pop)
         rd.seed(a=self.seed)
         self.cur_year = 0
+        self.graphs = Graphics(self.hist_specs)
 
     def set_animal_parameters(self, species, params):
         """
@@ -73,22 +75,23 @@ class BioSim:
         if num_years == 0:
             None
 
-        else:
-            graphs = Graphics(self.hist_specs)
-            graphs.setup(num_years, 1, self.island_map)
+        elif self.hist_specs is not None:
+            #graphs = Graphics(self.hist_specs)
+            self.graphs.setup(self.cur_year + num_years, 1, self.island_map)
 
-        for year in range(num_years):
+        for year in range(self.cur_year, self.cur_year + num_years):
             self.cur_year += 1
-            print(self.year, self.island.species_count())
+            #print(self.year, self.island.species_count())
             self.island.sim_year()
-            if self.vis_years != 0 and self.ini_pop != []:
+            if self.vis_years != 0 and self.ini_pop != [] and self.hist_specs is not None:
                 if year % self.vis_years == 0:
                     herb, carn = self.island.distrubution()
                     all_animals = self.island.animal_count()
-                    n_herbivores = self.island.species_count()['herbivores']
-                    n_carnivores = self.island.species_count()['carnivores']
-                    w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores = self.island.get_bincounts()
-                    graphs.update(year, herb, carn, all_animals, n_herbivores, n_carnivores, w_herbivores, w_carnivores,
+                    n_herbivores = self.island.species_count()['Herbivore']
+                    n_carnivores = self.island.species_count()['Carnivore']
+                    w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores = \
+                        self.island.get_bincounts()
+                    self.graphs.update(year, herb, carn, all_animals, n_herbivores, n_carnivores, w_herbivores, w_carnivores,
                                   f_herbivores, f_carnivores, a_herbivores, a_carnivores)
 
     def add_population(self, population):

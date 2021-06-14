@@ -66,14 +66,14 @@ class island:
         """
 
         species_amount = {
-            'carnivores': 0,
-            'herbivores': 0
+            'Carnivore': 0,
+            'Herbivore': 0
         }
         for lst in self.coord_map:
 
             for x in lst:
-                species_amount['carnivores'] += len(x.carn)
-                species_amount['herbivores'] += len(x.herb)
+                species_amount['Carnivore'] += len(x.carn)
+                species_amount['Herbivore'] += len(x.herb)
 
         return species_amount
 

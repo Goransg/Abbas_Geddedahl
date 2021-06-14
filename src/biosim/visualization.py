@@ -63,16 +63,16 @@ class Graphics:
 
         self._img_ctr = 0
         self._img_step = 1
+        if hist_specs is not None:
+            n_points_w = int(round(hist_specs['weight']['max'] / hist_specs['weight']['delta'])) + 1
+            self._limits_w = np.linspace(0, hist_specs['weight']['max'], num=n_points_w)
+            self._ymax = 10
 
-        n_points_w = int(round(hist_specs['weight']['max'] / hist_specs['weight']['delta'])) + 1
-        self._limits_w = np.linspace(0, hist_specs['weight']['max'], num=n_points_w)
-        self._ymax = 10
+            n_points_f = int(round(hist_specs['fitness']['max'] / hist_specs['fitness']['delta'])) + 1
+            self._limits_f = np.linspace(0, hist_specs['fitness']['max'], num=n_points_f)
 
-        n_points_f = int(round(hist_specs['fitness']['max'] / hist_specs['fitness']['delta'])) + 1
-        self._limits_f = np.linspace(0, hist_specs['fitness']['max'], num=n_points_f)
-
-        n_points_a = int(round(hist_specs['age']['max'] / hist_specs['age']['delta'])) + 1
-        self._limits_a = np.linspace(0, hist_specs['age']['max'], num=n_points_a)
+            n_points_a = int(round(hist_specs['age']['max'] / hist_specs['age']['delta'])) + 1
+            self._limits_a = np.linspace(0, hist_specs['age']['max'], num=n_points_a)
 
         # the following will be initialized by _setup_graphics
         self._fig = None
@@ -308,6 +308,7 @@ class Graphics:
         if self._count_ax is None:
             self._count_ax = self._fig.add_axes([0.4, 0.8, 0.2, 0.2])
             self._count_ax.axis('off')
+
 
         self._template = 'Year: {:5d}'
         self._txt = self._count_ax.text(0.5, 0.5, self._template.format(0),
