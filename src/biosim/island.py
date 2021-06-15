@@ -1,7 +1,6 @@
-from .biome import *
 import numpy as np
-import random as rd
-import warnings
+
+from .biome import *
 
 
 class island:
@@ -114,7 +113,7 @@ class island:
                 for lst in self.coord_map:
 
                     for x in lst:
-                        if len(x.herb) + len(x.carn)>0:
+                        if len(x.herb) + len(x.carn) > 0:
                             exec("x.%s()" % func)
 
     def migration(self):

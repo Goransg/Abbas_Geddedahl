@@ -20,7 +20,8 @@ class biome:
         """
         self.fodder = self.f_max
 
-    def change_animalparams(self, species, params):
+    @staticmethod
+    def change_animalparams(species, params):
         """
         Changes the constant parameters of a given animal type
 

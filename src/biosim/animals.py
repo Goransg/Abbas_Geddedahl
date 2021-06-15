@@ -23,11 +23,8 @@ class animal(object):
 
         :return fitness: float number between 0 and 1
         """
-
-
         if self.weight <= 0:
             fitness = 0
-
         else:
             fitness = (1 / (1 + m.e ** (self.phi_age * (self.age - self.a_half)))) * \
                       (1 / (1 + m.e ** (-self.phi_weight * (self.weight - self.w_half))))

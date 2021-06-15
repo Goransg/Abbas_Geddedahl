@@ -1,7 +1,8 @@
+import logging
+import random as rd
+
 from .island import *
 from .visualization import *
-import random as rd
-import logging
 
 
 class BioSim:
@@ -54,7 +55,8 @@ class BioSim:
         rd.seed(a=self.seed)
         self.cur_year = 0
         self.graphs = Graphics(self.hist_specs, self.img_dir, self.img_base, self.img_fmt)
-        logging.basicConfig(filename=log_file, level=logging.INFO, filemode='w')
+        logging.basicConfig(filename=log_file, level=logging.INFO,
+                            format='[%(levelname)s]%(module)s.%(funcName)s - %(asctime)s - %(message)s', filemode='w')
 
     def set_animal_parameters(self, species, params):
         """
