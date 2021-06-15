@@ -67,9 +67,10 @@ if __name__ == '__main__':
                            'weight': 20}
                           for _ in range(40)]}]
 
-    sim = BioSim(island_map='W', ini_pop=[], seed=1, ymax_animals=20,
-           cmax_animals={'Herbivore': 10, 'Carnivore': 20},
-           hist_specs={'fitness': {'max': 1.0, 'delta': 0.05}})
+    sim = BioSim(island_map="WWWW\nWLHW\nWWWW",
+                ini_pop=[],
+                seed=1,
+                vis_years=10, img_years=20)
 
 
     sim.simulate(num_years=2)

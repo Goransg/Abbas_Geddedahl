@@ -1,6 +1,7 @@
 from .island import *
 from .visualization import *
 import random as rd
+import logging
 
 
 class BioSim:
@@ -53,6 +54,7 @@ class BioSim:
         rd.seed(a=self.seed)
         self.cur_year = 0
         self.graphs = Graphics(self.hist_specs, self.img_dir, self.img_base, self.img_fmt)
+        logging.basicConfig(filename=log_file, level=logging.INFO, filemode='w')
 
     def set_animal_parameters(self, species, params):
         """
@@ -84,15 +86,18 @@ class BioSim:
         if num_years == 0:
             None
 
-        elif self.hist_specs is not None:
-            #graphs = Graphics(self.hist_specs)
+        # elif self.hist_specs is not None:
+        else:
             self.graphs.setup(self.cur_year + num_years, self.img_years, self.island_map)
 
         for year in range(self.cur_year, self.cur_year + num_years):
             self.cur_year += 1
-            print(self.year, self.island.species_count())
+            if self.log_file is not None:
+                logg_string = dict(Year=self.year, Total_Animals=self.island.animal_count(),
+                                   Animal_per_specie=self.island.species_count())
+                logging.info(logg_string)
             self.island.sim_year()
-            if self.vis_years != 0 and self.ini_pop != [] and self.hist_specs is not None:
+            if self.vis_years != 0:
                 if year % self.vis_years == 0:
                     herb, carn = self.island.distrubution()
                     all_animals = self.island.animal_count()
@@ -100,8 +105,8 @@ class BioSim:
                     n_carnivores = self.island.species_count()['Carnivore']
                     w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores = \
                         self.island.get_bincounts()
-                    self.graphs.update(year, herb, carn, all_animals, n_herbivores, n_carnivores, w_herbivores, w_carnivores,
-                                  f_herbivores, f_carnivores, a_herbivores, a_carnivores)
+                    self.graphs.update(year, herb, carn, all_animals, n_herbivores, n_carnivores, w_herbivores,
+                                       w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores)
 
     def add_population(self, population):
         """

@@ -114,7 +114,8 @@ class island:
                 for lst in self.coord_map:
 
                     for x in lst:
-                        exec("x.%s()" % func)
+                        if len(x.herb) + len(x.carn)>0:
+                            exec("x.%s()" % func)
 
     def migration(self):
         """
@@ -128,7 +129,7 @@ class island:
         for y in range(len(self.coord_map) - 1):
 
             for x in range(len(self.coord_map[y]) - 1):
-                cur_cell = self.coord_map[x][y]
+                cur_cell = self.coord_map[y][x]
                 try:
                     neighbours = [self.coord_map[x][y - 1], self.coord_map[x][y + 1], self.coord_map[x - 1][y],
                                   self.coord_map[x + 1][y]]
