@@ -9,9 +9,14 @@ __author__ = 'Hans Ekkehard Plesser, NMBU'
 
 import textwrap
 from src.biosim.biosim import BioSim
+import win32api, win32process, win32con
+pid = win32api.GetCurrentProcessId()
+handle = win32api.OpenProcess(win32con.PROCESS_ALL_ACCESS, True, pid)
+win32process.SetPriorityClass(handle, win32process.HIGH_PRIORITY_CLASS)
 
 if __name__ == '__main__':
-    geogr = """WWWWWWWWWWWWWWWWWWWWW
+    geogr = """\
+               WWWWWWWWWWWWWWWWWWWWW
                WHHHHHLLLLWWLLLLLLLWW
                WHHHHHLLLLWWLLLLLLLWW
                WHHHHHLLLLWWLLLLLLLWW
@@ -46,13 +51,13 @@ if __name__ == '__main__':
                            'weight': 20}
                           for _ in range(50)]}]
 
-    sim = BioSim(geogr, ini_herbs, seed=1,
+    sim = BioSim(geogr, ini_herbs + ini_carns, seed=1, vis_years=1,
                  hist_specs={'fitness': {'max': 1.0, 'delta': 0.05},
                              'age': {'max': 60.0, 'delta': 2},
                              'weight': {'max': 60, 'delta': 2}},
-                 img_dir='results',
-                 img_base='sample')
-    sim.simulate(400)
-    sim.make_movie()
+                 img_dir='results2',
+                 img_base='sample', img_years=1, log_file='res.txt')
+    sim.simulate(200)
+    sim.make_movie('mp4')
 
     input('Press ENTER')

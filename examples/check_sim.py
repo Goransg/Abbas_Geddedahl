@@ -3,7 +3,7 @@
 import textwrap
 import matplotlib.pyplot as plt
 
-from biosim.simulation import BioSim
+from src.biosim.biosim import BioSim
 
 """
 Compatibility check for BioSim simulations.
@@ -15,9 +15,7 @@ the INF200 project June 2021.
 __author__ = "Hans Ekkehard Plesser, NMBU"
 __email__ = "hans.ekkehard.plesser@nmbu.no"
 
-
 if __name__ == '__main__':
-
     geogr = """\
                WWWWWWWWWWWWWWWWWWWWW
                WWWWWWWWHWWWWLLLLLLLW
@@ -50,7 +48,8 @@ if __name__ == '__main__':
                  hist_specs={'fitness': {'max': 1.0, 'delta': 0.05},
                              'age': {'max': 60.0, 'delta': 2},
                              'weight': {'max': 60, 'delta': 2}},
-                 vis_years = 1
+                 vis_years=1,
+                 log_file='log_file.log'
                  )
 
     sim.set_animal_parameters('Herbivore', {'zeta': 3.2, 'xi': 1.8})

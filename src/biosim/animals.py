@@ -1,23 +1,51 @@
 import math as m
 import random as rd
-import operator
-import warnings
 
 
 class animal(object):
+    """
+    Represents an individual animal of any of the two kinds.
 
-    def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
-        # self.species = species
+    :param weight: Float number representing the weight of an animal
+    :param age: Integer representing the age of an animal
+    """
+    w_birth = None
+    sigma_birth = None
+    beta = None
+    eta = None
+    a_half = None
+    phi_age = None
+    w_half = None
+    phi_weight = None
+    mu = None
+    gamma = None
+    zeta = None
+    xi = None
+    omega = None
+    F = None
+    DeltaPhiMax = None
+
+    def __init__(self, weight, age):
+
         self.weight = weight
         self.age = age
-        self.seed = seed
-        rd.seed(a=self.seed)
         self.fitness = self.fitness_update()
         self.migrated = False
 
     def fitness_update(self):
-        # Calculating the fitness of the animal; if the weight is negative or zero, the fitness will be zero.
-        # Variables in use: a and w. The rest is defined for the respective species.
+        """
+        Calculating the fitness of the animal; if the weight is negative or zero,
+        the fitness will be zero.
+        The fitness is otherwise calculated as follows:
+
+        .. math::
+            \\frac{1}{1-e^{\\theta_{a}({a-a_{\\frac{1}{2}}})}}
+            \\times\\frac{1}{1-e^{-\\theta_{w}({w-w_{\\frac{1}{2}}})}}
+
+        Where a is the animal age, w is the animal weight,
+        and the rest are constants from the animals' species.
+        :return fitness: float number between 0 and 1
+        """
 
         if self.weight <= 0:
             fitness = 0
@@ -27,23 +55,24 @@ class animal(object):
                       (1 / (1 + m.e ** (-self.phi_weight * (self.weight - self.w_half))))
         return fitness
 
-    # def birth(self, n_animals):
-    #     # Calculating the possibility and probability of birth, returning True if birth and false if not birth.
-    #
-    #     if self.weight <= self.zeta * (self.w_birth + self.sigma_birth):
-    #         return False
-    #
-    #     else:
-    #         birth_proba = min(1, self.gamma * self.fitness * (n_animals - 1))
-    #
-    #         if rd.uniform(0, 1) <= birth_proba:
-    #             return True
-    #
-    #         else:
-    #             return False
-
     def birth(self, n_animals):
-        # Calculating the possibility and probability of birth, returning True if birth and false if not birth.
+        """
+        Calculating the probability of an individual animal giving birth,
+        and whether it should happen or not.
+        If the weight of the mother is less than the weight of the child +
+        the standard deviation of birthweight, the birth will not occur.
+        Otherwise, the probability of an animal giving birth is:
+
+        .. math::
+            min(1, \\gamma \\times \\Phi \\times(N-1)
+
+        Where :math:`\\Phi` is the animal fitness and N is the number of animals
+        in the cell of the same species.
+        The rest are constants from the animals' subclass
+
+        :param n_animals: Integer representing the number of animals on the island.
+        :return child object/None: returning a child object if birth is given, or None if not.
+        """
 
         if (self.weight <= self.zeta * (self.w_birth + self.sigma_birth)) or n_animals < 2:
             return None
@@ -62,14 +91,24 @@ class animal(object):
                 return None
 
     def death(self):
-        # Calculating the probability of death, also simulating if the death will occur.
+        """
+        Calculating the probability of death for a given animal, and deciding if it will occur.
+        If an animal's weight is zero or less, the animal will die.
+        Otherwise, the probability of any animal dying during any year is:
+
+        .. math::
+            \\omega(1-\\Phi)
+
+        Where omega is a constant from the animal species, and Phi is the fitness of the animal.
+
+        :return boolean: returning True if the animal dies and false if it survives.
+        """
 
         if self.weight <= 0:
             return True
 
         else:
             death_proba = self.omega * (1 - self.fitness)
-
             if rd.uniform(0, 1) <= death_proba:
                 return True
 
@@ -77,7 +116,18 @@ class animal(object):
                 return False
 
     def migration(self):
-        # Calculating probability of migration, and deciding whether the animal will migrate or not.
+        """
+        Calculating probability of migration, and deciding whether the animal will migrate or not.
+
+        The probability of an animal migrating in a given year is as follows:
+
+        .. math::
+            \\mu \\times \\Phi
+
+        Where :math:`\\Phi` is the animal's fitness and :math:`\\mu` is a constant of the species.
+
+        :return boolean: True if the animal migrates and False if it stays in its current cell.
+        """
 
         migration_proba = self.mu * self.fitness
         if rd.uniform(0, 1) <= migration_proba and self.migrated is False:
@@ -86,29 +136,44 @@ class animal(object):
             return False
 
     def aging(self):
-        # Increases the age of an animal and subtracts yearly weight loss
+        """
+        Increases the age of an animal and subtracts yearly weight loss.
+        Fitness is updated for the animal after the weight loss.
+
+        """
 
         self.age += 1
         self.weight -= (self.eta * self.weight)
 
         self.fitness = self.fitness_update()
+        self.migrated = False
 
     @classmethod
     def update_params(cls, paramchange):
-        for param in paramchange[1].keys():
+        """
+        Changes the constant parameters for a given animal type.
+        Parameter has to be known in the animals' class.
+
+        :param paramchange: A dictionary with the parameters to be changed, and their new value.
+        """
+
+        for param in paramchange.keys():
             classname = cls.__name__
             if param in dir(cls):
-                try:
-                    paramname = classname + '.' + param
-                    exec("%s = %f" % (paramname, paramchange[1][param]))
-
-                except:
-                    warnings.warn(param + ' ' + 'is not a valid class parameter, and will not be updated.')
+                paramname = classname + '.' + param
+                exec("%s = %f" % (paramname, paramchange[param]))
             else:
                 raise ValueError('Unknown parameter inserted')
 
 
 class herbivore(animal):
+    """
+    Object representing an animal of the herbivore kind.
+
+    :param age: Age of the animal
+    :param weight: Weight of the animal
+
+    """
     w_birth = 8
     sigma_birth = 1.5
     beta = 0.9
@@ -124,13 +189,18 @@ class herbivore(animal):
     omega = 0.4
     F = 10
 
-    def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
-        super().__init__(weight, age, seed)
+    def __init__(self, weight, age):
+        super().__init__(weight, age)
 
     def feeding(self, f_available):
-        # Takes amt of available fodder, adds the fodder eaten by animal to its weight.
-        # If less than desired fodder (F) is present, it will eat all available.
-        # Returns the remaining fodder in the cell after the animal has eaten.
+        """
+        Takes amount of available fodder, removes eaten fodder
+        , increases animal weight and updates fitness.
+        If less than desired fodder (F) is present, it will eat all available.
+
+        :param f_available: Integer representing the amount of available fodder in the cell.
+        :return cur_fodder: Integer representing the amount of fodder left in the cell.
+        """
 
         cur_fodder = f_available
 
@@ -148,6 +218,13 @@ class herbivore(animal):
 
 
 class carnivore(animal):
+    """
+    Object representing an animal of the carnivore kind.
+
+    :param age: Age of the animal
+    :param weight: Weight of the animal
+
+    """
     w_birth = 6
     sigma_birth = 1
     beta = 0.75
@@ -162,14 +239,34 @@ class carnivore(animal):
     xi = 1.1
     omega = 0.8
     F = 50
-    DeltaPhiMax = 5
+    DeltaPhiMax = 10
 
-    def __init__(self, weight, age, seed=rd.randint(0, 9999999)):
-        super().__init__(weight, age, seed)
+    def __init__(self, weight, age):
+        super().__init__(weight, age)
 
     def feeding(self, available_herbivores):
+        """
+        Simulates the carnivore trying to eat the herbivores in a cell.
+        The carnivore will try to eat herbivores as long as it has appetite (F)
+        , or until all herbivores are hunted.
+        This is done by calculating the probability of the carnivore eating a given herbivore,
+        and decides whether it will happen or not.
+        If the fitness of a herbivore is larger than that of the carnivore
+        , the probability of the carnivore eating the herbivore is 0.
+        If the carnivore has DeltaPhiMax more fitness than the herbivore, the probability is 1.
+        If the carnivore eats a herbivore, its weight is increased, and herbivore is removed.
+        If none of the above occur, the probability is calculated as follows:
 
-        # available_herbivores.sort(key=operator.attrgetter('fitness'))
+        .. math::
+            \\frac{\\Phi_{carn}-\\Phi_{herb}}{\\Delta\\Phi_{max}}
+
+        Where :math:`\\Phi` is the fitness of the respective animals and :math:`\\Delta\\Phi_{max}`
+        is a constant of the carnivores.
+        Carnivore fitness is updated after it has eaten what it wants or hunted all herbivores.
+
+        :param available_herbivores: list of herbivores in the cell, sorted by ascending fitness.
+        :return living_herbivores: list of herbivores in the cell after the carnivore has hunted.
+        """
 
         appetite = self.F
         living_herbivores = available_herbivores
@@ -188,6 +285,8 @@ class carnivore(animal):
             if rd.uniform(0, 1) <= p_eat and appetite > 0:
                 living_herbivores.remove(prey)
                 self.weight += prey.weight * self.beta
+                appetite -= prey.weight
 
-            return living_herbivores
+        self.fitness = self.fitness_update()
 
+        return living_herbivores
