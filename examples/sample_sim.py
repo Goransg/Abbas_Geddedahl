@@ -56,8 +56,8 @@ if __name__ == '__main__':
                              'age': {'max': 60.0, 'delta': 2},
                              'weight': {'max': 60, 'delta': 2}},
                  img_dir='results2',
-                 img_base='sample', img_years=1)
-    sim.simulate(50)
+                 img_base='sample', img_years=1, log_file='res.txt')
+    sim.simulate(500)
     sim.make_movie('mp4')
 
     input('Press ENTER')
