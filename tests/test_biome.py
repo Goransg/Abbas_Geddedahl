@@ -109,7 +109,7 @@ def test_parameterupdate():
     assert lowland.f_max == 90
 
 
-def test_parameterupdate_oneinstance_post_creation():
+def test_biome_parameterupdate_oneinstance_post_creation():
     # Test if parameter updating affects the unintended subclass.
 
     testcell = highland((3, 3))
@@ -117,14 +117,14 @@ def test_parameterupdate_oneinstance_post_creation():
     assert testcell.f_max == 40
 
 
-def test_parameterupdate_oneinstance_pre_creation():
+def test_biome_parameterupdate_oneinstance_pre_creation():
     # Test if parameter updating affects the unintended subclass.
     testcell2 = lowland((5, 3))
     lowland.update_params(({'f_max': 50}))
     assert testcell2.f_max == 50
 
 
-def test_parameterupdate():
+def test_biome_parameterupdate():
     # Test if parameter updating affects the unintended subclass.
     lowland.update_params(({'f_max': 90}))
     assert lowland.f_max == 90

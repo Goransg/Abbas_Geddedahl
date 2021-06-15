@@ -81,7 +81,6 @@ def test_aging():
     # Testing the aging and yearly weight decrease function
     weight = 50
     age = 2
-    yearly_weightloss = 50 * 0.05
     individual = herbivore(weight=weight, age=age)
     individual.aging()
     assert individual.age == 3

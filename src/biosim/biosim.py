@@ -118,7 +118,7 @@ class BioSim:
                         n_herbivores = self.island.species_count()['Herbivore']
                         n_carnivores = self.island.species_count()['Carnivore']
                         w_herbivores, w_carnivores, f_herbivores, \
-                        f_carnivores, a_herbivores, a_carnivores = self.island.get_bincounts()
+                            f_carnivores, a_herbivores, a_carnivores = self.island.get_bincounts()
                         self.graphs.update(year, herb, carn, all_animals, n_herbivores,
                                            n_carnivores, w_herbivores, w_carnivores, f_herbivores,
                                            f_carnivores, a_herbivores, a_carnivores)
