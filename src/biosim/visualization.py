@@ -70,16 +70,16 @@ class Graphics:
         self._limits_w = None
         self._limits_f = None
         self._limits_a = None
-        if hist_specs is not None and hist_specs.__contains__('weight') and hist_specs.__contains__('fitness') \
-                and hist_specs.__contains__('age'):
-            n_points_w = int(round(hist_specs['weight']['max'] / hist_specs['weight']['delta'])) + 1
+        if hist_specs is not None and hist_specs.__contains__('weight')\
+                and hist_specs.__contains__('fitness') and hist_specs.__contains__('age'):
+            n_points_w = int(round(hist_specs['weight']['max']/hist_specs['weight']['delta'])) + 1
             self._limits_w = np.linspace(0, hist_specs['weight']['max'], num=n_points_w)
             self._ymax = 10
 
-            n_points_f = int(round(hist_specs['fitness']['max'] / hist_specs['fitness']['delta'])) + 1
+            n_points_f = int(round(hist_specs['fitness']['max']/hist_specs['fitness']['delta'])) + 1
             self._limits_f = np.linspace(0, hist_specs['fitness']['max'], num=n_points_f)
 
-            n_points_a = int(round(hist_specs['age']['max'] / hist_specs['age']['delta'])) + 1
+            n_points_a = int(round(hist_specs['age']['max']/hist_specs['age']['delta'])) + 1
             self._limits_a = np.linspace(0, hist_specs['age']['max'], num=n_points_a)
         # else:
         #     raise ValueError('Invalid hist_specs')
@@ -209,7 +209,6 @@ class Graphics:
 
         self._img_step = img_step
 
-        # create new figure window
         if self._fig is None:
             self._fig = plt.figure(figsize=(19, 10))
             self._gs = gridspec.GridSpec(ncols=36, nrows=36, figure=self._fig)
@@ -217,12 +216,6 @@ class Graphics:
         if self._limits_w is not None:
             self._img_step = img_step
 
-            # create new figure window
-
-
-            # Add left subplot for images created with imshow().
-            # We cannot create the actual ImageAxis object before we know
-            # the size of the image, so we delay its creation.
             if self._map_ax_one is None:
                 self._map_ax_one = self._fig.add_subplot(self._gs[16:36, 10:24])
                 self._map_ax_one.set_title('Herbivore distribution', fontsize=8)
@@ -242,7 +235,6 @@ class Graphics:
                 self._geodesc_axis = self._fig.add_subplot(self._gs[:8, 24])
                 self._geodesc_img_axis = None
 
-            # Add right subplot for line graph of mean.
             if self._mean_ax is None:
                 self._mean_ax = self._fig.add_subplot(self._gs[:10, :14])
                 self._mean_ax.set_xlabel("            year", fontsize=8)
@@ -251,13 +243,12 @@ class Graphics:
                 plt.setp(self._mean_ax.get_xticklabels(), fontsize=6)
                 plt.setp(self._mean_ax.get_yticklabels(), fontsize=6)
 
-                # needs updating on subsequent calls to simulate()
-            # add 1 so we can show values for time zero and time final_step
             self._mean_ax.set_xlim(0, final_step + 1)
 
             if self._mean_line is None:
                 mean_plot = self._mean_ax.plot(np.arange(0, final_step + 1),
-                                               np.full(final_step + 1, np.nan), label='Overall population')
+                                               np.full(final_step + 1, np.nan)
+                                               , label='Overall population')
                 self._mean_line = mean_plot[0]
             else:
                 x_data, y_data = self._mean_line.get_data()
@@ -269,7 +260,8 @@ class Graphics:
 
             if self._mean_line_2 is None:
                 mean_plot_2 = self._mean_ax.plot(np.arange(0, final_step + 1),
-                                                 np.full(final_step + 1, np.nan), c='g', label='Herbivores')
+                                                 np.full(final_step + 1, np.nan),
+                                                 c='g', label='Herbivores')
                 self._mean_line_2 = mean_plot_2[0]
             else:
                 x_data, y_data = self._mean_line_2.get_data()
@@ -281,7 +273,8 @@ class Graphics:
 
             if self._mean_line_3 is None:
                 mean_plot_3 = self._mean_ax.plot(np.arange(0, final_step + 1),
-                                                 np.full(final_step + 1, np.nan), c='r', label='Carnivores')
+                                                 np.full(final_step + 1, np.nan),
+                                                 c='r', label='Carnivores')
                 self._mean_line_3 = mean_plot_3[0]
                 self._mean_ax.legend(prop={'size': 6})
             else:
@@ -297,9 +290,11 @@ class Graphics:
                 self._histw_ax.set_xlabel("weight", fontsize=6)
                 self._histw_ax.set_ylabel("Count", fontsize=6)
                 self._histw_ax.set_title("Animal weights", fontsize=8)
-                self._histw_line = self._histw_ax.step(self._limits_w[:-1], np.zeros_like(self._limits_w[:-1]),
+                self._histw_line = self._histw_ax.step(self._limits_w[:-1],
+                                                       np.zeros_like(self._limits_w[:-1]),
                                                        where='mid', lw=2, label='Herbivores')[0]
-                self._histw_line_2 = self._histw_ax.step(self._limits_w[:-1], np.zeros_like(self._limits_w[:-1]),
+                self._histw_line_2 = self._histw_ax.step(self._limits_w[:-1],
+                                                         np.zeros_like(self._limits_w[:-1]),
                                                          where='mid', lw=2, label='Carnivores')[0]
                 self._histw_ax.set_xlim(self._limits_w[0], self._limits_w[-1])
                 self._histw_ax.set_ylim(0, self._ymax)
@@ -312,9 +307,11 @@ class Graphics:
                 self._histf_ax.set_xlabel("fitness", fontsize=6)
                 self._histf_ax.set_ylabel("Count", fontsize=6)
                 self._histf_ax.set_title("Animal fitness", fontsize=8)
-                self._histf_line = self._histf_ax.step(self._limits_f[:-1], np.zeros_like(self._limits_f[:-1]),
+                self._histf_line = self._histf_ax.step(self._limits_f[:-1],
+                                                       np.zeros_like(self._limits_f[:-1]),
                                                        where='mid', lw=2, label='Herbivores')[0]
-                self._histf_line_2 = self._histf_ax.step(self._limits_f[:-1], np.zeros_like(self._limits_f[:-1]),
+                self._histf_line_2 = self._histf_ax.step(self._limits_f[:-1],
+                                                         np.zeros_like(self._limits_f[:-1]),
                                                          where='mid', lw=2, label='Carnivores')[0]
                 self._histf_ax.set_xlim(self._limits_f[0], self._limits_f[-1])
                 self._histf_ax.set_ylim(0, self._ymax)
@@ -327,9 +324,11 @@ class Graphics:
                 self._hista_ax.set_xlabel("age", fontsize=6)
                 self._hista_ax.set_ylabel("Count", fontsize=6)
                 self._hista_ax.set_title("Animal age", fontsize=8)
-                self._hista_line = self._hista_ax.step(self._limits_a[:-1], np.zeros_like(self._limits_a[:-1]),
+                self._hista_line = self._hista_ax.step(self._limits_a[:-1],
+                                                       np.zeros_like(self._limits_a[:-1]),
                                                        where='mid', lw=2, label='Herbivores')[0]
-                self._hista_line_2 = self._hista_ax.step(self._limits_a[:-1], np.zeros_like(self._limits_a[:-1]),
+                self._hista_line_2 = self._hista_ax.step(self._limits_a[:-1],
+                                                         np.zeros_like(self._limits_a[:-1]),
                                                          where='mid', lw=2, label='Carnivores')[0]
                 self._hista_ax.set_xlim(self._limits_a[0], self._limits_a[-1])
                 self._hista_ax.set_ylim(0, self._ymax)
@@ -463,8 +462,8 @@ class Graphics:
 
         else:
             self._fig.savefig('{base}_{num:05d}.{type}'.format(base=self._img_base,
-                                                         num=self._img_ctr,
-                                                         type=self._img_fmt))
+                                                               num=self._img_ctr,
+                                                               type=self._img_fmt))
             self._img_ctr += 1
 
     def _init_geography(self, island_map):
@@ -497,4 +496,5 @@ class Graphics:
                 self._geodesc_axis.add_patch(plt.Rectangle((0., ix * 0.2), 0.3, 0.1,
                                                            edgecolor='none',
                                                            facecolor=rgb_value[name[0]]))
-                self._geodesc_axis.text(0.35, ix * 0.2, name, transform=self._geodesc_axis.transAxes)
+                self._geodesc_axis.text(0.35, ix * 0.2, name,
+                                        transform=self._geodesc_axis.transAxes)

@@ -9,7 +9,8 @@ class island:
     This sets the geographical map of the island using biome objects, seen in :class:`biome.biome`.
     the map cannot have other than water cells in its outer boundary.
 
-    :param map: text-string consisting of letters H, L, D, W representing Highland, Lowland, Desert and Water.
+    :param map: text-string consisting of letters H, L, D, W
+    representing Highland, Lowland, Desert and Water.
     """
 
     def __init__(self, map):
@@ -30,7 +31,7 @@ class island:
             if len(line) != line_len:
                 raise ValueError('Inconsistent line length')
 
-            if (y == 1 and line != 'W' * len(line)) or (y == len(map_list) and line != 'W' * len(line)):
+            if (y == 1 and line != 'W'*len(line)) or (y == len(map_list) and line != 'W'*len(line)):
                 raise ValueError('The outline cells of the map needs to be water cells!')
             elif line[-1] != 'W' or line[0] != 'W':
                 raise ValueError('The outline cells of the map needs to be water cells!')
@@ -64,7 +65,8 @@ class island:
         Uses the function :func:`biome.biome.update_params`.
 
         :param land: a text string representing the landscape type to be updated
-        :param params: a dictionary of constant names to be updated, with values they are going to be set to as values.
+        :param params: a dictionary of constant names to be updated,
+        with values they are going to be set to as values.
         """
         if land == 'H':
             highland.update_params(params)
@@ -109,7 +111,7 @@ class island:
         """
         Counts the number of animal per species on the entire Island.
 
-        :return animal_amount: a dictionary providing the count of each the two species on the island.
+        :return animal_amount: a dictionary with the count of each the two species on the island.
         """
 
         animal_amount = 0
@@ -125,7 +127,8 @@ class island:
         """
         Goes through a yearly simulation, and executes the yearly function in sequence.
         """
-        yearly_functions = ['update_fodder', 'grazing', 'breeding', 'migration', 'aging', 'remove_population']
+        yearly_functions = ['update_fodder', 'grazing', 'breeding',
+                            'migration', 'aging', 'remove_population']
 
         for func in yearly_functions:
             if func == 'migration':
@@ -139,7 +142,8 @@ class island:
 
     def migration(self):
         """
-        Runs the :func:`biome.biome.migration` function for all cells on the island, providing the neighbouring cells.
+        Runs the :func:`biome.biome.migration` function for all cells on the island,
+        providing the neighbouring cells for each.
         """
 
         # self.migrationreset()
@@ -244,7 +248,7 @@ class island:
         """
         Fetches information for the histograms.
 
-        :return 6 x 2d-arrays: representing weight, fitness and age for the different animals in the cells.
+        :return 6 x 2d-arrays: representing weight, fitness and age for the animals in the cells.
         """
         herbweights = []
         carnweights = []
@@ -256,27 +260,23 @@ class island:
         for row in self.coord_map:
             for cell in row:
                 if len(cell.herb) > 0:
-                    herbweights.append(np.array([int(animal.weight) for animal in cell.herb], dtype=object))
-                    herbfitness.append(np.array([round(animal.fitness, 1) for animal in cell.herb], dtype=object))
-                    herbage.append(np.array([int(animal.age) for animal in cell.herb], dtype=object))
+                    herbweights.append(np.array([int(animal.weight) for animal in cell.herb],
+                                                dtype=object))
+                    herbfitness.append(np.array([round(animal.fitness, 1) for animal in cell.herb],
+                                                dtype=object))
+                    herbage.append(np.array([int(animal.age) for animal in cell.herb],
+                                            dtype=object))
 
                 if len(cell.herb) > 0:
-                    carnweights.append(np.array([int(animal.weight) for animal in cell.carn], dtype=object))
-                    carnfitness.append(np.array([round(animal.fitness, 1) for animal in cell.carn], dtype=object))
-                    carnage.append(np.array([int(animal.age) for animal in cell.carn], dtype=object))
+                    carnweights.append(np.array([int(animal.weight) for animal in cell.carn],
+                                                dtype=object))
+                    carnfitness.append(np.array([round(animal.fitness, 1) for animal in cell.carn],
+                                                dtype=object))
+                    carnage.append(np.array([int(animal.age) for animal in cell.carn],
+                                            dtype=object))
 
         return np.array(herbweights, dtype=object), np.array(carnweights, dtype=object), \
                np.array(herbfitness, dtype=object), np.array(carnfitness, dtype=object), \
                np.array(herbage, dtype=object), np.array(carnage, dtype=object)
 
-# def migrationdestination(cur_x, cur_y):
-#     """
-#          Decides where a given animal want to go to
-#         :param cur_x: Integer representing the x-location of the current cell of residence.
-#         :param cur_y: Integer representing the y-location of the current cell of residence.
-#         :return choice[0]: x-coordinate of the cell the animal want to go
-#         :return choice[1]: y-coordinate of the cell the animal want to go
-#         """
-#     choice = rd.choice([(cur_x + 1, cur_y), (cur_x - 1, cur_y), (cur_x, cur_y + 1), (cur_x, cur_y - 1)])
-#
-#     return choice[0], choice[1]
+

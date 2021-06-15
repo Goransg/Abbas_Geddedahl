@@ -58,11 +58,14 @@ class BioSim:
         self.cur_year = 0
         self.graphs = Graphics(self.hist_specs, self.img_dir, self.img_base, self.img_fmt)
         logging.basicConfig(filename=log_file, level=logging.INFO,
-                            format='[%(levelname)s]%(module)s.%(funcName)s - %(asctime)s - %(message)s', filemode='w')
+                            format='[%(levelname)s]%(module)s.%(funcName)s - '
+                                   '%(asctime)s - %(message)s',
+                            filemode='w')
 
     def set_animal_parameters(self, species, params):
         """
-        Set parameters for animal species, passing the information down to the :func:`island.island.change_animalparams`
+        Set parameters for animal species,
+        passing the information down to the :func:`island.island.change_animalparams`
 
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
@@ -90,7 +93,8 @@ class BioSim:
         Running simulation while visualizing the result.
         Function :func:`island.island.sim_year` is ran each year.
         Function :func:`visualization.Graphics.setup` is ran upon beginning.
-        Function :func:`visualization.Graphics.update` is ran each year, with data from several functions from
+        Function :func:`visualization.Graphics.update` is ran each year,
+        with data from several functions from
         the :class:`island.island` object.
 
         :param num_years: number of years to simulate
@@ -117,10 +121,11 @@ class BioSim:
                         all_animals = self.island.animal_count()
                         n_herbivores = self.island.species_count()['Herbivore']
                         n_carnivores = self.island.species_count()['Carnivore']
-                        w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores = \
-                            self.island.get_bincounts()
-                        self.graphs.update(year, herb, carn, all_animals, n_herbivores, n_carnivores, w_herbivores,
-                                           w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores)
+                        w_herbivores, w_carnivores, f_herbivores, \
+                            f_carnivores, a_herbivores, a_carnivores = self.island.get_bincounts()
+                        self.graphs.update(year, herb, carn, all_animals, n_herbivores,
+                                           n_carnivores, w_herbivores, w_carnivores, f_herbivores,
+                                           f_carnivores, a_herbivores, a_carnivores)
         else:
             raise ValueError('Invalid simulation years')
 
