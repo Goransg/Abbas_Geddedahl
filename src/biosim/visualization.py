@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # This file based on example files from lecture J05 in INF200 june block of 2021
+# By Hans Ekkehard Plesser
 """
 :mod:`randvis.graphics` provides graphics support for RandVis.
 
@@ -15,7 +16,7 @@
 
 """
 
-__author__ = "Hans E Plesser, NMBU"
+
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -23,14 +24,9 @@ import subprocess
 import os
 import matplotlib.gridspec as gridspec
 
-# Update these variables to point to your ffmpeg and convert binaries
-# If you installed ffmpeg using conda or installed both softwares in
-# standard ways on your computer, no changes should be required.
 _FFMPEG_BINARY = 'ffmpeg'
 _MAGICK_BINARY = 'magick'
 
-# update this to the directory and file-name beginning
-# for the graphics files
 _DEFAULT_GRAPHICS_DIR = os.path.join('..', 'data')
 _DEFAULT_GRAPHICS_NAME = 'dv'
 _DEFAULT_IMG_FORMAT = 'png'
@@ -52,8 +48,8 @@ class Graphics:
         self._img_base = None
         if img_name is None:
             img_name = _DEFAULT_GRAPHICS_NAME
-        # if img_dir is None:
-        #     img_dir = _DEFAULT_GRAPHICS_DIR
+        if img_dir is None:
+            img_dir = _DEFAULT_GRAPHICS_DIR
         if img_fmt is None:
             img_fmt = _DEFAULT_IMG_FORMAT
         elif img_dir is not None:
@@ -84,7 +80,6 @@ class Graphics:
         # else:
         #     raise ValueError('Invalid hist_specs')
 
-        # the following will be initialized by _setup_graphics
         self._fig = None
         self._gs = None
         self._map_ax_one = None
@@ -142,15 +137,13 @@ class Graphics:
             self._update_hist_w(w_herbivores, w_carnivores)
             self._update_hist_f(f_herbivores, f_carnivores)
             self._update_hist_a(a_herbivores, a_carnivores)
-            self._fig.canvas.flush_events()  # ensure every thing is drawn
+            self._fig.canvas.flush_events()
 
             self._txt.set_text(self._template.format(step))
 
         plt.pause(1e-20)
 
         self._save_graphics(step)
-
-        # pause required to pass control to GUI
 
     def make_movie(self, movie_fmt=None):
         """
@@ -172,8 +165,6 @@ class Graphics:
 
         if movie_fmt == 'mp4':
             try:
-                # Parameters chosen according to http://trac.ffmpeg.org/wiki/Encode/H.264,
-                # section "Compatibility"
                 subprocess.check_call([_FFMPEG_BINARY,
                                        '-i', '{}_%05d.png'.format(self._img_base),
                                        '-y',
@@ -207,7 +198,7 @@ class Graphics:
         :param geographic_map: The map of the Island
         """
 
-        # self._img_step = img_step
+        self._img_step = img_step
 
         if self._fig is None:
             self._fig = plt.figure(figsize=(19, 10))
@@ -476,10 +467,10 @@ class Graphics:
         if self._geomap_img_axis is not None:
             pass
         else:
-            rgb_value = {'W': (0.0, 0.0, 1.0),  # blue
-                         'L': (0.0, 0.6, 0.0),  # dark green
-                         'H': (0.5, 1.0, 0.5),  # light green
-                         'D': (1.0, 1.0, 0.5)}  # light yellow
+            rgb_value = {'W': (0.0, 0.0, 1.0),
+                         'L': (0.0, 0.6, 0.0),
+                         'H': (0.5, 1.0, 0.5),
+                         'D': (1.0, 1.0, 0.5)}
 
             map_rgb = [[rgb_value[column] for column in row]
                        for row in island_map.split()]
@@ -488,7 +479,7 @@ class Graphics:
             self._geomap_axis.set_xticklabels(range(1, 1 + len(map_rgb[0]), 4))
             self._geomap_axis.set_yticks(range(0, len(map_rgb), 4))
             self._geomap_axis.set_yticklabels(range(1, 1 + len(map_rgb), 4))
-            self._geomap_img_axis = self._geomap_axis.imshow(map_rgb)  # llx, lly, w, h
+            self._geomap_img_axis = self._geomap_axis.imshow(map_rgb)
 
             for ix, name in enumerate(('Water', 'Lowland',
                                        'Highland', 'Desert')):

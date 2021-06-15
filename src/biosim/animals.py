@@ -141,11 +141,7 @@ class animal(object):
 
         :param paramchange: A dictionary with the parameters to be changed, and their new value.
         """
-        # for param in paramchange[1].keys():
-        #     classname = cls.__name__
-        #     if param in dir(cls):
-        #         paramname = classname + '.' + param
-        #         exec("%s = %f" % (paramname, paramchange[1][param]))
+
         for param in paramchange.keys():
             classname = cls.__name__
             if param in dir(cls):

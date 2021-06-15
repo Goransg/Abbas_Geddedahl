@@ -159,30 +159,6 @@ class island:
                 if len(neighbours) > 0:
                     cur_cell.migration(neighbours)
 
-                #
-                # for herbivore in migrators_herb:
-                #
-                #     new_x, new_y = migrationdestination(x, y)
-                #     new_cell = self.coord_map[new_x][new_y]
-                #
-                #     if new_cell.habitable:
-                #
-                #         new_cell.herb.append(herbivore)
-                #
-                #         herbivore.migrated = True
-                #
-                # for carnivore in migrators_carn:
-                #
-                #     new_x, new_y = migrationdestination(x, y)
-                #     new_cell = self.coord_map[new_x][new_y]
-                #
-                #     if new_cell.habitable:
-                #
-                #         new_cell.carn.append(carnivore)
-                #
-                #         carnivore.migrated = True
-                #
-
     def add_population(self, populations):
         """
         Adds animals to a given cell, given in coordinates starting at (1,1).
@@ -200,20 +176,6 @@ class island:
             pop = population['pop']
 
             self.coord_map[y_value][x_value].add_population(pop)
-
-    # def migrationreset(self):
-    #     """
-    #         Sets the "Migrated" flag for all animals to false, allowing them to migrate.
-    #         """
-    #     for row in self.coord_map:
-    #
-    #         for cell in row:
-    #
-    #             for carnivore in cell.carn:
-    #                 carnivore.migrated = False
-    #
-    #             for herbivore in cell.herb:
-    #                 herbivore.migrated = False
 
     def distrubution(self):
         """
