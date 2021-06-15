@@ -155,7 +155,3 @@ def test_stat_prey():
     survivors = test_carnivore.feeding(test_herbivores)
     p_hyp = stats.binom_test(len(survivors), n=50, p=(1-p))
     assert p_hyp >= 0.05
-
-
-
-

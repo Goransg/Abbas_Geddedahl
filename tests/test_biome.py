@@ -1,5 +1,5 @@
 import pytest
-from biosim.biome import lowland, highland, desert, water
+from src.biosim.biome import lowland, highland, desert, water
 import random as rd
 
 
@@ -9,7 +9,7 @@ def test_lowland_create():
     f_max = 800
     cell = lowland((a, b))
     assert cell.f_max == f_max
-    assert cell.habitable == True
+    assert cell.habitable is True
 
 
 def test_highland_create():
@@ -18,7 +18,7 @@ def test_highland_create():
     f_max = 300
     cell = highland((a, b))
     assert cell.f_max == f_max
-    assert cell.habitable == True
+    assert cell.habitable is True
 
 
 def test_water_create():
@@ -27,7 +27,7 @@ def test_water_create():
     f_max = 0
     cell = water((a, b))
     assert cell.f_max == f_max
-    assert cell.habitable == False
+    assert cell.habitable is False
 
 
 def test_desert_create():
@@ -36,7 +36,7 @@ def test_desert_create():
     f_max = 0
     cell = desert((a, b))
     assert cell.f_max == f_max
-    assert cell.habitable == True
+    assert cell.habitable is True
 
 
 def test_add_population():
@@ -81,9 +81,9 @@ def test_migration(mocker):
             'weight': 20}
            for _ in range(pop_size)]
     A.add_population(pop)
-    mocker.patch('biosim.biome.animal.migration', return_value=True)
+    mocker.patch('src.biosim.biome.animal.migration', return_value=True)
     A.migration(cell_lst)
-    total_pop = len(A.carn) + len(A.herb) + len(B.carn) + len(B.herb) + len(C.carn) + len(C.herb) + len(D.carn) + len(
-        D.herb) + len(E.carn) + len(E.herb)
+    total_pop = len(A.carn) + len(A.herb) + len(B.carn) + len(B.herb) + len(C.carn) + len(C.herb) \
+                + len(D.carn) + len(D.herb) + len(E.carn) + len(E.herb)
     assert total_pop == pop_size
     assert len(A.carn) + len(A.herb) < total_pop
