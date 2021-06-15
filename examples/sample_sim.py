@@ -55,9 +55,9 @@ if __name__ == '__main__':
                  hist_specs={'fitness': {'max': 1.0, 'delta': 0.05},
                              'age': {'max': 60.0, 'delta': 2},
                              'weight': {'max': 60, 'delta': 2}},
-                 img_dir='results2',
+                 img_dir='results3',
                  img_base='sample', img_years=1, log_file='res.txt')
-    sim.simulate(200)
-    sim.make_movie('mp4')
+    sim.simulate(50)
+    sim.make_movie('gif')
 
     input('Press ENTER')

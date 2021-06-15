@@ -2,7 +2,7 @@
 # This file based on example files from lecture J05 in INF200 june block of 2021
 # By Hans Ekkehard Plesser
 """
-:mod:`randvis.graphics` provides graphics support for BioSim.
+:mod:`visualization.Graphics` provides graphics support for BioSim.
 
 .. note::
    * This module requires the program ``ffmpeg`` or ``convert``
@@ -18,7 +18,7 @@
 
 import os
 import subprocess
-
+import glob
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
@@ -34,7 +34,7 @@ _DEFAULT_MOVIE_FORMAT = 'gif'  # alternatives: mp4, gif
 
 class Graphics:
     """
-    Provides graphics support for BioSim.
+    Provides graphics for BioSim.
 
     :param img_dir: directory for image files; no images if None
     :type img_dir: str
@@ -49,14 +49,23 @@ class Graphics:
         self._img_base = None
         if img_name is None:
             img_name = _DEFAULT_GRAPHICS_NAME
+
         if img_dir is None:
             img_dir = _DEFAULT_GRAPHICS_DIR
+
         if img_fmt is None:
             img_fmt = _DEFAULT_IMG_FORMAT
+
         elif img_dir is not None:
-            self._img_base = os.path.join(img_dir, img_name)
             if not os.path.isdir(img_dir):
                 os.makedirs(img_dir)
+            elif os.path.isdir(img_dir):
+                self._img_base = os.path.join(img_dir, img_name)
+                old_files = glob.glob(img_dir+'/*')
+                for item in old_files:
+                    os.remove(item)
+            else:
+                pass
         else:
             self._img_base = None
 
