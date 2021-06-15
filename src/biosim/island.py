@@ -1,5 +1,5 @@
 import numpy as np
-from .biome import water, highland, lowland, desert
+from biosim.biome import water, highland, lowland, desert
 
 
 class island:

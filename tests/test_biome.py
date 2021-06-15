@@ -5,7 +5,7 @@ import random as rd
 def test_lowland_create():
     a = rd.randint(1, 50)
     b = rd.randint(1, 50)
-    f_max = 800
+    f_max = lowland.f_max
     cell = lowland((a, b))
     assert cell.f_max == f_max
     assert cell.habitable is True
@@ -14,7 +14,7 @@ def test_lowland_create():
 def test_highland_create():
     a = rd.randint(1, 50)
     b = rd.randint(1, 50)
-    f_max = 300
+    f_max = highland.f_max
     cell = highland((a, b))
     assert cell.f_max == f_max
     assert cell.habitable is True
@@ -23,7 +23,7 @@ def test_highland_create():
 def test_water_create():
     a = rd.randint(1, 50)
     b = rd.randint(1, 50)
-    f_max = 0
+    f_max = water.f_max
     cell = water((a, b))
     assert cell.f_max == f_max
     assert cell.habitable is False
@@ -32,7 +32,7 @@ def test_water_create():
 def test_desert_create():
     a = rd.randint(1, 50)
     b = rd.randint(1, 50)
-    f_max = 0
+    f_max = desert.f_max
     cell = desert((a, b))
     assert cell.f_max == f_max
     assert cell.habitable is True
@@ -80,12 +80,33 @@ def test_migration(mocker):
             'weight': 20}
            for _ in range(pop_size)]
     A.add_population(pop)
-    mocker.patch('src.biosim.biome.animal.migration', return_value=True)
+    mocker.patch('biosim.biome.animal.migration', return_value=True)
     A.migration(cell_lst)
     total_pop = len(A.carn) + len(A.herb) + len(B.carn) + len(B.herb) + len(C.carn) + len(C.herb) \
         + len(D.carn) + len(D.herb) + len(E.carn) + len(E.herb)
     assert total_pop == pop_size
     assert len(A.carn) + len(A.herb) < total_pop
+
+
+def test_parameterupdate_oneinstance_post_creation():
+    # Test if parameter updating affects the unintended subclass.
+
+    testcell = highland((3, 3))
+    testcell.update_params(({'f_max': 40}))
+    assert testcell.f_max == 40
+
+
+def test_parameterupdate_oneinstance_pre_creation():
+    # Test if parameter updating affects the unintended subclass.
+    testcell = lowland((5, 3))
+    testcell.update_params(({'f_max': 50}))
+    assert testcell.f_max == 50
+
+
+def test_parameterupdate():
+    # Test if parameter updating affects the unintended subclass.
+    lowland.update_params(({'f_max': 90}))
+    assert lowland.f_max == 90
 
 
 def test_parameterupdate_oneinstance_post_creation():

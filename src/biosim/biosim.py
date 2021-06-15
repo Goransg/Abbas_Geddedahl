@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 import logging
-from .island import island
-from .visualization import Graphics
+from biosim.island import island
+from biosim.visualization import Graphics
 import random as rd
 
 
@@ -43,16 +44,16 @@ class BioSim:
                  log_file=None):
         self.ymax_animals = ymax_animals
         self.cmax_animals = cmax_animals
+        self.vis_years = vis_years
         self.img_dir = img_dir
         self.img_base = img_base
         self.img_fmt = img_fmt
-        self.img_years = img_years
+        self.img_years = img_years if img_years is not None else vis_years
         self.log_file = log_file
         self.hist_specs = hist_specs
         self.island_map = island_map
         self.ini_pop = ini_pop
         self.seed = seed
-        self.vis_years = vis_years
         self.island = island(island_map)
         self.add_population(self.ini_pop)
         rd.seed(a=self.seed)

@@ -85,7 +85,7 @@ def test_aging():
     individual = herbivore(weight=weight, age=age)
     individual.aging()
     assert individual.age == 3
-    assert individual.weight == (50 - yearly_weightloss)
+    assert individual.weight == (50 - 50 * individual.eta)
 
 
 def test_feeding_herbivore():
@@ -125,7 +125,7 @@ def test_parameterupdate_oneinstance_pre_creation():
     age = 2
     herbivore.update_params(({'eta': 0.7}))
     individual = herbivore(age=age, weight=weight)
-    assert individual.beta == 0.7
+    assert individual.eta == 0.7
 
 
 def test_parameterupdate():
