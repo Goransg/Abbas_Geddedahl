@@ -25,7 +25,8 @@ class biome:
     @staticmethod
     def change_animalparams(species, params):
         """
-        Changes the constant parameters of a given animal type
+        Changes the constant parameters of a given animal type.
+        Runs function :func:`animals.animal.update_params` for the specified animal type.
 
         :param species: a text string representing the animal type to be updated
         :param params: a dictionary of constant names to be updated, with values they are going to be set to as values.
@@ -39,7 +40,7 @@ class biome:
 
     def add_population(self, pop):
         """
-        Function to add population in a specific cell
+        Function to add population in a specific cell.
 
         :param pop: List of dictionaries
         """
@@ -51,7 +52,8 @@ class biome:
 
     def remove_population(self):
         """
-        Simulates the yearly deaths in the cell
+        Simulates the yearly deaths in the cell.
+        Runs the :func:`animals.animal.death` function for all animals in the cell.
         """
         self.herb[:] = [specie for specie in self.herb if not specie.death()]
         self.carn[:] = [specie for specie in self.carn if not specie.death()]
@@ -59,6 +61,7 @@ class biome:
     def breeding(self):
         """
         Simulates the yearly births in the cell, adding the child objects and removing weight from mother.
+        Runs the :func:`animals.animal.birth` function for all animals in the cell.
         """
         baby_herb = []
         baby_carn = []
@@ -82,6 +85,8 @@ class biome:
     def aging(self):
         """
         Running the aging process for all animals in the cell, adding age and removing yearly weight loss.
+
+        Runs the :func:`animals.animal.aging` function for all animals in the cell.
         """
         for specie in self.herb:
             specie.aging()
@@ -92,6 +97,8 @@ class biome:
         """
         Simulates the yearly eating for the two species in the cell.
         Herbivores eat in random order, and carnivores eat in the order of descending fitness.
+        Runs the :func:`animals.herbivore.feeding` function for all herbivores in the cell.
+        Runs the :func:`animals.herbivore.feeding` function for all carnivores in the cell.
         """
         for specie in self.herb:
             if self.fodder > 0:
@@ -104,6 +111,7 @@ class biome:
         """
         Runs the migration for all animals in the cell, finding where the animal wants to go, and if it is possible.
         If it is possible, the animals are moved.
+        Runs the :func:`animals.herbivore.migration` function for all animals in the cell.
 
         :param cell_list:
         """
@@ -138,7 +146,7 @@ class biome:
     def update_params(cls, paramchange):
         """
         Changes the constant parameters for a given biome type.
-        Parameter has to be known in the biome' class.
+        Parameter has to be known in the biome class.
 
         :param paramchange: A dictionary with the parameters to be changed, and the value they shall be changed to.
         """

@@ -6,7 +6,7 @@ from .biome import *
 class island:
     """
     An object representing the group of cells, acting as an island.
-    This sets the geographical map of the island.
+    This sets the geographical map of the island using biome objects, seen in :class:`biome.biome`.
     the map cannot have other than water cells in its outer boundary.
 
     :param map: text-string consisting of letters H, L, D, W representing Highland, Lowland, Desert and Water.
@@ -60,9 +60,10 @@ class island:
     @staticmethod
     def change_landscapeparams(land, params):
         """
-        Changes the constant parameters of a given animal type
+        Changes the constant parameters of a given animal type.
+        Uses the function :func:`biome.biome.update_params`.
 
-        :param species: a text string representing the animal type to be updated
+        :param land: a text string representing the landscape type to be updated
         :param params: a dictionary of constant names to be updated, with values they are going to be set to as values.
         """
         if land == 'H':
@@ -97,6 +98,8 @@ class island:
 
     def change_animalparams(self, species, params):
         """
+        Passes changes of animal parameters to the function :func:`biome.biome.change_animalparams`
+
         :param species:
         :param params:
         """
@@ -121,7 +124,6 @@ class island:
     def sim_year(self):
         """
         Goes through a yearly simulation, and executes the yearly function in sequence.
-
         """
         yearly_functions = ['update_fodder', 'grazing', 'breeding', 'migration', 'aging', 'remove_population']
 
@@ -137,9 +139,7 @@ class island:
 
     def migration(self):
         """
-        Finds animals that are going to migrate, checks where they want to migrate, then moves them to the
-        desired cell if it is habitable.
-
+        Runs the :func:`biome.biome.migration` function for all cells on the island, providing the neighbouring cells.
         """
 
         # self.migrationreset()
@@ -184,18 +184,21 @@ class island:
                 # cur_cell.herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration() is False]
                 # cur_cell.carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration() is False]
 
-    def add_population(self, population):
+    def add_population(self, populations):
         """
-        Adds animals to a given cell.
-        and a list of dictionaries specifying where to place the animals.
+        Adds animals to a given cell, given in coordinates starting at (1,1).
+        Runs the :func:`biome.biome.add_population` function for the desired cell.
 
-        :param population: a list with a dictionary specifying the location of the animals,
+        :param populations: a list with a dictionary specifying the location of the animals,
         """
 
-        for specie in population:
-            y_value = specie['loc'][0] - 1
-            x_value = specie['loc'][1] - 1
-            pop = specie['pop']
+        for population in populations:
+            if population['loc'][0] > 0 and population['loc'][1] > 0:
+                y_value = population['loc'][0] - 1
+                x_value = population['loc'][1] - 1
+            else:
+                raise KeyError('Please use coordinate values larger than 0!')
+            pop = population['pop']
 
             self.coord_map[y_value][x_value].add_population(pop)
 

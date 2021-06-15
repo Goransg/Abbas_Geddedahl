@@ -1,6 +1,4 @@
 import logging
-import random as rd
-
 from .island import *
 from .visualization import *
 
@@ -32,6 +30,10 @@ class BioSim:
     f'{os.path.join(img_dir, img_base}_{img_number:05d}.{img_fmt}'
     where img_number are consecutive image numbers starting from 0.
     img_dir and img_base must either be both None or both strings.
+    Initial population is initialized through the :func:`island.island.add_population` function.
+    The geographical map is made into a :class:`island.island` class object.
+    Visualization is initializes as a :class:`visualization.Graphics` object.
+    Logging is initialized.
     """
 
     def __init__(self, island_map, ini_pop, seed,
@@ -60,7 +62,7 @@ class BioSim:
 
     def set_animal_parameters(self, species, params):
         """
-        Set parameters for animal species.
+        Set parameters for animal species, passing the information down to the :func:`island.island.change_animalparams`
 
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
@@ -73,6 +75,7 @@ class BioSim:
     def set_landscape_parameters(self, landscape, params):
         """
         Set parameters for landscape type.
+        Passes the information down to the `island.island.change_landscapeparams` function.
 
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
@@ -85,6 +88,10 @@ class BioSim:
     def simulate(self, num_years):
         """
         Running simulation while visualizing the result.
+        Function :func:`island.island.sim_year` is ran each year.
+        Function :func:`visualization.Graphics.setup` is ran upon beginning.
+        Function :func:`visualization.Graphics.update` is ran each year, with data from several functions from
+        the :class:`island.island` object.
 
         :param num_years: number of years to simulate
         """
@@ -119,7 +126,8 @@ class BioSim:
 
     def add_population(self, population):
         """
-        Add a population to the island
+        Add a population to a given locations on the island.
+        Runs the :func:`island.island.add_population` function.
 
         :param population: List of dictionaries specifying population
         """
@@ -139,6 +147,7 @@ class BioSim:
     def num_animals(self):
         """
         Total number of animals on island.
+        Runs the :func:`island.island.animal_count` function.
 
         :return animals_on_island: Integer representing the number of animals on the island.
         """
@@ -151,6 +160,7 @@ class BioSim:
     def num_animals_per_species(self):
         """
         Number of animals per species in island, as dictionary.
+        Runs the :func:`island.island.species_count` function.
 
         :return island.species_count: dictionary with species as key and
         integers representing species counts as values.
@@ -161,6 +171,7 @@ class BioSim:
     def make_movie(self, movie_format):
         """
         Create MPEG4 movie from visualization images saved.
+        Runs the :func:`visualization.Graphics.make_movie` function.
 
         :param movie_format: String indicating the desired format of the movie.
         """

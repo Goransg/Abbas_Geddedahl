@@ -29,7 +29,6 @@ class animal(object):
         :return fitness: float number between 0 and 1
         """
 
-
         if self.weight <= 0:
             fitness = 0
 

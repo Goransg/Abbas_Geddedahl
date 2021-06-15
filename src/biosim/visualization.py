@@ -21,7 +21,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import subprocess
 import os
-import time
 import matplotlib.gridspec as gridspec
 
 # Update these variables to point to your ffmpeg and convert binaries
@@ -59,11 +58,10 @@ class Graphics:
             img_fmt = _DEFAULT_IMG_FORMAT
         elif img_dir is not None:
             self._img_base = os.path.join(img_dir, img_name)
+            if not os.path.isdir(img_dir):
+                os.makedirs(img_dir)
         else:
             self._img_base = None
-
-        if not os.path.isdir(img_dir):
-           os.makedirs(img_dir)
 
         self._img_fmt = img_fmt if img_fmt is not None else _DEFAULT_IMG_FORMAT
 

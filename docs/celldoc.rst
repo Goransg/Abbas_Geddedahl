@@ -1,8 +1,6 @@
-The cell module
+The biome module
 =========================
 
-biome
--------
 .. automodule:: biosim.biome
   :members:
 
