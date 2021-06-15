@@ -48,7 +48,7 @@ class animal(object):
         .. math::
             min(1, \\gamma \\times \\Phi \\times(N-1)
 
-        Where Phi is the animal fitness and N is the number of animals in the cell of the same species.
+        Where :math:`\\Phi` is the animal fitness and N is the number of animals in the cell of the same species.
         The rest are constants from the animals' subclass
 
         :param n_animals: Integer representing the number of animals on the island.
@@ -105,7 +105,7 @@ class animal(object):
         .. math::
             \\mu \\times \\Phi
 
-        Where Phi is the animal's fitness and my is a constant of the species.
+        Where :math:`\\Phi` is the animal's fitness and :math:`\\mu` is a constant of the species.
 
         :return boolean: returning True if the animal migrates and false if it stays in its current cell.
         """
@@ -242,7 +242,8 @@ class carnivore(animal):
         .. math::
             \\frac{\\Phi_{carn}-\\Phi_{herb}}{\\Delta\\Phi_{max}}
 
-        Where Theta is the fitness of the respective animals and DeltaPhiMax is a constant of the carnivores.
+        Where :math:`\\Phi` is the fitness of the respective animals and :math:`\\Delta\\Phi_{max}` is a constant
+        of the carnivores.
         Fitness of the carnivore is updated after it has eaten what it wants or hunted all herbivores.
 
         :param available_herbivores: list of herbivores available in the cell, sorted by ascending fitness.
