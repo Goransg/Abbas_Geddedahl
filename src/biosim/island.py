@@ -1,6 +1,5 @@
 import numpy as np
-
-from .biome import *
+from .biome import water, highland, lowland, desert
 
 
 class island:
@@ -153,8 +152,8 @@ class island:
                 cur_cell = self.coord_map[y][x]
                 neighbours = []
                 try:
-                    neighbours = [self.coord_map[y+1][x], self.coord_map[y][x+1],
-                                  self.coord_map[y-1][x], self.coord_map[y][x-1]]
+                    neighbours = [self.coord_map[y][x-1], self.coord_map[y-1][x],
+                                  self.coord_map[y][x+1], self.coord_map[y+1][x]]
                 except IndexError:
                     pass
                 if len(neighbours) > 0:

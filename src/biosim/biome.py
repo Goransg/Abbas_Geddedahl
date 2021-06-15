@@ -1,5 +1,5 @@
-from .animals import *
-
+from .animals import herbivore, carnivore
+import random as rd
 
 class biome:
     """
@@ -29,7 +29,8 @@ class biome:
         Runs function :func:`animals.animal.update_params` for the specified animal type.
 
         :param species: a text string representing the animal type to be updated
-        :param params: a dictionary of constant names to be updated, with values they are going to be set to as values.
+        :param params: a dictionary of constant names to be updated,
+        with values they are going to be set to as values.
         """
         if species.lower() == 'herbivore':
             herbivore.update_params(params)
@@ -45,9 +46,9 @@ class biome:
         :param pop: List of dictionaries
         """
         for specie in pop:
-            if specie['species'] == 'Herbivore':
+            if specie['species'].lower() == 'herbivore':
                 self.herb.append(herbivore(specie['weight'], specie['age']))
-            elif specie['species'] == 'Carnivore':
+            elif specie['species'].lower() == 'carnivore':
                 self.carn.append(carnivore(specie['weight'], specie['age']))
 
     def remove_population(self):
@@ -60,7 +61,8 @@ class biome:
 
     def breeding(self):
         """
-        Simulates the yearly births in the cell, adding the child objects and removing weight from mother.
+        Simulates the yearly births in the cell,
+        adding the child objects and removing weight from mother.
         Runs the :func:`animals.animal.birth` function for all animals in the cell.
         """
         baby_herb = []
@@ -84,7 +86,8 @@ class biome:
 
     def aging(self):
         """
-        Running the aging process for all animals in the cell, adding age and removing yearly weight loss.
+        Running the aging process for all animals in the cell,
+        adding age and removing yearly weight loss.
 
         Runs the :func:`animals.animal.aging` function for all animals in the cell.
         """
@@ -109,11 +112,12 @@ class biome:
 
     def migration(self, cell_list):
         """
-        Runs the migration for all animals in the cell, finding where the animal wants to go, and if it is possible.
+        Runs the migration for all animals in the cell, finding where the animal wants to go,
+        and if it is possible.
         If it is possible, the animals are moved.
         Runs the :func:`animals.herbivore.migration` function for all animals in the cell.
 
-        :param cell_list:
+        :param cell_list: List of the neighbouring cells to the current cell.
         """
         # for specie in self.herb:
         #     if specie.migration():
@@ -148,7 +152,8 @@ class biome:
         Changes the constant parameters for a given biome type.
         Parameter has to be known in the biome class.
 
-        :param paramchange: A dictionary with the parameters to be changed, and the value they shall be changed to.
+        :param paramchange: A dictionary with the parameters to be changed,
+        and the value they shall be changed to.
         """
         # for param in paramchange[1].keys():
         #     classname = cls.__name__

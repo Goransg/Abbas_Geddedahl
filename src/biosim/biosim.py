@@ -1,6 +1,7 @@
 import logging
-from .island import *
-from .visualization import *
+from .island import island
+from .visualization import Graphics
+import random as rd
 
 
 class BioSim:

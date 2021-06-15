@@ -207,7 +207,7 @@ class Graphics:
         :param geographic_map: The map of the Island
         """
 
-        self._img_step = img_step
+        # self._img_step = img_step
 
         if self._fig is None:
             self._fig = plt.figure(figsize=(19, 10))
