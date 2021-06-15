@@ -1,4 +1,4 @@
-from biosim.animals import herbivore, carnivore, animal
+from biosim.animals import herbivore, carnivore
 import random as rd
 
 
