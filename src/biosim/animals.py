@@ -27,8 +27,8 @@ class animal(object):
 
         Where a is the animal age, w is the animal weight, and the rest are constants from the animals' species.
         :return fitness: float number between 0 and 1
-
         """
+
 
         if self.weight <= 0:
             fitness = 0
@@ -53,7 +53,6 @@ class animal(object):
 
         :param n_animals: Integer representing the number of animals on the island.
         :return child object/None: returning a child object if birth is given, or None if not.
-
         """
 
         if (self.weight <= self.zeta * (self.w_birth + self.sigma_birth)) or n_animals < 2:
@@ -84,7 +83,6 @@ class animal(object):
         Where omega is a constant from the animal species, and Phi is the fitness of the animal.
 
         :return boolean: returning True if the animal dies and false if it survives.
-
         """
 
         if self.weight <= 0:
@@ -110,7 +108,6 @@ class animal(object):
         Where Phi is the animal's fitness and my is a constant of the species.
 
         :return boolean: returning True if the animal migrates and false if it stays in its current cell.
-
         """
 
         migration_proba = self.mu * self.fitness
@@ -139,7 +136,6 @@ class animal(object):
         Parameter has to be known in the animals' class.
 
         :param paramchange: A dictionary with the parameters to be changed, and the value they shall be changed to.
-
         """
         # for param in paramchange[1].keys():
         #     classname = cls.__name__
@@ -188,7 +184,6 @@ class herbivore(animal):
 
         :param f_available: Integer representing the amount of available fodder in the cell.
         :return cur_fodder: Integer representing the amount of fodder left in the cell after the animal has eaten.
-
         """
 
         cur_fodder = f_available

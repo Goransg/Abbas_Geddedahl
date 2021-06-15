@@ -22,7 +22,8 @@ class biome:
         """
         self.fodder = self.f_max
 
-    def change_animalparams(self, species, params):
+    @staticmethod
+    def change_animalparams(species, params):
         """
         Changes the constant parameters of a given animal type
 
@@ -59,21 +60,24 @@ class biome:
         """
         Simulates the yearly births in the cell, adding the child objects and removing weight from mother.
         """
+        baby_herb = []
+        baby_carn = []
         n_herb = len(self.herb)
+        n_carn = len(self.carn)
         for specie in self.herb:
             result = specie.birth(n_herb)
             if result is not None:
-                self.herb.append(result)
+                baby_herb.append(result)
                 specie.weight -= specie.xi * result.weight
                 specie.fitness_update()
-
-        n_carn = len(self.carn)
+        self.herb.extend(baby_herb)
         for specie in self.carn:
             result = specie.birth(n_carn)
             if result is not None:
-                self.carn.append(result)
+                baby_carn.append(result)
                 specie.weight -= specie.xi * result.weight
                 specie.fitness_update()
+        self.carn.extend(baby_carn)
 
     def aging(self):
         """
@@ -130,6 +134,26 @@ class biome:
                     choice.carn.append(self.carn[i])
                     del self.carn[i]
 
+    @classmethod
+    def update_params(cls, paramchange):
+        """
+        Changes the constant parameters for a given biome type.
+        Parameter has to be known in the biome' class.
+
+        :param paramchange: A dictionary with the parameters to be changed, and the value they shall be changed to.
+        """
+        # for param in paramchange[1].keys():
+        #     classname = cls.__name__
+        #     if param in dir(cls):
+        #         paramname = classname + '.' + param
+        #         exec("%s = %f" % (paramname, paramchange[1][param]))
+        for param in paramchange.keys():
+            classname = cls.__name__
+            if param in dir(cls):
+                paramname = classname + '.' + param
+                exec("%s = %f" % (paramname, paramchange[param]))
+            else:
+                raise ValueError('Unknown parameter inserted')
     # def get_age(self):
     #     ages = []
     #     for specie in self.herb:
@@ -156,8 +180,10 @@ class lowland(biome):
     :param loc: a tuple containing the coordinates of the cell.
     """
 
+    f_max = 800
+
     def __init__(self, loc):
-        self.f_max = 800
+        # self.f_max = 800
         self.habitable = True
         super().__init__(loc)
 
@@ -169,8 +195,10 @@ class highland(biome):
     :param loc: a tuple containing the coordinates of the cell.
     """
 
+    f_max = 300
+
     def __init__(self, loc):
-        self.f_max = 300
+        # self.f_max = 300
         self.habitable = True
         super().__init__(loc)
 
@@ -182,21 +210,25 @@ class desert(biome):
     :param loc: a tuple containing the coordinates of the cell.
     """
 
+    f_max = 0
+
     def __init__(self, loc):
-        self.f_max = 0
+        # self.f_max = 0
         self.habitable = True
         super().__init__(loc)
 
 
 class water(biome):
+
     """
     Representing a cell of type water.
 
     :param loc: a tuple containing the coordinates of the cell.
     """
+    f_max = 0
 
     def __init__(self, loc):
-        self.f_max = 0
+        # self.f_max = 0
         self.habitable = False
         super().__init__(loc)
 

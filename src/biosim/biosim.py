@@ -1,6 +1,8 @@
+import logging
+import random as rd
+
 from .island import *
 from .visualization import *
-import random as rd
 
 
 class BioSim:
@@ -53,6 +55,8 @@ class BioSim:
         rd.seed(a=self.seed)
         self.cur_year = 0
         self.graphs = Graphics(self.hist_specs, self.img_dir, self.img_base, self.img_fmt)
+        logging.basicConfig(filename=log_file, level=logging.INFO,
+                            format='[%(levelname)s]%(module)s.%(funcName)s - %(asctime)s - %(message)s', filemode='w')
 
     def set_animal_parameters(self, species, params):
         """
@@ -73,6 +77,10 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
+        if landscape not in ['H', 'L', 'D', 'W']:
+            raise ValueError('Invalid landscape')
+        else:
+            self.island.change_landscapeparams(landscape, params)
 
     def simulate(self, num_years):
         """
@@ -81,27 +89,33 @@ class BioSim:
         :param num_years: number of years to simulate
         """
 
-        if num_years == 0:
-            None
+        # if num_years == 0:
+        #     None
 
-        elif self.hist_specs is not None:
-            #graphs = Graphics(self.hist_specs)
+        # elif self.hist_specs is not None:
+        # else:
+        #     self.graphs.setup(self.cur_year + num_years, self.img_years, self.island_map)
+        if num_years != 0:
             self.graphs.setup(self.cur_year + num_years, self.img_years, self.island_map)
-
-        for year in range(self.cur_year, self.cur_year + num_years):
-            self.cur_year += 1
-            print(self.year, self.island.species_count())
-            self.island.sim_year()
-            if self.vis_years != 0 and self.ini_pop != [] and self.hist_specs is not None:
-                if self.cur_year % self.vis_years == 0:
-                    herb, carn = self.island.distrubution()
-                    all_animals = self.island.animal_count()
-                    n_herbivores = self.island.species_count()['Herbivore']
-                    n_carnivores = self.island.species_count()['Carnivore']
-                    w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores = \
-                        self.island.get_bincounts()
-                    self.graphs.update(self.cur_year, herb, carn, all_animals, n_herbivores, n_carnivores, w_herbivores, w_carnivores,
-                                  f_herbivores, f_carnivores, a_herbivores, a_carnivores)
+            for year in range(self.cur_year, self.cur_year + num_years):
+                self.cur_year += 1
+                if self.log_file is not None:
+                    logg_string = dict(Year=self.year, Total_Animals=self.island.animal_count(),
+                                       Animal_per_specie=self.island.species_count())
+                    logging.info(logg_string)
+                self.island.sim_year()
+                if self.vis_years != 0:
+                    if year % self.vis_years == 0:
+                        herb, carn = self.island.distrubution()
+                        all_animals = self.island.animal_count()
+                        n_herbivores = self.island.species_count()['Herbivore']
+                        n_carnivores = self.island.species_count()['Carnivore']
+                        w_herbivores, w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores = \
+                            self.island.get_bincounts()
+                        self.graphs.update(year, herb, carn, all_animals, n_herbivores, n_carnivores, w_herbivores,
+                                           w_carnivores, f_herbivores, f_carnivores, a_herbivores, a_carnivores)
+        else:
+            raise ValueError('Invalid simulation years')
 
     def add_population(self, population):
         """

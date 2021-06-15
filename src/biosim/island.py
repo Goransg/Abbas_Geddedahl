@@ -1,7 +1,6 @@
-from .biome import *
 import numpy as np
-import random as rd
-import warnings
+
+from .biome import *
 
 
 class island:
@@ -57,6 +56,25 @@ class island:
             coord_map.append(line_list)
 
         self.coord_map = coord_map
+
+    @staticmethod
+    def change_landscapeparams(land, params):
+        """
+        Changes the constant parameters of a given animal type
+
+        :param species: a text string representing the animal type to be updated
+        :param params: a dictionary of constant names to be updated, with values they are going to be set to as values.
+        """
+        if land == 'H':
+            highland.update_params(params)
+        elif land == 'L':
+            lowland.update_params(params)
+        elif land == 'W':
+            raise KeyError('Water parameter can not be changed')
+        elif land == 'D':
+            raise KeyError('Desert parameter can not be changed')
+        else:
+            raise KeyError('unknown species specified')
 
     def species_count(self):
         """
@@ -114,7 +132,8 @@ class island:
                 for lst in self.coord_map:
 
                     for x in lst:
-                        exec("x.%s()" % func)
+                        if len(x.herb) + len(x.carn) > 0:
+                            exec("x.%s()" % func)
 
     def migration(self):
         """
