@@ -77,7 +77,7 @@ class island:
         elif land == 'D':
             raise KeyError('Desert parameter can not be changed')
         else:
-            raise KeyError('unknown species specified')
+            raise KeyError('unknown cell type specified')
 
     def species_count(self):
         """
@@ -102,8 +102,8 @@ class island:
         """
         Passes changes of animal parameters to the function :func:`biome.biome.change_animalparams`
 
-        :param species:
-        :param params:
+        :param species: String representing the species to update parameters for
+        :param params: Dictionary with parameter names and new values
         """
         self.coord_map[0][0].change_animalparams(species, params)
 

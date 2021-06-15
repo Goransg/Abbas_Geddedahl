@@ -1,6 +1,7 @@
 from .animals import herbivore, carnivore
 import random as rd
 
+
 class biome:
     """
     The biome class

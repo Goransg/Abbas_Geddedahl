@@ -118,6 +118,7 @@ def test_parameterupdate_oneinstance_post_creation():
     individual2.update_params(({'beta': 0.5}))
     assert individual2.beta == 0.5
 
+
 def test_parameterupdate_oneinstance_pre_creation():
     # Test if parameter updating affects the unintended subclass.
     weight = 50
@@ -125,6 +126,7 @@ def test_parameterupdate_oneinstance_pre_creation():
     herbivore.update_params(({'eta': 0.7}))
     individual = herbivore(age=age, weight=weight)
     assert individual.beta == 0.7
+
 
 def test_parameterupdate():
     # Test if parameter updating affects the unintended subclass.
@@ -172,4 +174,3 @@ def test_stat_prey():
     survivors = test_carnivore.feeding(test_herbivores)
     p_hyp = stats.binom_test(len(survivors), n=50, p=(1-p))
     assert p_hyp >= 0.05
-

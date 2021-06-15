@@ -247,8 +247,8 @@ class Graphics:
 
             if self._mean_line is None:
                 mean_plot = self._mean_ax.plot(np.arange(0, final_step + 1),
-                                               np.full(final_step + 1, np.nan)
-                                               , label='Overall population')
+                                               np.full(final_step + 1, np.nan),
+                                               label='Overall population')
                 self._mean_line = mean_plot[0]
             else:
                 x_data, y_data = self._mean_line.get_data()
