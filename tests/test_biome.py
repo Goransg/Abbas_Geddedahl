@@ -86,3 +86,21 @@ def test_migration(mocker):
         + len(D.carn) + len(D.herb) + len(E.carn) + len(E.herb)
     assert total_pop == pop_size
     assert len(A.carn) + len(A.herb) < total_pop
+
+def test_parameterupdate_oneinstance_post_creation():
+    # Test if parameter updating affects the unintended subclass.
+
+    testcell = highland((3, 3))
+    highland.update_params(({'f_max': 40}))
+    assert testcell.f_max == 40
+
+def test_parameterupdate_oneinstance_pre_creation():
+    # Test if parameter updating affects the unintended subclass.
+    testcell2 = lowland((5, 3))
+    lowland.update_params(({'f_max': 50}))
+    assert testcell2.f_max == 50
+
+def test_parameterupdate():
+    # Test if parameter updating affects the unintended subclass.
+    lowland.update_params(({'f_max': 90}))
+    assert lowland.f_max == 90
