@@ -1,4 +1,3 @@
-import pytest
 from src.biosim.biome import lowland, highland, desert, water
 import random as rd
 

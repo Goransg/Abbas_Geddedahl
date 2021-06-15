@@ -120,7 +120,8 @@ def test_parameterupdate_oneinstance():
 
 
 def test_stat_death():
-    # Statistical test for probability of death, checking that the probabilty of hypothesis correctness is more than 5%
+    # Statistical test for probability of death,
+    # checking that the probabilty of hypothesis correctness is more than 5%
     test_animals = [carnivore(age=2, weight=50) for _ in range(50)]
     p = test_animals[0].omega * (1 - test_animals[0].fitness)
     successes = [subject for subject in test_animals if subject.death() is True]
@@ -129,7 +130,8 @@ def test_stat_death():
 
 
 def test_stat_birth():
-    # Statistical test for probability of birth, checking if probabilty of hypothesis correctness is more than 5%
+    # Statistical test for probability of birth,
+    # checking if probabilty of hypothesis correctness is more than 5%
     test_animals = [carnivore(age=5, weight=20) for _ in range(50)]
     p = min(1, test_animals[0].gamma * test_animals[0].fitness * 49)
     all_res = [subject for subject in test_animals]
@@ -139,7 +141,8 @@ def test_stat_birth():
 
 
 def test_stat_migr():
-    # Statistical test for probability of migration, checking if probabilty of hypothesis correctness is more than 5%
+    # Statistical test for probability of migration,
+    # checking if probabilty of hypothesis correctness is more than 5%
     test_animals = [carnivore(age=5, weight=30) for _ in range(50)]
     p = test_animals[0].mu * test_animals[0].fitness
     successes = [subject for subject in test_animals if subject.migration() is True]
@@ -148,7 +151,8 @@ def test_stat_migr():
 
 
 def test_stat_prey():
-    # Statistical test for probability of preying, checking if probabilty of hypothesis correctness is more than 5%
+    # Statistical test for probability of preying,
+    # checking if probabilty of hypothesis correctness is more than 5%
     test_carnivore = carnivore(age=3, weight=30)
     test_herbivores = [herbivore(age=10, weight=10) for _ in range(50)]
     p = (test_carnivore.fitness - test_herbivores[0].fitness) / test_carnivore.DeltaPhiMax
