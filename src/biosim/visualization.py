@@ -16,13 +16,12 @@
 
 """
 
+import os
+import subprocess
 
-
+import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
-import subprocess
-import os
-import matplotlib.gridspec as gridspec
 
 _FFMPEG_BINARY = 'ffmpeg'
 _MAGICK_BINARY = 'magick'
@@ -66,16 +65,16 @@ class Graphics:
         self._limits_w = None
         self._limits_f = None
         self._limits_a = None
-        if hist_specs is not None and hist_specs.__contains__('weight')\
+        if hist_specs is not None and hist_specs.__contains__('weight') \
                 and hist_specs.__contains__('fitness') and hist_specs.__contains__('age'):
-            n_points_w = int(round(hist_specs['weight']['max']/hist_specs['weight']['delta'])) + 1
+            n_points_w = int(round(hist_specs['weight']['max'] / hist_specs['weight']['delta'])) + 1
             self._limits_w = np.linspace(0, hist_specs['weight']['max'], num=n_points_w)
             self._ymax = 10
 
-            n_points_f = int(round(hist_specs['fitness']['max']/hist_specs['fitness']['delta'])) + 1
+            n_points_f = int(round(hist_specs['fitness']['max'] / hist_specs['fitness']['delta'])) + 1
             self._limits_f = np.linspace(0, hist_specs['fitness']['max'], num=n_points_f)
 
-            n_points_a = int(round(hist_specs['age']['max']/hist_specs['age']['delta'])) + 1
+            n_points_a = int(round(hist_specs['age']['max'] / hist_specs['age']['delta'])) + 1
             self._limits_a = np.linspace(0, hist_specs['age']['max'], num=n_points_a)
         # else:
         #     raise ValueError('Invalid hist_specs')
@@ -130,7 +129,6 @@ class Graphics:
         :param a_carnivores: current fitness of herbivores
         """
         if self._limits_w is not None:
-
             self._update_system_map_one(sys_map_first)
             self._update_system_map_two(sys_map_second)
             self._update_mean_graph(step, all_animals, n_herbivores, n_carnivores)
