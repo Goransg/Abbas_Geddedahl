@@ -2,7 +2,7 @@
 # This file based on example files from lecture J05 in INF200 june block of 2021
 # By Hans Ekkehard Plesser
 """
-:mod:`randvis.graphics` provides graphics support for RandVis.
+:mod:`randvis.graphics` provides graphics support for BioSim.
 
 .. note::
    * This module requires the program ``ffmpeg`` or ``convert``
@@ -33,17 +33,19 @@ _DEFAULT_MOVIE_FORMAT = 'gif'  # alternatives: mp4, gif
 
 
 class Graphics:
-    """Provides graphics support for RandVis."""
+    """
+    Provides graphics support for BioSim.
+
+    :param img_dir: directory for image files; no images if None
+    :type img_dir: str
+    :param img_name: beginning of name for image files
+    :type img_name: str
+    :param img_fmt: image file format suffix
+    :type img_fmt: str
+    """
 
     def __init__(self, hist_specs, img_dir=None, img_name=None, img_fmt=None):
-        """
-        :param img_dir: directory for image files; no images if None
-        :type img_dir: str
-        :param img_name: beginning of name for image files
-        :type img_name: str
-        :param img_fmt: image file format suffix
-        :type img_fmt: str
-        """
+
         self._img_base = None
         if img_name is None:
             img_name = _DEFAULT_GRAPHICS_NAME
@@ -71,7 +73,8 @@ class Graphics:
             self._limits_w = np.linspace(0, hist_specs['weight']['max'], num=n_points_w)
             self._ymax = 10
 
-            n_points_f = int(round(hist_specs['fitness']['max'] / hist_specs['fitness']['delta'])) + 1
+            n_points_f = int(
+                round(hist_specs['fitness']['max'] / hist_specs['fitness']['delta'])) + 1
             self._limits_f = np.linspace(0, hist_specs['fitness']['max'], num=n_points_f)
 
             n_points_a = int(round(hist_specs['age']['max'] / hist_specs['age']['delta'])) + 1
@@ -97,6 +100,8 @@ class Graphics:
         self._mean_line_3 = None
         self._geomap_axis = None
         self._geodesc_axis = None
+        self._geomap_img_axis = None
+        self._geodesc_img_axis = None
         self._count_ax = None
         self._txt = None
         self._template = None

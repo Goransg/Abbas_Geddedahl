@@ -9,6 +9,21 @@ class animal(object):
     :param weight: Float number representing the weight of an animal
     :param age: Integer representing the age of an animal
     """
+    w_birth = None
+    sigma_birth = None
+    beta = None
+    eta = None
+    a_half = None
+    phi_age = None
+    w_half = None
+    phi_weight = None
+    mu = None
+    gamma = None
+    zeta = None
+    xi = None
+    omega = None
+    F = None
+    DeltaPhiMax = None
 
     def __init__(self, weight, age):
 

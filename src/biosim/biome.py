@@ -4,7 +4,8 @@ import random as rd
 
 class biome:
     """
-    The biome class
+    The biome class represent a geographical area on the island.
+    It can, if habitable, hold animals and contain food if highland or lowland.
 
     :param loc: a tuple containing the coordinates of the cell.
     """
@@ -120,18 +121,7 @@ class biome:
 
         :param cell_list: List of the neighbouring cells to the current cell.
         """
-        # for specie in self.herb:
-        #     if specie.migration():
-        #         choice = rd.choice(cell_list)
-        #         if choice.habitable:
-        #             choice.immigration(specie)
-        #             self.herb.remove(specie)
-        # for specie in self.carn:
-        #     if specie.migration():
-        #         choice = rd.choice(cell_list)
-        #         if choice.habitable:
-        #             choice.immigration(specie)
-        #             self.carn.remove(specie)
+
         for i in range(len(self.herb) - 1, -1, -1):
             if self.herb[i].migration():
                 choice = rd.choice(cell_list)
@@ -168,23 +158,6 @@ class biome:
                 exec("%s = %f" % (paramname, paramchange[param]))
             else:
                 raise ValueError('Unknown parameter inserted')
-    # def get_age(self):
-    #     ages = []
-    #     for specie in self.herb:
-    #         ages.append(specie.age)
-    #     return ages
-    #
-    # def get_weights(self):
-    #     weights = []
-    #     for specie in self.herb:
-    #         weights.append(specie.weight)
-    #     return weights
-    #
-    # def get_fitness(self):
-    #     fitnesslist = []
-    #     for specie in self.herb:
-    #         fitnesslist.append(specie.fitness)
-    #     return fitnesslist
 
 
 class lowland(biome):
@@ -233,7 +206,6 @@ class desert(biome):
 
 
 class water(biome):
-
     """
     Representing a cell of type water.
 
@@ -245,64 +217,3 @@ class water(biome):
         # self.f_max = 0
         self.habitable = False
         super().__init__(loc)
-
-# A = lowland((1, 1))
-# A.add_population([{'species': 'Herbivore',
-#                    'age': 5,
-#                    'weight': 200}])
-# A.add_population([{'species': 'Herbivore',
-#                    'age': 25,
-#                    'weight': 0}])
-# A.add_population([{'species': 'Herbivore',
-#                    'age': 25,
-#                    'weight': 8000}])
-# print(A.herb)
-# A.remove_population()
-# print(A.herb)
-# A.aging()
-# print(A.get_age())
-# print(A.get_weights())
-# print(A.get_fitness())
-# print(A.fodder)
-# A.aging()
-# A.grazing()
-# print(A.get_age())
-# print(A.get_weights())
-# print(A.get_fitness())
-# print(A.fodder)
-# print(len(A.herb))
-# A.breeding()
-# print(len(A.herb))
-# print(A.get_age())
-# print(A.get_weights())
-# print(A.get_fitness())
-# print(A.carn)
-
-# # Test Migration
-# A = lowland((5, 5))
-# B = lowland((5, 4))
-# C = highland((5, 6))
-# D = water((4, 5))
-# E = desert((6, 5))
-# A.add_population([{'species': 'Herbivore',
-#                    'age': 25,
-#                    'weight': 8000}])
-# A.add_population([{'species': 'Herbivore',
-#                    'age': 25,
-#                    'weight': 0}])
-# A.add_population([{'species': 'Herbivore',
-#                    'age': 25,
-#                    'weight': 8000}])
-# print(len(A.herb)+len(A.carn))
-# print(len(B.herb)+len(B.carn))
-# print(len(C.herb)+len(C.carn))
-# print(len(D.herb)+len(D.carn))
-# print(len(E.herb)+len(E.carn))
-# lst = [B, C, D, E]
-# print(lst)
-# A.migration(lst)
-# print(len(A.herb) + len(A.carn))
-# print(len(B.herb) + len(B.carn))
-# print(len(C.herb) + len(C.carn))
-# print(len(D.herb) + len(D.carn))
-# print(len(E.herb) + len(E.carn))

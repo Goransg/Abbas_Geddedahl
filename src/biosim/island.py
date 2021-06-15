@@ -8,22 +8,19 @@ class island:
     This sets the geographical map of the island using biome objects, seen in :class:`biome.biome`.
     the map cannot have other than water cells in its outer boundary.
 
-    :param map: text-string consisting of letters H, L, D, W
+    :param gmap: text-string consisting of letters H, L, D, W
     representing Highland, Lowland, Desert and Water.
     """
 
-    def __init__(self, map):
+    def __init__(self, gmap):
 
-        map_list = map.split()
+        map_list = gmap.split()
         coord_map = []
         x = 0
         y = 0
         line_len = len(map_list[0])
 
         for line in map_list:
-
-            # Making a coordinate system with nested lists through a nested for-loop.
-            # The Biome class is decided by the type of cell in the map string.
 
             line_list = []
             y += 1

@@ -102,12 +102,6 @@ class BioSim:
         :param num_years: number of years to simulate
         """
 
-        # if num_years == 0:
-        #     None
-
-        # elif self.hist_specs is not None:
-        # else:
-        #     self.graphs.setup(self.cur_year + num_years, self.img_years, self.island_map)
         if num_years != 0:
             self.graphs.setup(self.cur_year + num_years, self.img_years, self.island_map)
             for year in range(self.cur_year, self.cur_year + num_years):
@@ -124,7 +118,7 @@ class BioSim:
                         n_herbivores = self.island.species_count()['Herbivore']
                         n_carnivores = self.island.species_count()['Carnivore']
                         w_herbivores, w_carnivores, f_herbivores, \
-                            f_carnivores, a_herbivores, a_carnivores = self.island.get_bincounts()
+                        f_carnivores, a_herbivores, a_carnivores = self.island.get_bincounts()
                         self.graphs.update(year, herb, carn, all_animals, n_herbivores,
                                            n_carnivores, w_herbivores, w_carnivores, f_herbivores,
                                            f_carnivores, a_herbivores, a_carnivores)
