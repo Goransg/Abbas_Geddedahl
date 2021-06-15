@@ -1,4 +1,4 @@
-from src.biosim.biome import lowland, highland, desert, water
+from biosim.biome import lowland, highland, desert, water
 import random as rd
 
 
@@ -83,6 +83,6 @@ def test_migration(mocker):
     mocker.patch('src.biosim.biome.animal.migration', return_value=True)
     A.migration(cell_lst)
     total_pop = len(A.carn) + len(A.herb) + len(B.carn) + len(B.herb) + len(C.carn) + len(C.herb) \
-                + len(D.carn) + len(D.herb) + len(E.carn) + len(E.herb)
+        + len(D.carn) + len(D.herb) + len(E.carn) + len(E.herb)
     assert total_pop == pop_size
     assert len(A.carn) + len(A.herb) < total_pop

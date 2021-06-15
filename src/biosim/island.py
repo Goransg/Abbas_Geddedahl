@@ -31,7 +31,8 @@ class island:
             if len(line) != line_len:
                 raise ValueError('Inconsistent line length')
 
-            if (y == 1 and line != 'W'*len(line)) or (y == len(map_list) and line != 'W'*len(line)):
+            if (y == 1 and line != 'W' * len(line)) or (
+                    y == len(map_list) and line != 'W' * len(line)):
                 raise ValueError('The outline cells of the map needs to be water cells!')
             elif line[-1] != 'W' or line[0] != 'W':
                 raise ValueError('The outline cells of the map needs to be water cells!')
@@ -161,8 +162,6 @@ class island:
                 if len(neighbours) > 0:
                     cur_cell.migration(neighbours)
 
-                # migrators_herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration()]
-                # migrators_carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration()]
                 #
                 # for herbivore in migrators_herb:
                 #
@@ -186,8 +185,6 @@ class island:
                 #
                 #         carnivore.migrated = True
                 #
-                # cur_cell.herb = [herbivore for herbivore in cur_cell.herb if herbivore.migration() is False]
-                # cur_cell.carn = [carnivore for carnivore in cur_cell.carn if carnivore.migration() is False]
 
     def add_population(self, populations):
         """
@@ -277,7 +274,5 @@ class island:
                                             dtype=object))
 
         return np.array(herbweights, dtype=object), np.array(carnweights, dtype=object), \
-               np.array(herbfitness, dtype=object), np.array(carnfitness, dtype=object), \
-               np.array(herbage, dtype=object), np.array(carnage, dtype=object)
-
-
+            np.array(herbfitness, dtype=object), np.array(carnfitness, dtype=object), \
+            np.array(herbage, dtype=object), np.array(carnage, dtype=object)

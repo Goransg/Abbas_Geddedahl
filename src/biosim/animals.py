@@ -275,7 +275,6 @@ class carnivore(animal):
                 living_herbivores.remove(prey)
                 self.weight += prey.weight * self.beta
                 appetite -= prey.weight
-
-        self.fitness = self.fitness_update()
+                self.fitness = self.fitness_update()
 
         return living_herbivores
