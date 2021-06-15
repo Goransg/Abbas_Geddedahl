@@ -57,20 +57,24 @@ class biome:
         """
 
         """
+        baby_herb = []
+        baby_carn = []
+        n_herb = len(self.herb)
+        n_carn = len(self.carn)
         for specie in self.herb:
-            n = len(self.herb)
-            result = specie.birth(n)
+            result = specie.birth(n_herb)
             if result is not None:
-                self.herb.append(result)
+                baby_herb.append(result)
                 specie.weight -= specie.xi * result.weight
                 specie.fitness_update()
+        self.herb.extend(baby_herb)
         for specie in self.carn:
-            n = len(self.carn)
-            result = specie.birth(n)
+            result = specie.birth(n_carn)
             if result is not None:
-                self.carn.append(result)
+                baby_carn.append(result)
                 specie.weight -= specie.xi * result.weight
                 specie.fitness_update()
+        self.carn.extend(baby_carn)
 
     def aging(self):
         """
@@ -124,6 +128,26 @@ class biome:
                     choice.carn.append(self.carn[i])
                     del self.carn[i]
 
+    @classmethod
+    def update_params(cls, paramchange):
+        """
+        Changes the constant parameters for a given biome type.
+        Parameter has to be known in the biome' class.
+
+        :param paramchange: A dictionary with the parameters to be changed, and the value they shall be changed to.
+        """
+        # for param in paramchange[1].keys():
+        #     classname = cls.__name__
+        #     if param in dir(cls):
+        #         paramname = classname + '.' + param
+        #         exec("%s = %f" % (paramname, paramchange[1][param]))
+        for param in paramchange.keys():
+            classname = cls.__name__
+            if param in dir(cls):
+                paramname = classname + '.' + param
+                exec("%s = %f" % (paramname, paramchange[param]))
+            else:
+                raise ValueError('Unknown parameter inserted')
     # def get_age(self):
     #     ages = []
     #     for specie in self.herb:
@@ -144,46 +168,63 @@ class biome:
 
 
 class lowland(biome):
+    """
+
+    """
+    f_max = 800
 
     def __init__(self, loc):
-        self.f_max = 800
+        # self.f_max = 800
         self.habitable = True
         super().__init__(loc)
 
 
 class highland(biome):
+    """
+
+    """
+    f_max = 300
 
     def __init__(self, loc):
-        self.f_max = 300
+        # self.f_max = 300
         self.habitable = True
         super().__init__(loc)
 
 
 class desert(biome):
+    """
+
+    """
+    f_max = 0
 
     def __init__(self, loc):
-        self.f_max = 0
+        # self.f_max = 0
         self.habitable = True
         super().__init__(loc)
 
 
 class water(biome):
+    """
+
+    """
+    f_max = 0
 
     def __init__(self, loc):
-        self.f_max = 0
+        # self.f_max = 0
         self.habitable = False
         super().__init__(loc)
 
-# A = lowland((1, 1))
-# A.add_population([{'species': 'Herbivore',
-#                    'age': 5,
-#                    'weight': 200}])
-# A.add_population([{'species': 'Herbivore',
-#                    'age': 25,
-#                    'weight': 0}])
-# A.add_population([{'species': 'Herbivore',
-#                    'age': 25,
-#                    'weight': 8000}])
+
+A = lowland((1, 1))
+A.add_population([{'species': 'Herbivore',
+                   'age': 5,
+                   'weight': 200}])
+A.add_population([{'species': 'Herbivore',
+                   'age': 25,
+                   'weight': 0}])
+A.add_population([{'species': 'Herbivore',
+                   'age': 25,
+                   'weight': 8000}])
 # print(A.herb)
 # A.remove_population()
 # print(A.herb)
@@ -205,7 +246,6 @@ class water(biome):
 # print(A.get_weights())
 # print(A.get_fitness())
 # print(A.carn)
-
 # # Test Migration
 # A = lowland((5, 5))
 # B = lowland((5, 4))

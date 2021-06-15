@@ -457,7 +457,8 @@ class Graphics:
 
         if (self._img_base is None) or (step % self._img_step != 0):
             return None
-
+        # if self._img_base is None:
+        #     return None
         else:
             self._fig.savefig('{base}_{num:05d}.{type}'.format(base=self._img_base,
                                                                num=self._img_ctr,
