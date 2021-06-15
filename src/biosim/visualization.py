@@ -457,7 +457,7 @@ class Graphics:
         :param step: the current year of simulation
         """
 
-        if (self._img_base is None) or (step % self._img_step != 0):
+        if (self._img_base is None) or (self._img_step is None) or (step % self._img_step != 0):
             return None
 
         else:
