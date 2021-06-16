@@ -91,7 +91,7 @@ def test_feeding_herbivore():
     # Testing the feeding function for herbivores
     weight = 50
     age = 2
-    yearly_weightgain = 10 * 0.9
+    yearly_weightgain = 10 * herbivore.beta
     individual = herbivore(weight=weight, age=age)
     left = individual.feeding(2000)
     assert individual.weight == (50 + yearly_weightgain)

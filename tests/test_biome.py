@@ -10,6 +10,13 @@ def test_lowland_create():
     assert cell.f_max == f_max
     assert cell.habitable is True
 
+def test_update_fodder():
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    f_max = lowland.f_max
+    cell = lowland((a, b))
+    cell.update_fodder()
+    assert cell.fodder == f_max
 
 def test_highland_create():
     a = rd.randint(1, 50)
@@ -65,6 +72,41 @@ def test_remove_population():
     assert len(cell.carn) + len(cell.herb) < pop_size
 
 
+def test_ageing():
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    low_cell = lowland((5, 5))
+    pop_size = 20
+    pop = [{'species': 'Carnivore',
+            'age': 5,
+            'weight': 20}
+           for _ in range(pop_size)]
+    low_cell.add_population(pop)
+    age_now = low_cell.carn[0].age
+    low_cell.aging()
+    age_new = low_cell.carn[0].age
+
+    assert age_new == age_now + 1
+
+def test_grazing():
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    f_max = lowland.f_max
+    low_cell = lowland((5, 5))
+    pop_size = 20
+    pop_herb = [{'species': 'herbivore',
+            'age': 5,
+            'weight': 20}
+           for _ in range(pop_size)]
+    pop_carn = [{'species': 'Carnivore',
+            'age': 5,
+            'weight': 20}
+           for _ in range(pop_size)]
+    low_cell.add_population(pop_carn + pop_herb)
+    low_cell.grazing()
+    assert low_cell.fodder < f_max
+
+
 def test_migration(mocker):
     a = rd.randint(1, 50)
     b = rd.randint(1, 50)
@@ -100,7 +142,7 @@ def test_parameterupdate_oneinstance_pre_creation():
     # Test if parameter updating affects the unintended subclass.
     testcell = lowland((5, 3))
     testcell.update_params(({'f_max': 50}))
-    assert testcell.f_max == 50
+    assert lowland.f_max == 50
 
 
 def test_parameterupdate():
@@ -128,3 +170,33 @@ def test_biome_parameterupdate():
     # Test if parameter updating affects the unintended subclass.
     lowland.update_params(({'f_max': 90}))
     assert lowland.f_max == 90
+
+
+def test_animal_parameterupdate_intended():
+    # Test if parameter updating affects the unintended subclass.
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    low_cell = lowland((5, 5))
+    pop_size = 20
+    pop = [{'species': 'Carnivore',
+            'age': 5,
+            'weight': 20}
+           for _ in range(pop_size)]
+    low_cell.add_population(pop)
+    low_cell.change_animalparams('Herbivore', ({'beta': 0.5}))
+    assert low_cell.carn[0].beta == 0.75
+
+
+def test_animal_parameterupdate_unintended():
+    # Test if parameter updating affects the unintended subclass.
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    low_cell = lowland((5, 5))
+    pop_size = 20
+    pop = [{'species': 'Herbivore',
+            'age': 5,
+            'weight': 20}
+           for _ in range(pop_size)]
+    low_cell.add_population(pop)
+    low_cell.change_animalparams('Herbivore', ({'beta': 0.5}))
+    assert low_cell.herb[0].beta == 0.5
