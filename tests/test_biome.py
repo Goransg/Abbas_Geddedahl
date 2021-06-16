@@ -1,5 +1,6 @@
-from biosim.biome import lowland, highland, desert, water
 import random as rd
+
+from biosim.biome import lowland, highland, desert, water
 
 
 def test_lowland_create():
@@ -10,6 +11,7 @@ def test_lowland_create():
     assert cell.f_max == f_max
     assert cell.habitable is True
 
+
 def test_update_fodder():
     a = rd.randint(1, 50)
     b = rd.randint(1, 50)
@@ -17,6 +19,7 @@ def test_update_fodder():
     cell = lowland((a, b))
     cell.update_fodder()
     assert cell.fodder == f_max
+
 
 def test_highland_create():
     a = rd.randint(1, 50)
@@ -73,8 +76,6 @@ def test_remove_population():
 
 
 def test_ageing():
-    a = rd.randint(1, 50)
-    b = rd.randint(1, 50)
     low_cell = lowland((5, 5))
     pop_size = 20
     pop = [{'species': 'Carnivore',
@@ -88,20 +89,19 @@ def test_ageing():
 
     assert age_new == age_now + 1
 
+
 def test_grazing():
-    a = rd.randint(1, 50)
-    b = rd.randint(1, 50)
     f_max = lowland.f_max
     low_cell = lowland((5, 5))
     pop_size = 20
     pop_herb = [{'species': 'herbivore',
-            'age': 5,
-            'weight': 20}
-           for _ in range(pop_size)]
+                 'age': 5,
+                 'weight': 20}
+                for _ in range(pop_size)]
     pop_carn = [{'species': 'Carnivore',
-            'age': 5,
-            'weight': 20}
-           for _ in range(pop_size)]
+                 'age': 5,
+                 'weight': 20}
+                for _ in range(pop_size)]
     low_cell.add_population(pop_carn + pop_herb)
     low_cell.grazing()
     assert low_cell.fodder < f_max
@@ -128,6 +128,7 @@ def test_migration(mocker):
         + len(D.carn) + len(D.herb) + len(E.carn) + len(E.herb)
     assert total_pop == pop_size
     assert len(A.carn) + len(A.herb) < total_pop
+
 
 def test_cell_procreation(mocker):
     # test no babies are born
@@ -190,8 +191,6 @@ def test_biome_parameterupdate():
 
 def test_animal_parameterupdate_intended():
     # Test if parameter updating affects the unintended subclass.
-    a = rd.randint(1, 50)
-    b = rd.randint(1, 50)
     low_cell = lowland((5, 5))
     pop_size = 20
     pop = [{'species': 'Carnivore',
@@ -205,8 +204,6 @@ def test_animal_parameterupdate_intended():
 
 def test_animal_parameterupdate_unintended():
     # Test if parameter updating affects the unintended subclass.
-    a = rd.randint(1, 50)
-    b = rd.randint(1, 50)
     low_cell = lowland((5, 5))
     pop_size = 20
     pop = [{'species': 'Herbivore',

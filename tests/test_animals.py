@@ -1,14 +1,16 @@
-from biosim.animals import herbivore, carnivore
-import random as rd
 import math as m
+import random as rd
+
 from scipy import stats
+
+from biosim.animals import herbivore, carnivore
 
 
 def test_creation_herb():
     # Testing if the weight and age of the individual are correct.
     weight = rd.randint(0, 50)
     age = rd.randint(0, 20)
-    fitness = (1/(1+m.e**(0.6*(age-40))) * (1/(1+m.e**(-0.1*(weight-10)))))
+    fitness = (1 / (1 + m.e ** (0.6 * (age - 40))) * (1 / (1 + m.e ** (-0.1 * (weight - 10)))))
     individual_herb = herbivore(weight=weight, age=age)
     assert individual_herb.weight == weight
     assert individual_herb.age == age
@@ -19,7 +21,7 @@ def test_creation_carn():
     # Testing if the weight and age of the individual are correct.
     weight = rd.randint(0, 50)
     age = rd.randint(0, 20)
-    fitness = (1/(1+m.e**(0.3*(age-40))) * (1/(1+m.e**(-0.4*(weight-4)))))
+    fitness = (1 / (1 + m.e ** (0.3 * (age - 40))) * (1 / (1 + m.e ** (-0.4 * (weight - 4)))))
     individual_carn = carnivore(weight=weight, age=age)
     assert individual_carn.weight == weight
     assert individual_carn.age == age
@@ -171,5 +173,5 @@ def test_stat_prey():
     test_herbivores = [herbivore(age=10, weight=10) for _ in range(50)]
     p = (test_carnivore.fitness - test_herbivores[0].fitness) / test_carnivore.DeltaPhiMax
     survivors = test_carnivore.feeding(test_herbivores)
-    p_hyp = stats.binom_test(len(survivors), n=50, p=(1-p))
+    p_hyp = stats.binom_test(len(survivors), n=50, p=(1 - p))
     assert p_hyp >= 0.05
