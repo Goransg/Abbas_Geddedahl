@@ -129,6 +129,22 @@ def test_migration(mocker):
     assert total_pop == pop_size
     assert len(A.carn) + len(A.herb) < total_pop
 
+def test_cell_procreation(mocker):
+    # test no babies are born
+    a = rd.randint(1, 50)
+    b = rd.randint(1, 50)
+    A = lowland((a, b))
+    pop_size = 20
+    pop = [{'species': 'Carnivore',
+            'age': 5,
+            'weight': 20}
+           for _ in range(pop_size)]
+    A.add_population(pop)
+    mocker.patch('biosim.animals.animal.birth', return_value=None)
+    A.breeding()
+
+    assert len(A.carn) + len(A.herb) == pop_size
+
 
 def test_parameterupdate_oneinstance_post_creation():
     # Test if parameter updating affects the unintended subclass.
@@ -183,8 +199,8 @@ def test_animal_parameterupdate_intended():
             'weight': 20}
            for _ in range(pop_size)]
     low_cell.add_population(pop)
-    low_cell.change_animalparams('Herbivore', ({'beta': 0.5}))
-    assert low_cell.carn[0].beta == 0.75
+    low_cell.change_animalparams('Herbivore', ({'mu': 0.5}))
+    assert low_cell.carn[0].mu == 0.4
 
 
 def test_animal_parameterupdate_unintended():
