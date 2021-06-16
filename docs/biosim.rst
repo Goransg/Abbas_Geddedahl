@@ -45,7 +45,7 @@ Coding examples
                                 img_years=1, log_file='res.txt')
 
 .. code-block:: python
-   :caption: Example of adding population after a certain time in the simulation. Here, the simulation is first ran for 100 years with the initial setup. After 100 years, a new population of animals is added to a given location, and the simulation continue for another 100 years.
+   :caption: Example of adding population after a certain time in the simulation. Here, the simulation is first ran for 100 years with the initial setup. After 100 years, a new population of animals is added to a given location, and the simulation continue for another 100 years. Movie is made from the images at last, in mp4 format. If blank, the standard value is mp4. gif can also be used.
    :name: Example simulation with added population
 
       sim.simulate(num_years=100)
@@ -56,3 +56,4 @@ Coding examples
                              for _ in range(50)]}]
        sim.add_population(population=new_carns)
        sim.simulate(num_years=100)
+       sim.make_movie('mp4')

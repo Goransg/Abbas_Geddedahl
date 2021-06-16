@@ -29,12 +29,13 @@ _MAGICK_BINARY = 'magick'
 _DEFAULT_GRAPHICS_DIR = os.path.join('..', 'data')
 _DEFAULT_GRAPHICS_NAME = 'dv'
 _DEFAULT_IMG_FORMAT = 'png'
-_DEFAULT_MOVIE_FORMAT = 'gif'  # alternatives: mp4, gif
+_DEFAULT_MOVIE_FORMAT = 'mp4'
 
 
 class Graphics:
     """
     Provides graphics for BioSim.
+    Deletes existing videos and images with the same image naming and format in the same directory.
 
     :param img_dir: directory for image files; no images if None
     :type img_dir: str
@@ -63,7 +64,11 @@ class Graphics:
                 self._img_base = os.path.join(img_dir, img_name)
                 old_files = glob.glob(img_dir+'/*')
                 for item in old_files:
-                    os.remove(item)
+                    if ((item[-(len('.' + img_fmt)):] == ('.' + img_fmt))\
+                        and item[:len(self._img_base)] == self._img_base)\
+                            or (item[-len(self._img_base + '.mp4'):] == (self._img_base + '.mp4'))\
+                            or (item[-len(self._img_base + '.gif'):] == (self._img_base + '.gif')):
+                        os.remove(item)
             else:
                 pass
         else:

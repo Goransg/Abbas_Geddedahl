@@ -57,7 +57,7 @@ if __name__ == '__main__':
                              'weight': {'max': 60, 'delta': 2}},
                  img_dir='results3',
                  img_base='sample', img_years=1, log_file='res.txt')
-    sim.simulate(50)
-    sim.make_movie('gif')
+    sim.simulate(400)
+    sim.make_movie('mp4')
 
     input('Press ENTER')
