@@ -64,7 +64,7 @@ class Graphics:
                 self._img_base = os.path.join(img_dir, img_name)
                 old_files = glob.glob(img_dir+'/*')
                 for item in old_files:
-                    if ((item[-(len('.' + img_fmt)):] == ('.' + img_fmt))\
+                    if ((item[-(len('.' + img_fmt)):] == ('.' + img_fmt))
                         and item[:len(self._img_base)] == self._img_base)\
                             or (item[-len(self._img_base + '.mp4'):] == (self._img_base + '.mp4'))\
                             or (item[-len(self._img_base + '.gif'):] == (self._img_base + '.gif')):

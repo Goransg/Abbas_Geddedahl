@@ -22,7 +22,7 @@ Welcome to T02_Abbas_GeddeDahl BioSim documentation!
 
 
 Indices and tables
-==================
+====================
 
 * :ref:`genindex`
 * :ref:`modindex`

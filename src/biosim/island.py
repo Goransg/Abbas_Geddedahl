@@ -9,7 +9,7 @@ class island:
     the map cannot have other than water cells in its outer boundary.
 
     :param gmap: text-string consisting of letters H, L, D, W
-    representing Highland, Lowland, Desert and Water.
+        representing Highland, Lowland, Desert and Water.
     """
 
     def __init__(self, gmap):
@@ -63,7 +63,8 @@ class island:
 
         :param land: a text string representing the landscape type to be updated
         :param params: a dictionary of constant names to be updated,
-        with values they are going to be set to as values.
+            with values they are going to be set to as values.
+
         """
         if land == 'H':
             highland.update_params(params)

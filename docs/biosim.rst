@@ -34,8 +34,7 @@ Coding examples
                              'age': {'max': 60.0, 'delta': 2},
                              'weight': {'max': 60, 'delta': 2}}
 .. code-block:: python
-   :caption: This is an example of histogram specifications for creation of an object in the BioSim class.
-   :name: example simulation setup
+   :caption: This is an example of histogram specifications for creation of an object in the BioSim class. If image directory is provided, the standard value for image name and format is 'dv' and .png.
 
        sim = BioSim(island_map, ini_herbs, seed=1, vis_years=1,
                     hist_specs={'fitness': {'max': 1.0, 'delta': 0.05},

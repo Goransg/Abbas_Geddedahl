@@ -19,6 +19,7 @@ class BioSim:
     :param img_fmt: String with file type for figures, e.g. 'png'
     :param img_years: years between visualizations saved to files (default: vis_years)
     :param log_file: If given, write animal counts to this file
+
     If ymax_animals is None, the y-axis limit should be adjusted automatically.
     If cmax_animals is None, sensible, fixed default values should be used.
     cmax_animals is a dict mapping species names to numbers, e.g.,
@@ -164,7 +165,7 @@ class BioSim:
         Runs the :func:`island.island.species_count` function.
 
         :return island.species_count: dictionary with species as key and
-        integers representing species counts as values.
+            integers representing species counts as values.
         """
 
         return self.island.species_count()
